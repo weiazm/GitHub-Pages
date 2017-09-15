@@ -356,7 +356,7 @@
 </code></pre><p>#####查询返回部分数据:<br>    使用_source=title,text, 来指定取回的字段</p>
 <p>###更新与创建<br>    note: 在es中, 文档是不可改变的, 更新文档可以直接对相同id的文档进行index 或者 update操作(相当于执行get,index操作). 在内部, es 将旧文档标记为已删除, 并增加一个全新的文档. 当被标记为删除的文档累计一定的数量或持续时间后, es会在后台清理这些文档.</p>
 <pre><code>1. index文档时可以加op_type=create参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.
-2. 更新或者创建时, 可以加version=?参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.
+2. 更新或者创建时, 可以加version=?参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.(并发更新时, 可以使用时间戳作为version, 如:传入参数:version=10&amp;version_type=external, 避免因网络等因素, 导致的新更新被旧更新覆盖).
 </code></pre><p>###删除</p>
 <p>###聚合</p>
 <p>aggs</p>
