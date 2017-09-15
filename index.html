@@ -225,6 +225,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-sitemap">
           <a href="/sitemap.xml" rel="section">
             
@@ -348,18 +358,34 @@
       
         
           
-            <p>###查询</p>
-<p>#####对于文档中的text类型字段,查询:</p>
-<pre><code>1. match: 通过分词后,查询倒排索引进行模糊搜索.
-2. match_phrase: 匹配短语, 相对于match更精确.
-3. match_phrase_prefix: 前缀匹配, 用于suggestion as typing
-</code></pre><p>#####查询返回部分数据:<br>    使用_source=title,text, 来指定取回的字段</p>
-<p>###更新与创建<br>    note: 在es中, 文档是不可改变的, 更新文档可以直接对相同id的文档进行index 或者 update操作(相当于执行get,index操作). 在内部, es 将旧文档标记为已删除, 并增加一个全新的文档. 当被标记为删除的文档累计一定的数量或持续时间后, es会在后台清理这些文档.</p>
-<pre><code>1. index文档时可以加op_type=create参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.
-2. 更新或者创建时, 可以加version=?参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.(并发更新时, 可以使用时间戳作为version, 如:传入参数:version=10&amp;version_type=external, 避免因网络等因素, 导致的新更新被旧更新覆盖).
-</code></pre><p>###删除</p>
-<p>###聚合</p>
-<p>aggs</p>
+            <p>##查询</p>
+<p>####对于文档中的text类型字段,查询:</p>
+<ul>
+<li>match: 通过分词后,查询倒排索引进行模糊搜索.</li>
+<li>match_phrase: 匹配短语, 相对于match更精确.</li>
+<li>match_phrase_prefix: 前缀匹配, 用于suggestion as typing</li>
+</ul>
+<p>####查询返回部分数据:</p>
+<ul>
+<li>使用_source=title,text, 来指定取回的字段</li>
+</ul>
+<p>##更新与创建</p>
+<blockquote>
+<p>在es中, 文档是不可改变的, 更新文档可以直接对相同id的文档进行index 或者 update操作(相当于执行get,index操作). 在内部, es 将旧文档标记为已删除, 并增加一个全新的文档. 当被标记为删除的文档累计一定的数量或持续时间后, es会在后台清理这些文档.</p>
+</blockquote>
+<ul>
+<li><p>index文档时可以加op_type=create参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.</p>
+</li>
+<li><p>更新或者创建时, 可以加version=?参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.(并发更新时, 可以使用时间戳作为version, 如:传入参数:version=10&amp;version_type=external, 避免因网络等因素, 导致的新更新被旧更新覆盖).</p>
+</li>
+<li><p>局部更新可以在update请求中指定doc属性, 来进行局部更新</p>
+</li>
+</ul>
+<p>##删除</p>
+<p>##聚合</p>
+<ul>
+<li>aggs</li>
+</ul>
 
           
         
@@ -568,6 +594,15 @@
 
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
