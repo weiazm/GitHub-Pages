@@ -374,7 +374,7 @@
 </li>
 <li><p>更新或者创建时, 可以加version=?参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.(并发更新时, 可以使用时间戳作为version, 如:传入参数:version=10&amp;version_type=external, 避免因网络等因素, 导致的新更新被旧更新覆盖).</p>
 </li>
-<li><p>局部更新可以在update请求中指定doc属性, 来进行局部更新</p>
+<li><p>局部更新可以在update请求中指定doc属性, 来进行局部更新.</p>
 </li>
 </ul>
 <h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><ul>
