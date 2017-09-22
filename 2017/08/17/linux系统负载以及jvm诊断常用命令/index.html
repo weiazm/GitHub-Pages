@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux," />
 
 
 
@@ -94,17 +94,18 @@
 
 
 
-<meta name="description" content="一人我饮酒醉 七八个小姐姐一起睡">
+<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux系统负载以及jvm诊断常用命令">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/08/17/linux系统负载以及jvm诊断常用命令/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="一人我饮酒醉 七八个小姐姐一起睡">
+<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-17T06:23:12.000Z">
+<meta property="og:updated_time" content="2017-09-22T05:50:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux系统负载以及jvm诊断常用命令">
-<meta name="twitter:description" content="一人我饮酒醉 七八个小姐姐一起睡">
+<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
 
 
 
@@ -353,7 +354,38 @@
       
 
       
-        
+        <h2 id="一些基本命令备忘"><a href="#一些基本命令备忘" class="headerlink" title="一些基本命令备忘"></a>一些基本命令备忘</h2><ul>
+<li><p>查看端口号被占用情况:</p>
+<pre><code>fuser -n tcp 9200
+</code></pre></li>
+<li><p>查看所有进程,以及cpu,内存占用:</p>
+<pre><code>ps aux
+</code></pre></li>
+<li><p>查看机器内存用量以及剩余:</p>
+<pre><code>free -m
+</code></pre></li>
+<li><p>查看指定进程内, 线程资源占用情况:</p>
+<pre><code>top -Hp pid
+</code></pre></li>
+<li><p>转换pid -&gt; nid:</p>
+<pre><code>printf &quot;%x\n&quot; pid
+</code></pre></li>
+<li><p>java堆统计实例数量,大小:</p>
+<pre><code>jmap -histo:live pid | head -100
+</code></pre></li>
+<li><p>java栈快照:</p>
+<pre><code>jstack -l  nid
+</code></pre></li>
+</ul>
+<ul>
+<li><p>文件目录大小排序显示:</p>
+<pre><code>du -m -d 1 | sort -k1 -n -t&apos; &apos;
+</code></pre></li>
+<li><p>磁盘剩余容量:</p>
+<pre><code>df
+</code></pre></li>
+</ul>
+
       
     </div>
     
@@ -367,6 +399,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
       
 
       
@@ -383,7 +421,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/15/elasticSearch使用要点(一)/" rel="prev" title="elasticSearch使用要点(一)">
+              <a href="/2017/09/15/elasticSearch使用要点-一/" rel="prev" title="elasticSearch使用要点(一)">
                 elasticSearch使用要点(一) <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -437,8 +475,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -453,7 +500,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -466,7 +513,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -515,6 +562,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些基本命令备忘"><span class="nav-number">1.</span> <span class="nav-text">一些基本命令备忘</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
