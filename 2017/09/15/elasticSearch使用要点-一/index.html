@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  查询返回部分数据: 使用_source=title,text, 来指定取回的字段.  取回多个文档: 使用multi-get或者mge">
+<meta name="description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段,">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
 <meta property="og:title" content="elasticSearch使用要点(一)">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/09/15/elasticSearch使用要点-一/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  查询返回部分数据: 使用_source=title,text, 来指定取回的字段.  取回多个文档: 使用multi-get或者mge">
+<meta property="og:description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-22T05:50:09.000Z">
+<meta property="og:updated_time" content="2017-09-22T11:48:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticSearch使用要点(一)">
-<meta name="twitter:description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  查询返回部分数据: 使用_source=title,text, 来指定取回的字段.  取回多个文档: 使用multi-get或者mge">
+<meta name="twitter:description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段,">
 
 
 
@@ -357,9 +357,11 @@
         <h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><h4 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h4><ul>
 <li>match: 通过分词后,查询倒排索引进行模糊搜索.</li>
 <li>match_phrase: 匹配短语, 相对于match更精确.</li>
-<li>match_phrase_prefix: 前缀匹配, 用于suggestion as typing.</li>
-</ul>
-<h4 id="查询返回部分数据"><a href="#查询返回部分数据" class="headerlink" title="查询返回部分数据:"></a>查询返回部分数据:</h4><ul>
+<li><p>match_phrase_prefix: 前缀匹配, 用于suggestion as typing.</p>
+<blockquote>
+<p>从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段, 精确值字段. 字符串将默认被同时映射成text和keyword类型.</p>
+<h4 id="查询返回部分数据"><a href="#查询返回部分数据" class="headerlink" title="查询返回部分数据:"></a>查询返回部分数据:</h4></blockquote>
+</li>
 <li>使用_source=title,text, 来指定取回的字段.</li>
 </ul>
 <h4 id="取回多个文档"><a href="#取回多个文档" class="headerlink" title="取回多个文档:"></a>取回多个文档:</h4><ul>
@@ -499,7 +501,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
