@@ -508,7 +508,20 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </blockquote>
 </li>
 </ul>
+<h4 id="映射"><a href="#映射" class="headerlink" title="映射:"></a>映射:</h4><ul>
+<li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
+<li>字段可以是对象(一个json文档).</li>
+<li><p>内部对象索引后会被打平:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</div><div class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</div><div class="line">    <span class="attr">"user.gender"</span>:      [male],</div><div class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</div><div class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</div><div class="line">    <span class="attr">"user.name.first"</span>:  [john],</div><div class="line">    <span class="attr">"user.name.last"</span>:   [smith]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>内部对象数组也会被打平:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>打平为:
 
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">   <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre>
           
         
       

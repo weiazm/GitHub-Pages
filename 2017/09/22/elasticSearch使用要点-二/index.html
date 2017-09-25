@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="vonyan">
 <meta property="og:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10 f">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-22T11:44:32.000Z">
+<meta property="og:updated_time" content="2017-09-25T08:34:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticSearch使用要点(二)">
 <meta name="twitter:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10 f">
@@ -374,7 +374,20 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </blockquote>
 </li>
 </ul>
+<h4 id="映射"><a href="#映射" class="headerlink" title="映射:"></a>映射:</h4><ul>
+<li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
+<li>字段可以是对象(一个json文档).</li>
+<li><p>内部对象索引后会被打平:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</div><div class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</div><div class="line">    <span class="attr">"user.gender"</span>:      [male],</div><div class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</div><div class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</div><div class="line">    <span class="attr">"user.name.first"</span>:  [john],</div><div class="line">    <span class="attr">"user.name.last"</span>:   [smith]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>内部对象数组也会被打平:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>打平为:
 
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">   <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre>
       
     </div>
     
@@ -565,7 +578,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式文档存储"><span class="nav-number">1.</span> <span class="nav-text">分布式文档存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分片路由"><span class="nav-number">1.0.1.</span> <span class="nav-text">分片路由:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页"><span class="nav-number">1.0.2.</span> <span class="nav-text">分页:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式文档存储"><span class="nav-number">1.</span> <span class="nav-text">分布式文档存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分片路由"><span class="nav-number">1.0.1.</span> <span class="nav-text">分片路由:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页"><span class="nav-number">1.0.2.</span> <span class="nav-text">分页:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#映射"><span class="nav-number">1.0.3.</span> <span class="nav-text">映射:</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
