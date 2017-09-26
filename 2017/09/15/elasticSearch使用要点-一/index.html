@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段,">
+<meta name="description" content="普通查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
 <meta property="og:title" content="elasticSearch使用要点(一)">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/09/15/elasticSearch使用要点-一/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段,">
+<meta property="og:description" content="普通查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-26T07:55:53.000Z">
+<meta property="og:updated_time" content="2017-09-26T08:09:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticSearch使用要点(一)">
-<meta name="twitter:description" content="查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段,">
+<meta name="twitter:description" content="普通查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字">
 
 
 
@@ -354,7 +354,7 @@
       
 
       
-        <h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><h4 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h4><ul>
+        <h2 id="普通查询"><a href="#普通查询" class="headerlink" title="普通查询"></a>普通查询</h2><h4 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h4><ul>
 <li><code>match</code>: 通过分词后,查询倒排索引进行模糊搜索.</li>
 <li><code>match_phrase</code>: 匹配短语, 相对于match更精确.</li>
 <li><p><code>match_phrase_prefix</code>: 前缀匹配, 用于suggestion as typing.</p>
@@ -553,10 +553,10 @@
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
@@ -613,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#查询"><span class="nav-number">1.</span> <span class="nav-text">查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对于文档中的text类型字段-查询"><span class="nav-number">1.0.1.</span> <span class="nav-text">对于文档中的text类型字段,查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询返回部分数据"><span class="nav-number">1.0.2.</span> <span class="nav-text">查询返回部分数据:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取回多个文档"><span class="nav-number">1.0.3.</span> <span class="nav-text">取回多个文档:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询与过滤"><span class="nav-number">1.0.4.</span> <span class="nav-text">查询与过滤:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询API"><span class="nav-number">2.</span> <span class="nav-text">查询API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#match"><span class="nav-number">2.0.1.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#match-1"><span class="nav-number">2.0.2.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#range"><span class="nav-number">2.0.3.</span> <span class="nav-text">range:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#term"><span class="nav-number">2.0.4.</span> <span class="nav-text">term:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#terms"><span class="nav-number">2.0.5.</span> <span class="nav-text">terms:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exists-amp-missing"><span class="nav-number">2.0.6.</span> <span class="nav-text">exists & missing:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通查询"><span class="nav-number">1.</span> <span class="nav-text">普通查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对于文档中的text类型字段-查询"><span class="nav-number">1.0.1.</span> <span class="nav-text">对于文档中的text类型字段,查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询返回部分数据"><span class="nav-number">1.0.2.</span> <span class="nav-text">查询返回部分数据:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取回多个文档"><span class="nav-number">1.0.3.</span> <span class="nav-text">取回多个文档:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询与过滤"><span class="nav-number">1.0.4.</span> <span class="nav-text">查询与过滤:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询API"><span class="nav-number">2.</span> <span class="nav-text">查询API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#match"><span class="nav-number">2.0.1.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#match-1"><span class="nav-number">2.0.2.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#range"><span class="nav-number">2.0.3.</span> <span class="nav-text">range:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#term"><span class="nav-number">2.0.4.</span> <span class="nav-text">term:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#terms"><span class="nav-number">2.0.5.</span> <span class="nav-text">terms:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exists-amp-missing"><span class="nav-number">2.0.6.</span> <span class="nav-text">exists & missing:</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
