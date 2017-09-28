@@ -175,7 +175,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">一人我饮酒醉 七八个小姐姐一起睡</p>
+        <h1 class="site-subtitle" itemprop="description">一人我饮酒醉 七八个小姐姐一起睡</h1>
       
   </div>
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/28/Elasticsearch使用要点-五/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/28/Elasticsearch_manner_5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,9 +304,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/28/Elasticsearch使用要点-五/" itemprop="url">Elasticsearch使用要点(五)</a></h1>
+                <a class="post-title-link" href="/2017/09/28/Elasticsearch_manner_5/" itemprop="url">Elasticsearch使用要点(五)</a></h2>
         
 
         <div class="post-meta">
@@ -432,7 +432,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/26/Elasticsearch使用要点-四/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/26/Elasticsearch_manner_4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -449,9 +449,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/26/Elasticsearch使用要点-四/" itemprop="url">Elasticsearch使用要点(四)</a></h1>
+                <a class="post-title-link" href="/2017/09/26/Elasticsearch_manner_4/" itemprop="url">Elasticsearch使用要点(四)</a></h2>
         
 
         <div class="post-meta">
@@ -596,7 +596,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/Elasticsearch使用要点-三/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/Elasticsearch_manner_3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -613,9 +613,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/25/Elasticsearch使用要点-三/" itemprop="url">Elasticsearch使用要点(三)</a></h1>
+                <a class="post-title-link" href="/2017/09/25/Elasticsearch_manner_3/" itemprop="url">Elasticsearch使用要点(三)</a></h2>
         
 
         <div class="post-meta">
@@ -672,20 +672,39 @@
 <pre><code>shard = hash(routing) % number_of_primary_shards
 </code></pre><blockquote>
 <p>这个公式决定了主分片数量在创建以后不可更改.</p>
-<p>但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.</p>
+<p>但是在后续的水平扩展中可以通过<code>routing</code>路由参数从指定的分片中获取数据.</p>
 </blockquote>
 </li>
 <li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="external">官方文档</a></p>
 </li>
 </ul>
-<h4 id="分页"><a href="#分页" class="headerlink" title="分页:"></a>分页:</h4><ul>
+<h4 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h4><ul>
 <li><p>es使用以下两个参数来进行分页</p>
 <pre><code>size:显示应该返回的结果数量, 默认是 10
 from: 显示应该跳过的初始结果数量, 默认是 0
 </code></pre><blockquote>
 <p>深度分页问题: 当分页深度过大时, 有性能问题. 如from=10000, size=10. 则协调节点向所有的n个分片请求10010个文档数量. 协调节点获取了n <em> 10010个文档后, 排序找到前10个文档再丢弃n </em> 10010 - 10个文档.即在分布式系统中, 对结果排序的成本随分页的深度成指数上升.</p>
+<p>如果你 确实 需要从你的集群取回大量的文档, 你可以通过用 <code>scroll</code> 查询禁用排序使这个取回行为更有效率.    </p>
 </blockquote>
 </li>
+</ul>
+<h4 id="游标查询"><a href="#游标查询" class="headerlink" title="游标查询:"></a>游标查询:</h4><blockquote>
+<p><code>scroll</code> 查询 可以用来对 Elasticsearch 有效地执行大批量的文档查询, 而又不用付出深度分页那种代价. (使用场景: 数据导出)</p>
+</blockquote>
+<ul>
+<li>游标查询初始化时会取某个时间点的快照数据, 保存在某个位置. </li>
+<li>快照数据可以被指定过期时间.(过期时间会在每次查询时刷新. 故这个时间可以理解为一次请求的最大时间, 后续的连续请求会刷新过期时间. )</li>
+<li><p>初始化后索引上的任何变化会被忽略, 不会再反映到快照数据上.</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>游标查询返回的结果会有一个<code>_scroll_id</code>字段, 值为base64编码的字符串.</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	GET /_search/scroll</div><div class="line">&#123;</div><div class="line">   "scroll": "1m", // 后续请求刷新的游标过期时间</div><div class="line">   "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAABVT7FlJSQ3VHeWhhVGlLQ0U5OF9qMGlhWmcAAAAAAAVU4xZ0ME5Uc0hkelFQMkJnZURKdjRxZE5RAAAAAAAFVOYWdDBOVHNIZHpRUDJCZ2VESnY0cWROUQAAAAAABVTlFnQwTlRzSGR6UVAyQmdlREp2NHFkTlEAAAAAAAVU5BZ0ME5Uc0hkelFQMkJnZURKdjRxZE5R"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>游标初始化后, 后续的游标查询需指定上次返回的<code>_scroll_id</code>字段, 返回的结果会自动接着上次返回的内容.</li>
 </ul>
 <h2 id="映射"><a href="#映射" class="headerlink" title="映射:"></a>映射:</h2><ul>
 <li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
@@ -765,9 +784,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/22/转-ElasticSearch数据类型-string类型已死-字符串数据永生/" itemprop="url">[转]ElasticSearch数据类型--string类型已死, 字符串数据永生</a></h1>
+                <a class="post-title-link" href="/2017/09/22/转-ElasticSearch数据类型-string类型已死-字符串数据永生/" itemprop="url">[转]ElasticSearch数据类型--string类型已死, 字符串数据永生</a></h2>
         
 
         <div class="post-meta">
@@ -878,7 +897,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/22/Elasticsearch使用要点-二/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/22/Elasticsearch_manner_2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -895,9 +914,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/22/Elasticsearch使用要点-二/" itemprop="url">Elasticsearch使用要点(二)</a></h1>
+                <a class="post-title-link" href="/2017/09/22/Elasticsearch_manner_2/" itemprop="url">Elasticsearch使用要点(二)</a></h2>
         
 
         <div class="post-meta">
@@ -949,12 +968,16 @@ from: 显示应该跳过的初始结果数量, 默认是 0
       
         
           
-            <h2 id="更新与创建"><a href="#更新与创建" class="headerlink" title="更新与创建"></a>更新与创建</h2><blockquote>
+            <h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><blockquote>
 <p>在es中, 文档是不可改变的, 更新文档可以直接对相同id的文档进行index 或者 update操作(相当于执行get,index操作). 在内部, es 将旧文档标记为已删除, 并增加一个全新的文档. 当被标记为删除的文档累计一定的数量或持续时间后, es会在后台清理这些文档.</p>
 </blockquote>
 <ul>
-<li><p>index文档时可以加<code>op_type=create</code>参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.</p>
+<li>index文档时可以加<code>op_type=create</code>参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.</li>
+<li><p>创建时可以指定索引的主分片数量, 复制分片数量.</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"settings"</span>: &#123;</div><div class="line">        <span class="attr">"number_of_shards"</span> :   <span class="number">1</span>,</div><div class="line">        <span class="attr">"number_of_replicas"</span> : <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
+</ul>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><ul>
 <li><p>更新或者创建时, 可以加<code>version=?</code>参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.(并发更新时, 可以使用时间戳作为version, 如:传入参数:<code>version=10&amp;version_type=external</code>, 避免因网络等因素, 导致的新更新被旧更新覆盖).</p>
 </li>
 <li><p>局部更新可以在update请求中指定<code>doc</code>属性, 来进行局部更新.</p>
@@ -1012,7 +1035,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/15/Elasticsearch使用要点-一/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/15/Elasticsearch_manner_1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -1029,9 +1052,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/15/Elasticsearch使用要点-一/" itemprop="url">Elasticsearch使用要点(一)</a></h1>
+                <a class="post-title-link" href="/2017/09/15/Elasticsearch_manner_1/" itemprop="url">Elasticsearch使用要点(一)</a></h2>
         
 
         <div class="post-meta">
@@ -1216,9 +1239,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/17/linux系统负载以及JVM诊断常用命令/" itemprop="url">linux系统负载以及JVM诊断常用命令</a></h1>
+                <a class="post-title-link" href="/2017/08/17/linux系统负载以及JVM诊断常用命令/" itemprop="url">linux系统负载以及JVM诊断常用命令</a></h2>
         
 
         <div class="post-meta">
@@ -1374,8 +1397,8 @@ from: 显示应该跳过的初始结果数量, 默认是 0
                alt="weihongyan" />
           <p class="site-author-name" itemprop="name">weihongyan</p>
            
-              <p class="site-description motion-element" itemprop="description">一人我饮酒醉 七八个小姐姐一起睡</p>
-          
+              <p class="site-description motion-element" itemprop="description"></p>
+           
         </div>
         <nav class="site-state motion-element">
 

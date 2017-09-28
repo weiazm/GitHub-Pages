@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10 f">
+<meta name="description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch使用要点(三)">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/09/25/Elasticsearch使用要点-三/index.html">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/09/25/Elasticsearch_manner_3/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10 f">
+<meta property="og:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-28T06:59:27.000Z">
+<meta property="og:updated_time" content="2017-09-28T08:34:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(三)">
-<meta name="twitter:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10 f">
+<meta name="twitter:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
 
 
 
@@ -134,7 +134,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/09/25/Elasticsearch使用要点-三/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/09/25/Elasticsearch_manner_3/"/>
 
 
 
@@ -175,7 +175,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">一人我饮酒醉 七八个小姐姐一起睡</p>
+        <h1 class="site-subtitle" itemprop="description">一人我饮酒醉 七八个小姐姐一起睡</h1>
       
   </div>
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/Elasticsearch使用要点-三/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/Elasticsearch_manner_3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Elasticsearch使用要点(三)</h1>
+          <h2 class="post-title" itemprop="name headline">Elasticsearch使用要点(三)</h2>
         
 
         <div class="post-meta">
@@ -359,20 +359,39 @@
 <pre><code>shard = hash(routing) % number_of_primary_shards
 </code></pre><blockquote>
 <p>这个公式决定了主分片数量在创建以后不可更改.</p>
-<p>但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.</p>
+<p>但是在后续的水平扩展中可以通过<code>routing</code>路由参数从指定的分片中获取数据.</p>
 </blockquote>
 </li>
 <li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="external">官方文档</a></p>
 </li>
 </ul>
-<h4 id="分页"><a href="#分页" class="headerlink" title="分页:"></a>分页:</h4><ul>
+<h4 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h4><ul>
 <li><p>es使用以下两个参数来进行分页</p>
 <pre><code>size:显示应该返回的结果数量, 默认是 10
 from: 显示应该跳过的初始结果数量, 默认是 0
 </code></pre><blockquote>
 <p>深度分页问题: 当分页深度过大时, 有性能问题. 如from=10000, size=10. 则协调节点向所有的n个分片请求10010个文档数量. 协调节点获取了n <em> 10010个文档后, 排序找到前10个文档再丢弃n </em> 10010 - 10个文档.即在分布式系统中, 对结果排序的成本随分页的深度成指数上升.</p>
+<p>如果你 确实 需要从你的集群取回大量的文档, 你可以通过用 <code>scroll</code> 查询禁用排序使这个取回行为更有效率.    </p>
 </blockquote>
 </li>
+</ul>
+<h4 id="游标查询"><a href="#游标查询" class="headerlink" title="游标查询:"></a>游标查询:</h4><blockquote>
+<p><code>scroll</code> 查询 可以用来对 Elasticsearch 有效地执行大批量的文档查询, 而又不用付出深度分页那种代价. (使用场景: 数据导出)</p>
+</blockquote>
+<ul>
+<li>游标查询初始化时会取某个时间点的快照数据, 保存在某个位置. </li>
+<li>快照数据可以被指定过期时间.(过期时间会在每次查询时刷新. 故这个时间可以理解为一次请求的最大时间, 后续的连续请求会刷新过期时间. )</li>
+<li><p>初始化后索引上的任何变化会被忽略, 不会再反映到快照数据上.</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>游标查询返回的结果会有一个<code>_scroll_id</code>字段, 值为base64编码的字符串.</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	GET /_search/scroll</div><div class="line">&#123;</div><div class="line">   "scroll": "1m", // 后续请求刷新的游标过期时间</div><div class="line">   "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAABVT7FlJSQ3VHeWhhVGlLQ0U5OF9qMGlhWmcAAAAAAAVU4xZ0ME5Uc0hkelFQMkJnZURKdjRxZE5RAAAAAAAFVOYWdDBOVHNIZHpRUDJCZ2VESnY0cWROUQAAAAAABVTlFnQwTlRzSGR6UVAyQmdlREp2NHFkTlEAAAAAAAVU5BZ0ME5Uc0hkelFQMkJnZURKdjRxZE5R"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>游标初始化后, 后续的游标查询需指定上次返回的<code>_scroll_id</code>字段, 返回的结果会自动接着上次返回的内容.</li>
 </ul>
 <h2 id="映射"><a href="#映射" class="headerlink" title="映射:"></a>映射:</h2><ul>
 <li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
@@ -427,7 +446,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/26/Elasticsearch使用要点-四/" rel="prev" title="Elasticsearch使用要点(四)">
+              <a href="/2017/09/26/Elasticsearch_manner_4/" rel="prev" title="Elasticsearch使用要点(四)">
                 Elasticsearch使用要点(四) <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -498,8 +517,8 @@ from: 显示应该跳过的初始结果数量, 默认是 0
                alt="weihongyan" />
           <p class="site-author-name" itemprop="name">weihongyan</p>
            
-              <p class="site-description motion-element" itemprop="description">一人我饮酒醉 七八个小姐姐一起睡</p>
-          
+              <p class="site-description motion-element" itemprop="description"></p>
+           
         </div>
         <nav class="site-state motion-element">
 
@@ -578,7 +597,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式文档存储"><span class="nav-number">1.</span> <span class="nav-text">分布式文档存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分片路由"><span class="nav-number">1.0.1.</span> <span class="nav-text">分片路由:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页"><span class="nav-number">1.0.2.</span> <span class="nav-text">分页:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射"><span class="nav-number">2.</span> <span class="nav-text">映射:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式文档存储"><span class="nav-number">1.</span> <span class="nav-text">分布式文档存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分片路由"><span class="nav-number">1.0.1.</span> <span class="nav-text">分片路由:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页查询"><span class="nav-number">1.0.2.</span> <span class="nav-text">分页查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#游标查询"><span class="nav-number">1.0.3.</span> <span class="nav-text">游标查询:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射"><span class="nav-number">2.</span> <span class="nav-text">映射:</span></a></li></ol></div>
             
 
           </div>
