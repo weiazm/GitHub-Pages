@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="vonyan">
 <meta property="og:description" content="组合多条件查询 组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.  bool查询: bool查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。     参数 含义     must 文档 必须 匹配这些条件才能被包含进来。(计算相关度)   mus">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-28T06:59:49.000Z">
+<meta property="og:updated_time" content="2017-09-28T07:36:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(四)">
 <meta name="twitter:description" content="组合多条件查询 组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.  bool查询: bool查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。     参数 含义     must 文档 必须 匹配这些条件才能被包含进来。(计算相关度)   mus">
@@ -398,6 +398,7 @@
 <p>可以使用它来取代只有 <strong>filter</strong> 语句的 <strong>bool</strong> 查询. 在性能上是完全相同的，但对于提高查询简洁性和清晰度有很大帮助。</p>
 </blockquote>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET students/_search</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">		<span class="attr">"constant_score"</span>: &#123;</div><div class="line">		  <span class="attr">"filter"</span>: &#123;</div><div class="line">		    <span class="attr">"term"</span>: &#123;</div><div class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></div><div class="line">		    &#125;</div><div class="line">		  &#125;,</div><div class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h4><p>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</p>
 
       
     </div>
@@ -589,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#组合多条件查询"><span class="nav-number">1.</span> <span class="nav-text">组合多条件查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bool查询"><span class="nav-number">1.0.1.</span> <span class="nav-text">bool查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#constant-score查询"><span class="nav-number">1.0.2.</span> <span class="nav-text">constant_score查询:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#组合多条件查询"><span class="nav-number">1.</span> <span class="nav-text">组合多条件查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bool查询"><span class="nav-number">1.0.1.</span> <span class="nav-text">bool查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#constant-score查询"><span class="nav-number">1.0.2.</span> <span class="nav-text">constant_score查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#explain查询"><span class="nav-number">1.0.3.</span> <span class="nav-text">explain查询:</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

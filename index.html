@@ -547,6 +547,7 @@
 <p>可以使用它来取代只有 <strong>filter</strong> 语句的 <strong>bool</strong> 查询. 在性能上是完全相同的，但对于提高查询简洁性和清晰度有很大帮助。</p>
 </blockquote>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET students/_search</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">		<span class="attr">"constant_score"</span>: &#123;</div><div class="line">		  <span class="attr">"filter"</span>: &#123;</div><div class="line">		    <span class="attr">"term"</span>: &#123;</div><div class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></div><div class="line">		    &#125;</div><div class="line">		  &#125;,</div><div class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h4><p>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</p>
 
           
         
