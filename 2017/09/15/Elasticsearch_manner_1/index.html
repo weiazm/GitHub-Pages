@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="vonyan">
 <meta property="og:description" content="普通查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-28T06:59:44.000Z">
+<meta property="og:updated_time" content="2017-09-29T06:17:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(一)">
 <meta name="twitter:description" content="普通查询对于文档中的text类型字段,查询: match: 通过分词后,查询倒排索引进行模糊搜索. match_phrase: 匹配短语, 相对于match更精确. match_phrase_prefix: 前缀匹配, 用于suggestion as typing.  从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字">
@@ -354,27 +354,29 @@
       
 
       
-        <h2 id="普通查询"><a href="#普通查询" class="headerlink" title="普通查询"></a>普通查询</h2><h4 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h4><ul>
+        <h1 id="普通查询"><a href="#普通查询" class="headerlink" title="普通查询"></a>普通查询</h1><h2 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h2><ul>
 <li><code>match</code>: 通过分词后,查询倒排索引进行模糊搜索.</li>
 <li><code>match_phrase</code>: 匹配短语, 相对于match更精确.</li>
 <li><p><code>match_phrase_prefix</code>: 前缀匹配, 用于suggestion as typing.</p>
 <blockquote>
 <p>从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段, 精确值字段. 字符串将默认被同时映射成text和keyword类型.</p>
-<h4 id="查询返回部分数据"><a href="#查询返回部分数据" class="headerlink" title="查询返回部分数据:"></a>查询返回部分数据:</h4></blockquote>
+</blockquote>
 </li>
+</ul>
+<h2 id="查询返回部分数据"><a href="#查询返回部分数据" class="headerlink" title="查询返回部分数据:"></a>查询返回部分数据:</h2><ul>
 <li>使用 <code>_source=title,text</code>, 来指定取回的字段.</li>
 </ul>
-<h4 id="取回多个文档"><a href="#取回多个文档" class="headerlink" title="取回多个文档:"></a>取回多个文档:</h4><ul>
+<h2 id="取回多个文档"><a href="#取回多个文档" class="headerlink" title="取回多个文档:"></a>取回多个文档:</h2><ul>
 <li>使用<code>multi-get</code>或者<code>mget</code>可以在一次请求中获取多个文档.</li>
 </ul>
-<h4 id="查询与过滤"><a href="#查询与过滤" class="headerlink" title="查询与过滤:"></a>查询与过滤:</h4><blockquote>
+<h2 id="查询与过滤"><a href="#查询与过滤" class="headerlink" title="查询与过滤:"></a>查询与过滤:</h2><blockquote>
 <p>使用 查询(<strong>query</strong>）语句来进行 全文 搜索或者其它任何需要影响 相关性得分的搜索. 除此以外的情况都使用过滤（<strong>filters</strong>).</p>
 </blockquote>
 <ul>
 <li><code>过滤查询</code>（<strong>Filtering queries</strong>）只是简单的检查包含或者排除，这就使得计算起来非常快. 结果会被缓存到内存中以便快速读取.</li>
 <li><code>评分查询</code>（<strong>scoring queries</strong>）不仅仅要找出 匹配的文档, 还要计算每个匹配文档的相关性, 计算相关性使得它们比不评分查询费力的多.同时, 查询结果并不缓存.</li>
 </ul>
-<h2 id="查询API"><a href="#查询API" class="headerlink" title="查询API"></a>查询API</h2><h4 id="match"><a href="#match" class="headerlink" title="match:"></a>match:</h4><blockquote>
+<h2 id="查询API"><a href="#查询API" class="headerlink" title="查询API"></a>查询API</h2><h3 id="match"><a href="#match" class="headerlink" title="match:"></a>match:</h3><blockquote>
 <p>无论你在任何字段上进行的是全文搜索还是精确查询，<code>match</code> 查询是你可用的标准查询。</p>
 </blockquote>
 <ul>
@@ -387,13 +389,20 @@
 <li><p>区别于<code>filter</code>, <code>query</code>对于精确值的返回结果可能不会被缓存到内存中.</p>
 </li>
 </ul>
-<h4 id="match-1"><a href="#match-1" class="headerlink" title="match:"></a>match:</h4><ul>
+<h3 id="multi-match"><a href="#multi-match" class="headerlink" title="multi_match:"></a>multi_match:</h3><ul>
 <li><p><code>multi_match</code> 查询可以在多个字段上执行相同的 <code>match</code> 查询：</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   	<span class="attr">"multi_match"</span>: &#123;</div><div class="line">      		<span class="attr">"query"</span>:    <span class="string">"full text search"</span>,</div><div class="line">      		<span class="attr">"fields"</span>:   [ <span class="string">"title"</span>, <span class="string">"body"</span> ]</div><div class="line">   	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="range"><a href="#range" class="headerlink" title="range:"></a>range:</h4><ul>
+<h3 id="range"><a href="#range" class="headerlink" title="range:"></a>range:</h3><ul>
 <li><p><code>range</code> 查询找出那些落在指定区间内的数字或者时间：</p>
+<blockquote>
+<p>针对于时间来讲, es有特殊的比较语法, 可以直接在时间上操作.     </p>
+<blockquote>
+<p>例如: <code>now-1h</code>代表前一个小时, <code>2014-01-01 00:00:00||+1M</code>代表指定时间加一分钟.</p>
+</blockquote>
+<p>针对于字符串来讲, 字符串范围可以采用字典顺序排序筛选. 但是字符串比较的成本要远大于数值类型, 尤其是长字符串.</p>
+</blockquote>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"range"</span>: &#123;</div><div class="line">        <span class="attr">"age"</span>: &#123;</div><div class="line">            <span class="attr">"gte"</span>:  <span class="number">20</span>,</div><div class="line">            <span class="attr">"lt"</span>:   <span class="number">30</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li><code>gt</code> : 大于</li>
@@ -403,13 +412,12 @@
 </ul>
 </li>
 </ul>
-<h4 id="term"><a href="#term" class="headerlink" title="term:"></a>term:</h4><blockquote>
-<p><code>term</code> 查询对于输入的文本不分析, 所以它将给定的值进行精确查询.</p>
-</blockquote>
-<ul>
-<li><code>term</code> 查询被用于精确值 匹配, 这些精确值可能是数字、时间、布尔或者那些 <code>not_analyzed</code> 的字符串.</li>
+<h3 id="term"><a href="#term" class="headerlink" title="term:"></a>term:</h3><ul>
+<li><code>term</code> 查询对于输入的文本不分析, 被用于精确值 匹配, 相当于直接从倒排索引中查询匹配项, 然后返回匹配文档. 这些精确值可能是数字、时间、布尔或者那些 <code>not_analyzed</code> 的字符串.</li>
+<li><code>term</code>: 用于查找准确值单字段, 搭配filter使用.</li>
+<li><code>terms</code>: 用法类似与<code>term</code>, 区别是接受一个数组. 用于多值查找.</li>
 </ul>
-<h4 id="terms"><a href="#terms" class="headerlink" title="terms:"></a>terms:</h4><blockquote>
+<h3 id="terms"><a href="#terms" class="headerlink" title="terms:"></a>terms:</h3><blockquote>
 <p><code>term</code> 的多值匹配.</p>
 </blockquote>
 <ul>
@@ -417,9 +425,12 @@
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">	<span class="attr">"terms"</span>: &#123; </div><div class="line">		<span class="attr">"tag"</span>: [ <span class="string">"search"</span>, <span class="string">"full_text"</span>, <span class="string">"nosql"</span> ]</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="exists-amp-missing"><a href="#exists-amp-missing" class="headerlink" title="exists &amp; missing:"></a>exists &amp; missing:</h4><ul>
+<h3 id="exists-amp-missing"><a href="#exists-amp-missing" class="headerlink" title="exists &amp; missing:"></a>exists &amp; missing:</h3><ul>
 <li><p><code>exists</code> 查询和 <code>missing</code> 查询被用于查找那些指定字段中有值 或无值的文档. 类似sql中的<code>is null</code>, <code>is not null</code>:</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"exists"</span>:   &#123;</div><div class="line">        <span class="attr">"field"</span>:    <span class="string">"title"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>存在(不存在)查询也可以指定对象类型字段. 如name是一个对象字段, 且里面包含first, last字段:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   	<span class="attr">"exists"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"name"</span> &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">等价于:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"bool"</span>: &#123;</div><div class="line">        <span class="attr">"should"</span>: [</div><div class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.first"</span> &#125;&#125;,</div><div class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.last"</span> &#125;&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
 
@@ -613,7 +624,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通查询"><span class="nav-number">1.</span> <span class="nav-text">普通查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对于文档中的text类型字段-查询"><span class="nav-number">1.0.1.</span> <span class="nav-text">对于文档中的text类型字段,查询:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询返回部分数据"><span class="nav-number">1.0.2.</span> <span class="nav-text">查询返回部分数据:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取回多个文档"><span class="nav-number">1.0.3.</span> <span class="nav-text">取回多个文档:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询与过滤"><span class="nav-number">1.0.4.</span> <span class="nav-text">查询与过滤:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询API"><span class="nav-number">2.</span> <span class="nav-text">查询API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#match"><span class="nav-number">2.0.1.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#match-1"><span class="nav-number">2.0.2.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#range"><span class="nav-number">2.0.3.</span> <span class="nav-text">range:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#term"><span class="nav-number">2.0.4.</span> <span class="nav-text">term:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#terms"><span class="nav-number">2.0.5.</span> <span class="nav-text">terms:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exists-amp-missing"><span class="nav-number">2.0.6.</span> <span class="nav-text">exists & missing:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#普通查询"><span class="nav-number">1.</span> <span class="nav-text">普通查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对于文档中的text类型字段-查询"><span class="nav-number">1.1.</span> <span class="nav-text">对于文档中的text类型字段,查询:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询返回部分数据"><span class="nav-number">1.2.</span> <span class="nav-text">查询返回部分数据:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取回多个文档"><span class="nav-number">1.3.</span> <span class="nav-text">取回多个文档:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询与过滤"><span class="nav-number">1.4.</span> <span class="nav-text">查询与过滤:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询API"><span class="nav-number">1.5.</span> <span class="nav-text">查询API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#match"><span class="nav-number">1.5.1.</span> <span class="nav-text">match:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-match"><span class="nav-number">1.5.2.</span> <span class="nav-text">multi_match:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range"><span class="nav-number">1.5.3.</span> <span class="nav-text">range:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#term"><span class="nav-number">1.5.4.</span> <span class="nav-text">term:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#terms"><span class="nav-number">1.5.5.</span> <span class="nav-text">terms:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exists-amp-missing"><span class="nav-number">1.5.6.</span> <span class="nav-text">exists & missing:</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

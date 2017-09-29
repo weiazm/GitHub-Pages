@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="vonyan">
 <meta property="og:description" content="排序默认排序: 当查询计算了相关度时, 返回的结果默认按照相关度降序排序. 当没有计算相关度时(filter查询等), 或计算从出的相关度相同时(constant_score查询等), 顺序是随机的.  指定值字段排序: 使用sort参数, 来指定排序:   123456789GET /_search&amp;#123;    &quot;query&quot; : &amp;#123;        &quot;bool&quot; : &amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-28T07:18:56.000Z">
+<meta property="og:updated_time" content="2017-09-29T06:10:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(五)">
 <meta name="twitter:description" content="排序默认排序: 当查询计算了相关度时, 返回的结果默认按照相关度降序排序. 当没有计算相关度时(filter查询等), 或计算从出的相关度相同时(constant_score查询等), 顺序是随机的.  指定值字段排序: 使用sort参数, 来指定排序:   123456789GET /_search&amp;#123;    &quot;query&quot; : &amp;#123;        &quot;bool&quot; : &amp;#123;">
@@ -354,11 +354,11 @@
       
 
       
-        <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><h4 id="默认排序"><a href="#默认排序" class="headerlink" title="默认排序:"></a>默认排序:</h4><ul>
+        <h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h2 id="默认排序"><a href="#默认排序" class="headerlink" title="默认排序:"></a>默认排序:</h2><ul>
 <li>当查询计算了相关度时, 返回的结果默认按照相关度降序排序.</li>
 <li>当没有计算相关度时(<code>filter</code>查询等), 或计算从出的相关度相同时(<code>constant_score</code>查询等), 顺序是随机的.</li>
 </ul>
-<h4 id="指定值字段排序"><a href="#指定值字段排序" class="headerlink" title="指定值字段排序:"></a>指定值字段排序:</h4><ul>
+<h2 id="指定值字段排序"><a href="#指定值字段排序" class="headerlink" title="指定值字段排序:"></a>指定值字段排序:</h2><ul>
 <li><p>使用<code>sort</code>参数, 来指定排序:</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"bool"</span> : &#123;</div><div class="line">            <span class="attr">"filter"</span> : &#123; <span class="attr">"term"</span> : &#123; <span class="attr">"user_id"</span> : <span class="number">1</span> &#125;&#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"sort"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125; //排序升降</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <blockquote>
@@ -368,12 +368,12 @@
 </blockquote>
 </li>
 </ul>
-<h4 id="多级排序"><a href="#多级排序" class="headerlink" title="多级排序:"></a>多级排序:</h4><ul>
+<h2 id="多级排序"><a href="#多级排序" class="headerlink" title="多级排序:"></a>多级排序:</h2><ul>
 <li><p>多级排序类似于MySQL的排序, 只有第一个排序字段相同时, 才使用第二个字段来排序.</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"bool"</span> : &#123;</div><div class="line">            <span class="attr">"must"</span>:   &#123; <span class="attr">"match"</span>: &#123; <span class="attr">"tweet"</span>: <span class="string">"manage text search"</span> &#125;&#125;,</div><div class="line">            <span class="attr">"filter"</span> : &#123; <span class="attr">"term"</span> : &#123; <span class="attr">"user_id"</span> : <span class="number">2</span> &#125;&#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"sort"</span>: [</div><div class="line">        &#123; <span class="attr">"date"</span>:   &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125;,</div><div class="line">        &#123; <span class="attr">"_score"</span>: &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125;// 排序可以使用score</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="多值字段排序"><a href="#多值字段排序" class="headerlink" title="多值字段排序:"></a>多值字段排序:</h4><ul>
+<h2 id="多值字段排序"><a href="#多值字段排序" class="headerlink" title="多值字段排序:"></a>多值字段排序:</h2><ul>
 <li><p>多值字段可以是一个无序可重复集合. 排序时可以使用<code>mode</code>参数, 将集合转为单元素.</p>
   <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"sort": &#123;</div><div class="line">    "dates": &#123;</div><div class="line">        "order": "asc",</div><div class="line">        "mode":  "min"</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
@@ -567,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#排序"><span class="nav-number">1.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#默认排序"><span class="nav-number">1.0.1.</span> <span class="nav-text">默认排序:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定值字段排序"><span class="nav-number">1.0.2.</span> <span class="nav-text">指定值字段排序:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多级排序"><span class="nav-number">1.0.3.</span> <span class="nav-text">多级排序:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多值字段排序"><span class="nav-number">1.0.4.</span> <span class="nav-text">多值字段排序:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#排序"><span class="nav-number">1.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#默认排序"><span class="nav-number">1.1.</span> <span class="nav-text">默认排序:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定值字段排序"><span class="nav-number">1.2.</span> <span class="nav-text">指定值字段排序:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多级排序"><span class="nav-number">1.3.</span> <span class="nav-text">多级排序:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多值字段排序"><span class="nav-number">1.4.</span> <span class="nav-text">多值字段排序:</span></a></li></ol></li></ol></div>
             
 
           </div>

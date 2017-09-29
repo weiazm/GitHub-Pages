@@ -358,11 +358,11 @@
       
         
           
-            <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><h4 id="默认排序"><a href="#默认排序" class="headerlink" title="默认排序:"></a>默认排序:</h4><ul>
+            <h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h2 id="默认排序"><a href="#默认排序" class="headerlink" title="默认排序:"></a>默认排序:</h2><ul>
 <li>当查询计算了相关度时, 返回的结果默认按照相关度降序排序.</li>
 <li>当没有计算相关度时(<code>filter</code>查询等), 或计算从出的相关度相同时(<code>constant_score</code>查询等), 顺序是随机的.</li>
 </ul>
-<h4 id="指定值字段排序"><a href="#指定值字段排序" class="headerlink" title="指定值字段排序:"></a>指定值字段排序:</h4><ul>
+<h2 id="指定值字段排序"><a href="#指定值字段排序" class="headerlink" title="指定值字段排序:"></a>指定值字段排序:</h2><ul>
 <li><p>使用<code>sort</code>参数, 来指定排序:</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"bool"</span> : &#123;</div><div class="line">            <span class="attr">"filter"</span> : &#123; <span class="attr">"term"</span> : &#123; <span class="attr">"user_id"</span> : <span class="number">1</span> &#125;&#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"sort"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125; //排序升降</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <blockquote>
@@ -372,12 +372,12 @@
 </blockquote>
 </li>
 </ul>
-<h4 id="多级排序"><a href="#多级排序" class="headerlink" title="多级排序:"></a>多级排序:</h4><ul>
+<h2 id="多级排序"><a href="#多级排序" class="headerlink" title="多级排序:"></a>多级排序:</h2><ul>
 <li><p>多级排序类似于MySQL的排序, 只有第一个排序字段相同时, 才使用第二个字段来排序.</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"bool"</span> : &#123;</div><div class="line">            <span class="attr">"must"</span>:   &#123; <span class="attr">"match"</span>: &#123; <span class="attr">"tweet"</span>: <span class="string">"manage text search"</span> &#125;&#125;,</div><div class="line">            <span class="attr">"filter"</span> : &#123; <span class="attr">"term"</span> : &#123; <span class="attr">"user_id"</span> : <span class="number">2</span> &#125;&#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"sort"</span>: [</div><div class="line">        &#123; <span class="attr">"date"</span>:   &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125;,</div><div class="line">        &#123; <span class="attr">"_score"</span>: &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125;// 排序可以使用score</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="多值字段排序"><a href="#多值字段排序" class="headerlink" title="多值字段排序:"></a>多值字段排序:</h4><ul>
+<h2 id="多值字段排序"><a href="#多值字段排序" class="headerlink" title="多值字段排序:"></a>多值字段排序:</h2><ul>
 <li><p>多值字段可以是一个无序可重复集合. 排序时可以使用<code>mode</code>参数, 将集合转为单元素.</p>
   <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"sort": &#123;</div><div class="line">    "dates": &#123;</div><div class="line">        "order": "asc",</div><div class="line">        "mode":  "min"</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
@@ -503,10 +503,10 @@
       
         
           
-            <h2 id="组合多条件查询"><a href="#组合多条件查询" class="headerlink" title="组合多条件查询"></a>组合多条件查询</h2><blockquote>
+            <h1 id="组合多条件查询"><a href="#组合多条件查询" class="headerlink" title="组合多条件查询"></a>组合多条件查询</h1><blockquote>
 <p>组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.</p>
 </blockquote>
-<h4 id="bool查询"><a href="#bool查询" class="headerlink" title="bool查询:"></a>bool查询:</h4><blockquote>
+<h2 id="bool查询"><a href="#bool查询" class="headerlink" title="bool查询:"></a>bool查询:</h2><blockquote>
 <p><code>bool</code>查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。</p>
 </blockquote>
 <table>
@@ -527,7 +527,7 @@
 </tr>
 <tr>
 <td style="text-align:center"><code>should</code></td>
-<td style="text-align:center">如果满足这些语句中的任意语句，将增加 <strong>_score</strong> ，否则，无任何影响。(<strong>计算相关度</strong>)</td>
+<td style="text-align:center">如果满足这些语句中的任意语句(or)，将增加 <strong>_score</strong> ，否则，无任何影响。(<strong>计算相关度</strong>)</td>
 </tr>
 <tr>
 <td style="text-align:center"><code>filter</code></td>
@@ -542,12 +542,17 @@
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"bool"</span>: &#123;</div><div class="line">		<span class="attr">"filter"</span>: &#123;</div><div class="line">			<span class="attr">"bool"</span>: &#123; </div><div class="line">				<span class="attr">"must"</span>: [</div><div class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"gte"</span>: <span class="string">"2014-01-01"</span> &#125;&#125;&#125;,</div><div class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"price"</span>: &#123; <span class="attr">"lte"</span>: <span class="number">29.99</span> &#125;&#125;&#125;</div><div class="line">				],</div><div class="line">				<span class="attr">"must_not"</span>: [</div><div class="line">				&#123; <span class="attr">"term"</span>: &#123; <span class="attr">"category"</span>: <span class="string">"ebooks"</span> &#125;&#125;</div><div class="line">				]</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="constant-score查询"><a href="#constant-score查询" class="headerlink" title="constant_score查询:"></a>constant_score查询:</h4><blockquote>
-<p><strong>constant_score</strong>查询将一个不变的常量评分应用于所有匹配的文档. 它被经常用于你只需要执行一个 <strong>filter</strong> 的情况下. </p>
+<h2 id="constant-score查询"><a href="#constant-score查询" class="headerlink" title="constant_score查询:"></a>constant_score查询:</h2><blockquote>
 <p>可以使用它来取代只有 <strong>filter</strong> 语句的 <strong>bool</strong> 查询. 在性能上是完全相同的，但对于提高查询简洁性和清晰度有很大帮助。</p>
 </blockquote>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET students/_search</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">		<span class="attr">"constant_score"</span>: &#123;</div><div class="line">		  <span class="attr">"filter"</span>: &#123;</div><div class="line">		    <span class="attr">"term"</span>: &#123;</div><div class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></div><div class="line">		    &#125;</div><div class="line">		  &#125;,</div><div class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h4><p>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</p>
+<ul>
+<li><p><strong>constant_score</strong>查询将一个不变的常量评分应用于所有匹配的文档. 它被经常用于你只需要执行一个 <strong>filter</strong> 的情况下. </p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET students/_search</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">		<span class="attr">"constant_score"</span>: &#123;</div><div class="line">		  <span class="attr">"filter"</span>: &#123;</div><div class="line">		    <span class="attr">"term"</span>: &#123;</div><div class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></div><div class="line">		    &#125;</div><div class="line">		  &#125;,</div><div class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h2><ul>
+<li>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</li>
+</ul>
 
           
         
@@ -667,7 +672,7 @@
       
         
           
-            <h2 id="分布式文档存储"><a href="#分布式文档存储" class="headerlink" title="分布式文档存储"></a>分布式文档存储</h2><h4 id="分片路由"><a href="#分片路由" class="headerlink" title="分片路由:"></a>分片路由:</h4><ul>
+            <h1 id="分布式文档存储"><a href="#分布式文档存储" class="headerlink" title="分布式文档存储"></a>分布式文档存储</h1><h2 id="分片路由"><a href="#分片路由" class="headerlink" title="分片路由:"></a>分片路由:</h2><ul>
 <li><p>路由计算公式</p>
 <pre><code>shard = hash(routing) % number_of_primary_shards
 </code></pre><blockquote>
@@ -678,7 +683,7 @@
 <li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="external">官方文档</a></p>
 </li>
 </ul>
-<h4 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h4><ul>
+<h2 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h2><ul>
 <li><p>es使用以下两个参数来进行分页</p>
 <pre><code>size:显示应该返回的结果数量, 默认是 10
 from: 显示应该跳过的初始结果数量, 默认是 0
@@ -688,14 +693,14 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </blockquote>
 </li>
 </ul>
-<h4 id="游标查询"><a href="#游标查询" class="headerlink" title="游标查询:"></a>游标查询:</h4><blockquote>
+<h2 id="游标查询"><a href="#游标查询" class="headerlink" title="游标查询:"></a>游标查询:</h2><blockquote>
 <p><code>scroll</code> 查询 可以用来对 Elasticsearch 有效地执行大批量的文档查询, 而又不用付出深度分页那种代价. (使用场景: 数据导出)</p>
 </blockquote>
 <ul>
 <li>游标查询初始化时会取某个时间点的快照数据, 保存在某个位置. </li>
 <li>快照数据可以被指定过期时间.(过期时间会在每次查询时刷新. 故这个时间可以理解为一次请求的最大时间, 后续的连续请求会刷新过期时间. )</li>
 <li><p>初始化后索引上的任何变化会被忽略, 不会再反映到快照数据上.</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">	<span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <ul>
@@ -713,13 +718,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</div><div class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</div><div class="line">    <span class="attr">"user.gender"</span>:      [male],</div><div class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</div><div class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</div><div class="line">    <span class="attr">"user.name.first"</span>:  [john],</div><div class="line">    <span class="attr">"user.name.last"</span>:   [smith]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 <li><p>内部对象数组也会被打平:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">打平为:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">    <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
 </ul>
-<pre><code>打平为:
 
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">   <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</code></pre>
           
         
       
@@ -840,9 +841,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
           
             <p><a href="https://www.elastic.co/blog/strings-are-dead-long-live-strings" target="_blank" rel="external">英文原版文档</a></p>
 <p><a href="https://segmentfault.com/a/1190000008897731" target="_blank" rel="external">转载地址</a></p>
-<h3 id="Text-vs-keyword"><a href="#Text-vs-keyword" class="headerlink" title="Text vs. keyword"></a>Text vs. keyword</h3><p>随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了<strong>string</strong>类型. 这个变动的根本原因是<strong>string</strong>类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全文搜索(full-text search). 对ElasticSearch稍有了解的人都知道, 前者的字符串被称为<strong>not-analyzed</strong>字符, 而后者被称作<strong>analyzed</strong>字符串.</p>
+<h2 id="Text-vs-keyword"><a href="#Text-vs-keyword" class="headerlink" title="Text vs. keyword"></a>Text vs. keyword</h2><p>随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了<strong>string</strong>类型. 这个变动的根本原因是<strong>string</strong>类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全文搜索(full-text search). 对ElasticSearch稍有了解的人都知道, 前者的字符串被称为<strong>not-analyzed</strong>字符, 而后者被称作<strong>analyzed</strong>字符串.</p>
 <p>事实上, 同一种类型用于应对两种不同的使用场景是会让人崩溃的, 因为有些选项只对其一的场景设置有效.例如<strong>position_increment_gap</strong>对<strong>not-analyzed</strong>字符就不会起作用, 而像<strong>ignore_above</strong>对于<strong>analyzed</strong>字符串就很难区分它到底是对整个字符串的值有效还是对单独的每个分词有效(在这种场景, <strong>ignore_above</strong>确实只对整个字符串值有效, 而对单个分词的限制可以使用<strong>limit</strong>设置).</p>
-<h3 id="新的默认类型"><a href="#新的默认类型" class="headerlink" title="新的默认类型"></a>新的默认类型</h3><p>做了这个类型分解之后, 我们对string字段的默认dynamic mappings 也做了改变. 在以前刚接接触ElasticSearch时, 如果需要对某个字段的所有取值做聚合, 你不得不对这些数据重做索引. 假如你正在处理的文档中包含一个city字段. 对这个字段做聚合的话会分别给出new和york的总数, 而非我们通常期望的New York的总数.让人沮丧的是为了达到我们希望的结果, 我们必须对这个字段重新进行索引.</p>
+<h2 id="新的默认类型"><a href="#新的默认类型" class="headerlink" title="新的默认类型"></a>新的默认类型</h2><p>做了这个类型分解之后, 我们对string字段的默认dynamic mappings 也做了改变. 在以前刚接接触ElasticSearch时, 如果需要对某个字段的所有取值做聚合, 你不得不对这些数据重做索引. 假如你正在处理的文档中包含一个city字段. 对这个字段做聚合的话会分别给出new和york的总数, 而非我们通常期望的New York的总数.让人沮丧的是为了达到我们希望的结果, 我们必须对这个字段重新进行索引.</p>
 <p>为了不让事情变得这么糟糕, ElasticSearch决定从Logstash中借取思路: 字符串将默认被同时映射成<strong>text</strong>和<strong>keyword</strong>类型. 例如对下面的文档进行索引后:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"foo"</span>: <span class="string">"bar"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>ElasticSearch将会为你创建下面的动态映射(dynamic mappings):</p>
@@ -968,7 +969,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
       
         
           
-            <h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><blockquote>
+            <h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><blockquote>
 <p>在es中, 文档是不可改变的, 更新文档可以直接对相同id的文档进行index 或者 update操作(相当于执行get,index操作). 在内部, es 将旧文档标记为已删除, 并增加一个全新的文档. 当被标记为删除的文档累计一定的数量或持续时间后, es会在后台清理这些文档.</p>
 </blockquote>
 <ul>
@@ -984,7 +985,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </li>
 <li>批量操作可以使用<code>bulk-api</code>, 实现定时,定量刷新提交策略.整合多个原子操作于一个es请求中. 注意:bulk中每一个操作是原子的, 但是bulk整个不是原子的, 无法实现事务.</li>
 </ul>
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><ul>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>TODO</p>
+<h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><p>TODO</p>
+<ul>
 <li>aggs</li>
 </ul>
 
@@ -1106,27 +1109,29 @@ from: 显示应该跳过的初始结果数量, 默认是 0
       
         
           
-            <h2 id="普通查询"><a href="#普通查询" class="headerlink" title="普通查询"></a>普通查询</h2><h4 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h4><ul>
+            <h1 id="普通查询"><a href="#普通查询" class="headerlink" title="普通查询"></a>普通查询</h1><h2 id="对于文档中的text类型字段-查询"><a href="#对于文档中的text类型字段-查询" class="headerlink" title="对于文档中的text类型字段,查询:"></a>对于文档中的text类型字段,查询:</h2><ul>
 <li><code>match</code>: 通过分词后,查询倒排索引进行模糊搜索.</li>
 <li><code>match_phrase</code>: 匹配短语, 相对于match更精确.</li>
 <li><p><code>match_phrase_prefix</code>: 前缀匹配, 用于suggestion as typing.</p>
 <blockquote>
 <p>从es5.0版本之前, 字符串只有string类型.es5.0之后将string类型分为text, keyword. 分别为全文字段, 精确值字段. 字符串将默认被同时映射成text和keyword类型.</p>
-<h4 id="查询返回部分数据"><a href="#查询返回部分数据" class="headerlink" title="查询返回部分数据:"></a>查询返回部分数据:</h4></blockquote>
+</blockquote>
 </li>
+</ul>
+<h2 id="查询返回部分数据"><a href="#查询返回部分数据" class="headerlink" title="查询返回部分数据:"></a>查询返回部分数据:</h2><ul>
 <li>使用 <code>_source=title,text</code>, 来指定取回的字段.</li>
 </ul>
-<h4 id="取回多个文档"><a href="#取回多个文档" class="headerlink" title="取回多个文档:"></a>取回多个文档:</h4><ul>
+<h2 id="取回多个文档"><a href="#取回多个文档" class="headerlink" title="取回多个文档:"></a>取回多个文档:</h2><ul>
 <li>使用<code>multi-get</code>或者<code>mget</code>可以在一次请求中获取多个文档.</li>
 </ul>
-<h4 id="查询与过滤"><a href="#查询与过滤" class="headerlink" title="查询与过滤:"></a>查询与过滤:</h4><blockquote>
+<h2 id="查询与过滤"><a href="#查询与过滤" class="headerlink" title="查询与过滤:"></a>查询与过滤:</h2><blockquote>
 <p>使用 查询(<strong>query</strong>）语句来进行 全文 搜索或者其它任何需要影响 相关性得分的搜索. 除此以外的情况都使用过滤（<strong>filters</strong>).</p>
 </blockquote>
 <ul>
 <li><code>过滤查询</code>（<strong>Filtering queries</strong>）只是简单的检查包含或者排除，这就使得计算起来非常快. 结果会被缓存到内存中以便快速读取.</li>
 <li><code>评分查询</code>（<strong>scoring queries</strong>）不仅仅要找出 匹配的文档, 还要计算每个匹配文档的相关性, 计算相关性使得它们比不评分查询费力的多.同时, 查询结果并不缓存.</li>
 </ul>
-<h2 id="查询API"><a href="#查询API" class="headerlink" title="查询API"></a>查询API</h2><h4 id="match"><a href="#match" class="headerlink" title="match:"></a>match:</h4><blockquote>
+<h2 id="查询API"><a href="#查询API" class="headerlink" title="查询API"></a>查询API</h2><h3 id="match"><a href="#match" class="headerlink" title="match:"></a>match:</h3><blockquote>
 <p>无论你在任何字段上进行的是全文搜索还是精确查询，<code>match</code> 查询是你可用的标准查询。</p>
 </blockquote>
 <ul>
@@ -1139,13 +1144,20 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <li><p>区别于<code>filter</code>, <code>query</code>对于精确值的返回结果可能不会被缓存到内存中.</p>
 </li>
 </ul>
-<h4 id="match-1"><a href="#match-1" class="headerlink" title="match:"></a>match:</h4><ul>
+<h3 id="multi-match"><a href="#multi-match" class="headerlink" title="multi_match:"></a>multi_match:</h3><ul>
 <li><p><code>multi_match</code> 查询可以在多个字段上执行相同的 <code>match</code> 查询：</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   	<span class="attr">"multi_match"</span>: &#123;</div><div class="line">      		<span class="attr">"query"</span>:    <span class="string">"full text search"</span>,</div><div class="line">      		<span class="attr">"fields"</span>:   [ <span class="string">"title"</span>, <span class="string">"body"</span> ]</div><div class="line">   	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="range"><a href="#range" class="headerlink" title="range:"></a>range:</h4><ul>
+<h3 id="range"><a href="#range" class="headerlink" title="range:"></a>range:</h3><ul>
 <li><p><code>range</code> 查询找出那些落在指定区间内的数字或者时间：</p>
+<blockquote>
+<p>针对于时间来讲, es有特殊的比较语法, 可以直接在时间上操作.     </p>
+<blockquote>
+<p>例如: <code>now-1h</code>代表前一个小时, <code>2014-01-01 00:00:00||+1M</code>代表指定时间加一分钟.</p>
+</blockquote>
+<p>针对于字符串来讲, 字符串范围可以采用字典顺序排序筛选. 但是字符串比较的成本要远大于数值类型, 尤其是长字符串.</p>
+</blockquote>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"range"</span>: &#123;</div><div class="line">        <span class="attr">"age"</span>: &#123;</div><div class="line">            <span class="attr">"gte"</span>:  <span class="number">20</span>,</div><div class="line">            <span class="attr">"lt"</span>:   <span class="number">30</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li><code>gt</code> : 大于</li>
@@ -1155,13 +1167,12 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </ul>
 </li>
 </ul>
-<h4 id="term"><a href="#term" class="headerlink" title="term:"></a>term:</h4><blockquote>
-<p><code>term</code> 查询对于输入的文本不分析, 所以它将给定的值进行精确查询.</p>
-</blockquote>
-<ul>
-<li><code>term</code> 查询被用于精确值 匹配, 这些精确值可能是数字、时间、布尔或者那些 <code>not_analyzed</code> 的字符串.</li>
+<h3 id="term"><a href="#term" class="headerlink" title="term:"></a>term:</h3><ul>
+<li><code>term</code> 查询对于输入的文本不分析, 被用于精确值 匹配, 相当于直接从倒排索引中查询匹配项, 然后返回匹配文档. 这些精确值可能是数字、时间、布尔或者那些 <code>not_analyzed</code> 的字符串.</li>
+<li><code>term</code>: 用于查找准确值单字段, 搭配filter使用.</li>
+<li><code>terms</code>: 用法类似与<code>term</code>, 区别是接受一个数组. 用于多值查找.</li>
 </ul>
-<h4 id="terms"><a href="#terms" class="headerlink" title="terms:"></a>terms:</h4><blockquote>
+<h3 id="terms"><a href="#terms" class="headerlink" title="terms:"></a>terms:</h3><blockquote>
 <p><code>term</code> 的多值匹配.</p>
 </blockquote>
 <ul>
@@ -1169,9 +1180,12 @@ from: 显示应该跳过的初始结果数量, 默认是 0
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">	<span class="attr">"terms"</span>: &#123; </div><div class="line">		<span class="attr">"tag"</span>: [ <span class="string">"search"</span>, <span class="string">"full_text"</span>, <span class="string">"nosql"</span> ]</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="exists-amp-missing"><a href="#exists-amp-missing" class="headerlink" title="exists &amp; missing:"></a>exists &amp; missing:</h4><ul>
+<h3 id="exists-amp-missing"><a href="#exists-amp-missing" class="headerlink" title="exists &amp; missing:"></a>exists &amp; missing:</h3><ul>
 <li><p><code>exists</code> 查询和 <code>missing</code> 查询被用于查找那些指定字段中有值 或无值的文档. 类似sql中的<code>is null</code>, <code>is not null</code>:</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"exists"</span>:   &#123;</div><div class="line">        <span class="attr">"field"</span>:    <span class="string">"title"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>存在(不存在)查询也可以指定对象类型字段. 如name是一个对象字段, 且里面包含first, last字段:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   	<span class="attr">"exists"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"name"</span> &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">等价于:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"bool"</span>: &#123;</div><div class="line">        <span class="attr">"should"</span>: [</div><div class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.first"</span> &#125;&#125;,</div><div class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.last"</span> &#125;&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
 

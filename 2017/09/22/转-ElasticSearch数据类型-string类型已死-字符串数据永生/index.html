@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="vonyan">
 <meta property="og:description" content="英文原版文档 转载地址 Text vs. keyword随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了string类型. 这个变动的根本原因是string类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-22T12:01:05.000Z">
+<meta property="og:updated_time" content="2017-09-29T06:13:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[转]ElasticSearch数据类型--string类型已死, 字符串数据永生">
 <meta name="twitter:description" content="英文原版文档 转载地址 Text vs. keyword随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了string类型. 这个变动的根本原因是string类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全">
@@ -356,9 +356,9 @@
       
         <p><a href="https://www.elastic.co/blog/strings-are-dead-long-live-strings" target="_blank" rel="external">英文原版文档</a></p>
 <p><a href="https://segmentfault.com/a/1190000008897731" target="_blank" rel="external">转载地址</a></p>
-<h3 id="Text-vs-keyword"><a href="#Text-vs-keyword" class="headerlink" title="Text vs. keyword"></a>Text vs. keyword</h3><p>随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了<strong>string</strong>类型. 这个变动的根本原因是<strong>string</strong>类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全文搜索(full-text search). 对ElasticSearch稍有了解的人都知道, 前者的字符串被称为<strong>not-analyzed</strong>字符, 而后者被称作<strong>analyzed</strong>字符串.</p>
+<h2 id="Text-vs-keyword"><a href="#Text-vs-keyword" class="headerlink" title="Text vs. keyword"></a>Text vs. keyword</h2><p>随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了<strong>string</strong>类型. 这个变动的根本原因是<strong>string</strong>类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全文搜索(full-text search). 对ElasticSearch稍有了解的人都知道, 前者的字符串被称为<strong>not-analyzed</strong>字符, 而后者被称作<strong>analyzed</strong>字符串.</p>
 <p>事实上, 同一种类型用于应对两种不同的使用场景是会让人崩溃的, 因为有些选项只对其一的场景设置有效.例如<strong>position_increment_gap</strong>对<strong>not-analyzed</strong>字符就不会起作用, 而像<strong>ignore_above</strong>对于<strong>analyzed</strong>字符串就很难区分它到底是对整个字符串的值有效还是对单独的每个分词有效(在这种场景, <strong>ignore_above</strong>确实只对整个字符串值有效, 而对单个分词的限制可以使用<strong>limit</strong>设置).</p>
-<h3 id="新的默认类型"><a href="#新的默认类型" class="headerlink" title="新的默认类型"></a>新的默认类型</h3><p>做了这个类型分解之后, 我们对string字段的默认dynamic mappings 也做了改变. 在以前刚接接触ElasticSearch时, 如果需要对某个字段的所有取值做聚合, 你不得不对这些数据重做索引. 假如你正在处理的文档中包含一个city字段. 对这个字段做聚合的话会分别给出new和york的总数, 而非我们通常期望的New York的总数.让人沮丧的是为了达到我们希望的结果, 我们必须对这个字段重新进行索引.</p>
+<h2 id="新的默认类型"><a href="#新的默认类型" class="headerlink" title="新的默认类型"></a>新的默认类型</h2><p>做了这个类型分解之后, 我们对string字段的默认dynamic mappings 也做了改变. 在以前刚接接触ElasticSearch时, 如果需要对某个字段的所有取值做聚合, 你不得不对这些数据重做索引. 假如你正在处理的文档中包含一个city字段. 对这个字段做聚合的话会分别给出new和york的总数, 而非我们通常期望的New York的总数.让人沮丧的是为了达到我们希望的结果, 我们必须对这个字段重新进行索引.</p>
 <p>为了不让事情变得这么糟糕, ElasticSearch决定从Logstash中借取思路: 字符串将默认被同时映射成<strong>text</strong>和<strong>keyword</strong>类型. 例如对下面的文档进行索引后:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"foo"</span>: <span class="string">"bar"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>ElasticSearch将会为你创建下面的动态映射(dynamic mappings):</p>
@@ -556,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Text-vs-keyword"><span class="nav-number">1.</span> <span class="nav-text">Text vs. keyword</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新的默认类型"><span class="nav-number">2.</span> <span class="nav-text">新的默认类型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-vs-keyword"><span class="nav-number">1.</span> <span class="nav-text">Text vs. keyword</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新的默认类型"><span class="nav-number">2.</span> <span class="nav-text">新的默认类型</span></a></li></ol></div>
             
 
           </div>
