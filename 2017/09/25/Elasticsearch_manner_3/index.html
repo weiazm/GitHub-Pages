@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="vonyan">
 <meta property="og:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-29T06:12:49.000Z">
+<meta property="og:updated_time" content="2017-09-29T08:20:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(三)">
 <meta name="twitter:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
@@ -215,6 +215,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
@@ -231,16 +241,6 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-sitemap">
-          <a href="/sitemap.xml" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
-            
-            站点地图
           </a>
         </li>
       
@@ -326,6 +326,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -527,6 +549,15 @@ from: 显示应该跳过的初始结果数量, 默认是 0
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
           
 
           
