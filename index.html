@@ -287,6 +287,125 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/12/centOS-安装ffmpeg-实现amr-mp3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vonyan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/12/centOS-安装ffmpeg-实现amr-mp3/" itemprop="url">centOS 安装ffmpeg 实现amr->mp3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-12T17:25:39+08:00">
+                2017-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz</div><div class="line">tar xvf yasm-1.3.0.tar.gz</div><div class="line"><span class="built_in">cd</span> yasm-1.3.0</div><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line"></div><div class="line">wget http://jaist.dl.sourceforge.net/project/lame/lame/3.99/lame-3.99.5.tar.gz  </div><div class="line">tar xvf lame-3.99.5.tar.gz</div><div class="line"><span class="built_in">cd</span> lame-3.99.5</div><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line">wget http://jaist.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-0.1.3.tar.gz</div><div class="line">tar xvf opencore-amr-0.1.3.tar.gz</div><div class="line"><span class="built_in">cd</span> opencore-amr-0.1.3</div><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line">wget http://ffmpeg.org/releases/ffmpeg-3.2.4.tar.bz2</div><div class="line">tar xvf ffmpeg-3.2.4.tar.bz2</div><div class="line"><span class="built_in">cd</span> ffmpeg-3.2.4</div><div class="line">./configure --<span class="built_in">enable</span>-version3 --<span class="built_in">enable</span>-libmp3lame --<span class="built_in">enable</span>-libopencore-amrnb --<span class="built_in">enable</span>-libopencore-amrwb</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">ln -s /usr/<span class="built_in">local</span>/lib/libopencore-amrwb.so.0 /usr/lib64/libopencore-amrwb.so.0</div><div class="line"></div><div class="line">ln -s /usr/<span class="built_in">local</span>/lib/libopencore-amrnb.so.0 /usr/lib64/libopencore-amrnb.so.0</div><div class="line"></div><div class="line">ln -s /usr/<span class="built_in">local</span>/lib/libmp3lame.so.0 /usr/lib64/libmp3lame.so.0</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/28/Elasticsearch_manner_5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1573,7 +1692,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
