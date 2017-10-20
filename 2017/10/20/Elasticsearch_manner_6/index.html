@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="es," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX() 等聚合操作. 聚合 是由 桶 和 指">
+<meta name="keywords" content="es">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch使用要点(六)">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/10/20/Elasticsearch_manner_6/index.html">
+<meta property="og:site_name" content="vonyan">
+<meta property="og:description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX() 等聚合操作. 聚合 是由 桶 和 指">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-20T07:53:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch使用要点(六)">
+<meta name="twitter:description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX() 等聚合操作. 聚合 是由 桶 和 指">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/10/20/Elasticsearch_manner_6/"/>
+
+
+
+
+
+  <title>Elasticsearch使用要点(六) | vonyan</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vonyan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一人我饮酒醉 七八个小姐姐一起睡</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/20/Elasticsearch_manner_6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vonyan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Elasticsearch使用要点(六)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-20T11:34:24+08:00">
+                2017-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="聚合-group-by"><a href="#聚合-group-by" class="headerlink" title="聚合 (group by)"></a>聚合 (group by)</h1><blockquote>
+<p>在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。</p>
+</blockquote>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p><code>桶</code>(<strong>Buckets</strong>): 满足特定条件的文档的集合. 类似于MySQL的<strong>GROUP BY</strong>.</p>
+<p><code>指标</code>(<strong>Metrics</strong>): 对桶内的文档进行统计计算. 类似MySQL的<strong>COUNT()</strong>, <strong>SUM()</strong>, <strong>MAX()</strong> 等聚合操作.</p>
+<p><code>聚合</code> 是由 <code>桶</code> 和 <code>指标</code> 组成的。 聚合可能只有一个桶，可能只有一个指标，或者可能两个都有。也有可能有一些桶 <strong>嵌套</strong>(通过嵌套, 可以实现非常复杂的聚合统计) 在其他桶里面。</p>
+<h2 id="easy-demo"><a href="#easy-demo" class="headerlink" title="easy demo"></a>easy demo</h2><p>请求:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">    "size" : 0, // 指定size为0, 不关心搜索结果(hits为空), 提高查询速度.</div><div class="line">    "aggs" : &#123; // 聚合参数.</div><div class="line">        "popular_colors" : &#123; // 聚合名称.</div><div class="line">            "terms" : &#123; // 单个桶的类型.</div><div class="line">              "field" : "color"</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>响应:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	...</div><div class="line">   "hits": &#123;</div><div class="line">      "hits": [] // 前文设置了size, 故hits为空.</div><div class="line">   &#125;,</div><div class="line">   "aggregations": &#123;</div><div class="line">      "popular_colors": &#123; // 前文设置的聚合名称</div><div class="line">         "buckets": [ // 桶</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"red"</span>, </div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">4</span> // 默认指标</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"blue"</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">2</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"green"</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">2</span></div><div class="line">            &#125;</div><div class="line">         ]</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>关于指标: extended_stats指标可以返回很多统计字段.</p>
+</blockquote>
+<h2 id="more-metrics"><a href="#more-metrics" class="headerlink" title="more metrics"></a>more metrics</h2><p>请求:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">   <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">   <span class="attr">"aggs"</span>: &#123;</div><div class="line">      "colors": &#123; // 聚合名称</div><div class="line">         "terms": &#123;</div><div class="line">            "field": "color" // 单个桶的类型</div><div class="line">         &#125;,</div><div class="line">         "aggs": &#123; // 新增指标</div><div class="line">            "avg_price": &#123; // 新增的指标名称.</div><div class="line">               "avg": &#123; // 新增指标的含义</div><div class="line">                  "field": "price" </div><div class="line">               &#125;</div><div class="line">            &#125;</div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>响应:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	...</div><div class="line">   "aggregations": &#123;</div><div class="line">      "colors": &#123;</div><div class="line">         "buckets": [ // 桶</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"red"</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">4</span>,</div><div class="line">               "avg_price": &#123; // 自定义的指标名称</div><div class="line">                  "value": 32500 // 值</div><div class="line">               &#125;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"blue"</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">2</span>,</div><div class="line">               <span class="attr">"avg_price"</span>: &#123;</div><div class="line">                  <span class="attr">"value"</span>: <span class="number">20000</span></div><div class="line">               &#125;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"green"</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">2</span>,</div><div class="line">               <span class="attr">"avg_price"</span>: &#123;</div><div class="line">                  <span class="attr">"value"</span>: <span class="number">21000</span></div><div class="line">               &#125;</div><div class="line">            &#125;</div><div class="line">         ]</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="nested-buckets"><a href="#nested-buckets" class="headerlink" title="nested buckets"></a>nested buckets</h2><p>请求:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">   <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">   <span class="attr">"aggs"</span>: &#123;</div><div class="line">      <span class="attr">"colors"</span>: &#123;</div><div class="line">         <span class="attr">"terms"</span>: &#123;</div><div class="line">            <span class="attr">"field"</span>: <span class="string">"color"</span></div><div class="line">         &#125;,</div><div class="line">         <span class="attr">"aggs"</span>: &#123;</div><div class="line">            <span class="attr">"avg_price"</span>: &#123; </div><div class="line">               <span class="attr">"avg"</span>: &#123;</div><div class="line">                  <span class="attr">"field"</span>: <span class="string">"price"</span></div><div class="line">               &#125;</div><div class="line">            &#125;,</div><div class="line">            "make": &#123; // 嵌套聚合. 含义为在上层聚合中, 增加单独的聚合.</div><div class="line">                "terms": &#123;</div><div class="line">                    "field": "make" </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>响应:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">...</div><div class="line">   "aggregations": &#123;</div><div class="line">      "colors": &#123;</div><div class="line">         "buckets": [</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key"</span>: <span class="string">"red"</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">4</span>,</div><div class="line">               "make": &#123; // 针对一个桶内的数据, 再次聚合运算.</div><div class="line">                  "buckets": [</div><div class="line">                     &#123;</div><div class="line">                        <span class="attr">"key"</span>: <span class="string">"honda"</span>, </div><div class="line">                        <span class="attr">"doc_count"</span>: <span class="number">3</span></div><div class="line">                     &#125;,</div><div class="line">                     &#123;</div><div class="line">                        <span class="attr">"key"</span>: <span class="string">"bmw"</span>,</div><div class="line">                        <span class="attr">"doc_count"</span>: <span class="number">1</span></div><div class="line">                     &#125;</div><div class="line">                  ]</div><div class="line">               &#125;,</div><div class="line">               "avg_price": &#123;</div><div class="line">                  "value": 32500 </div><div class="line">               &#125;</div><div class="line">            &#125;,</div><div class="line">	</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a>直方图</h2><p>直方图使用<code>histogram</code>参数, 指定区间. 使用场景较窄, 可以参考<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/_building_bar_charts.html" target="_blank" rel="external">官方文档</a></p>
+<h2 id="按时间统计"><a href="#按时间统计" class="headerlink" title="按时间统计"></a>按时间统计</h2><p>带有时间戳的文档, 可以使用参数<code>date_histogram</code>进行分析.</p>
+<p>统计每个月汽车销量:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">   <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">   <span class="attr">"aggs"</span>: &#123;</div><div class="line">      <span class="attr">"sales"</span>: &#123;</div><div class="line">         <span class="attr">"date_histogram"</span>: &#123;</div><div class="line">            <span class="attr">"field"</span>: <span class="string">"sold"</span>,</div><div class="line">            <span class="attr">"interval"</span>: <span class="string">"month"</span>, </div><div class="line">            <span class="attr">"format"</span>: <span class="string">"yyyy-MM-dd"</span> </div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>响应:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   ...</div><div class="line">   "aggregations": &#123;</div><div class="line">      "sales": &#123;</div><div class="line">         "buckets": [ // 空数据的月份不会显示出来</div><div class="line">            &#123;</div><div class="line">               "key_as_string": "2014-01-01", // 时间</div><div class="line">               "key": 1388534400000,</div><div class="line">               "doc_count": 1</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key_as_string"</span>: <span class="string">"2014-02-01"</span>,</div><div class="line">               <span class="attr">"key"</span>: <span class="number">1391212800000</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">1</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key_as_string"</span>: <span class="string">"2014-05-01"</span>,</div><div class="line">               <span class="attr">"key"</span>: <span class="number">1398902400000</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">1</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key_as_string"</span>: <span class="string">"2014-07-01"</span>,</div><div class="line">               <span class="attr">"key"</span>: <span class="number">1404172800000</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">1</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key_as_string"</span>: <span class="string">"2014-08-01"</span>,</div><div class="line">               <span class="attr">"key"</span>: <span class="number">1406851200000</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">1</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key_as_string"</span>: <span class="string">"2014-10-01"</span>,</div><div class="line">               <span class="attr">"key"</span>: <span class="number">1412121600000</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">1</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">               <span class="attr">"key_as_string"</span>: <span class="string">"2014-11-01"</span>,</div><div class="line">               <span class="attr">"key"</span>: <span class="number">1414800000000</span>,</div><div class="line">               <span class="attr">"doc_count"</span>: <span class="number">2</span></div><div class="line">            &#125;</div><div class="line">         ]</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>若需要显示范围内所有数据, 请求:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">   <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">   <span class="attr">"aggs"</span>: &#123;</div><div class="line">      <span class="attr">"sales"</span>: &#123;</div><div class="line">         <span class="attr">"date_histogram"</span>: &#123;</div><div class="line">            <span class="attr">"field"</span>: <span class="string">"sold"</span>,</div><div class="line">            <span class="attr">"interval"</span>: <span class="string">"month"</span>,</div><div class="line">            <span class="attr">"format"</span>: <span class="string">"yyyy-MM-dd"</span>,</div><div class="line">            "min_doc_count" : 0, // 强制返回空数据bucket</div><div class="line">            "extended_bounds" : &#123; // 指定范围区间</div><div class="line">                "min" : "2014-01-01",</div><div class="line">                "max" : "2014-12-31"</div><div class="line">            &#125;</div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="限定聚合的数据范围"><a href="#限定聚合的数据范围" class="headerlink" title="限定聚合的数据范围"></a>限定聚合的数据范围</h2><p>聚合操作可以加上参数<code>query</code>, 来与查询结合, 返回指定查询数据范围内的聚合.<br>如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">    "query" : &#123; // 范围</div><div class="line">        "match" : &#123;</div><div class="line">            "make" : "ford"</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    "aggs" : &#123; // 聚合</div><div class="line">        "colors" : &#123;</div><div class="line">            "terms" : &#123;</div><div class="line">              "field" : "color"</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>若在指定范围的聚合操作中, 还需要返回全局数据范围的聚合数据. 可以用<code>global</code>参数.<br>如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"match"</span> : &#123;</div><div class="line">            <span class="attr">"make"</span> : <span class="string">"ford"</span></div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"aggs"</span> : &#123;</div><div class="line">        <span class="attr">"single_avg_price"</span>: &#123;</div><div class="line">            <span class="attr">"avg"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"price"</span> &#125; </div><div class="line">        &#125;,</div><div class="line">        "all": &#123; // 全局数据范围的聚合</div><div class="line">            "global" : &#123;&#125;, // 参数</div><div class="line">            "aggs" : &#123;</div><div class="line">                "avg_price": &#123;</div><div class="line">                    "avg" : &#123; "field" : "price" &#125; </div><div class="line">                &#125;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="过滤buckets-amp-amp-后过滤器"><a href="#过滤buckets-amp-amp-后过滤器" class="headerlink" title="过滤buckets &amp;&amp; 后过滤器"></a>过滤buckets &amp;&amp; 后过滤器</h2><p>上文搭配<code>query</code>参数指定了数据范围进行聚合操作, 同时返回了相同范围内的查询与聚合. 若聚合操作的数据范围需要与查询操作的数据范围不同, 则可以使用 <strong>过滤buckets</strong> 或 <strong>后过滤器</strong> .</p>
+<p>过滤buckets请求:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">   <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">   <span class="attr">"query"</span>:&#123;</div><div class="line">      <span class="attr">"match"</span>: &#123;</div><div class="line">         <span class="attr">"make"</span>: <span class="string">"ford"</span></div><div class="line">      &#125;</div><div class="line">   &#125;,</div><div class="line">   <span class="attr">"aggs"</span>:&#123;</div><div class="line">      <span class="attr">"recent_sales"</span>: &#123;</div><div class="line">         "filter": &#123; // query返回的文档, 满足该filter时, 才放入bucket.(不影响查询结果)</div><div class="line">            "range": &#123;</div><div class="line">               "sold": &#123;</div><div class="line">                  "from": "now-1M"</div><div class="line">               &#125;</div><div class="line">            &#125;</div><div class="line">         &#125;,</div><div class="line">         "aggs": &#123;</div><div class="line">            "average_price":&#123;</div><div class="line">               "avg": &#123;</div><div class="line">                  "field": "price" </div><div class="line">               &#125;</div><div class="line">            &#125;</div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>后过滤器请求: (这个操作意为查询后操作, 会丢弃过滤操作的缓存, 可能性能差)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">    <span class="attr">"query"</span>: &#123;</div><div class="line">        <span class="attr">"match"</span>: &#123;</div><div class="line">            <span class="attr">"make"</span>: <span class="string">"ford"</span></div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    "post_filter": &#123; // 后过滤器, 在计算完全部查询后, 再对搜索结果进行过滤.(不影响聚合结果)</div><div class="line">        "term" : &#123;</div><div class="line">            "color" : "green"</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    "aggs" : &#123;</div><div class="line">        "all_colors": &#123;</div><div class="line">            "terms" : &#123; "field" : "color" &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>小节:</p>
+<ul>
+<li>在 filter 过滤中的 non-scoring 查询. 同时影响搜索结果和聚合结果.</li>
+<li>filter 桶影响聚合.</li>
+<li>post_filter 只影响搜索结果.</li>
+</ul>
+<h2 id="聚合结果的排序"><a href="#聚合结果的排序" class="headerlink" title="聚合结果的排序"></a>聚合结果的排序</h2><p>请求:<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">    <span class="attr">"aggs"</span> : &#123;</div><div class="line">        <span class="attr">"colors"</span> : &#123;</div><div class="line">            <span class="attr">"terms"</span> : &#123;</div><div class="line">              <span class="attr">"field"</span> : <span class="string">"color"</span>,</div><div class="line">              "order": &#123; // 排序</div><div class="line">                "_count" : "asc" </div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>内置排序字段:</p>
+<ul>
+<li><code>_count</code>: 按文档数排序. 对 <code>terms</code>, <code>histogram</code>, <code>date_histogram</code> 有效.</li>
+<li><code>_term</code>: 按词项的字符串值的字母顺序排序. 只在<code>terms</code>内使用.</li>
+<li><code>_key</code>:按每个桶的键值数值排序(理论上与 <code>_term</code> 类似). 只在 <code>histogram</code>和<code>date_histogram</code>内使用.</li>
+</ul>
+<p>按指标排序请求:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">GET /cars/transactions/_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"size"</span> : <span class="number">0</span>,</div><div class="line">    <span class="attr">"aggs"</span> : &#123;</div><div class="line">        <span class="attr">"colors"</span> : &#123;</div><div class="line">            <span class="attr">"terms"</span> : &#123;</div><div class="line">              <span class="attr">"field"</span> : <span class="string">"color"</span>,</div><div class="line">              <span class="attr">"order"</span>: &#123;</div><div class="line">                <span class="attr">"avg_price"</span> : <span class="string">"asc"</span> // 指标升序</div><div class="line">              &#125;</div><div class="line">            &#125;,</div><div class="line">            <span class="attr">"aggs"</span>: &#123;</div><div class="line">                "avg_price": &#123; // 内置指标</div><div class="line">                    "avg": &#123;"field": "price"&#125; </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>嵌套聚合的排序可以使用<code>&gt;</code>符号将指标嵌套起来.</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/es/" rel="tag"># es</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/12/CentOS-安装ffmpeg-实现amr-mp3/" rel="next" title="CentOS 安装ffmpeg脚本 (实现amr -> mp3)">
+                <i class="fa fa-chevron-left"></i> CentOS 安装ffmpeg脚本 (实现amr -> mp3)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="weihongyan" />
+          <p class="site-author-name" itemprop="name">weihongyan</p>
+           
+              <p class="site-description motion-element" itemprop="description">一人我饮酒醉 七八个小姐姐一起睡</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/weiazm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/3569209981" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#聚合-group-by"><span class="nav-number">1.</span> <span class="nav-text">聚合 (group by)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#easy-demo"><span class="nav-number">1.2.</span> <span class="nav-text">easy demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#more-metrics"><span class="nav-number">1.3.</span> <span class="nav-text">more metrics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nested-buckets"><span class="nav-number">1.4.</span> <span class="nav-text">nested buckets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直方图"><span class="nav-number">1.5.</span> <span class="nav-text">直方图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#按时间统计"><span class="nav-number">1.6.</span> <span class="nav-text">按时间统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限定聚合的数据范围"><span class="nav-number">1.7.</span> <span class="nav-text">限定聚合的数据范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤buckets-amp-amp-后过滤器"><span class="nav-number">1.8.</span> <span class="nav-text">过滤buckets && 后过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合结果的排序"><span class="nav-number">1.9.</span> <span class="nav-text">聚合结果的排序</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weihongyan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Mist
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
