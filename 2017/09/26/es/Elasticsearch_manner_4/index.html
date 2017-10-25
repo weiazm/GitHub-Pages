@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="排序默认排序: 当查询计算了相关度时, 返回的结果默认按照相关度降序排序. 当没有计算相关度时(filter查询等), 或计算从出的相关度相同时(constant_score查询等), 顺序是随机的.  指定值字段排序: 使用sort参数, 来指定排序:   123456789GET /_search&amp;#123;    &quot;query&quot; : &amp;#123;        &quot;bool&quot; : &amp;#123;">
+<meta name="description" content="组合多条件查询 组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.  bool查询: bool查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。     参数 含义     must 文档 必须 匹配这些条件才能被包含进来。(计算相关度)   mus">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Elasticsearch使用要点(五)">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/09/28/Elasticsearch_manner_5/index.html">
+<meta property="og:title" content="Elasticsearch使用要点(四)">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/09/26/es/Elasticsearch_manner_4/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="排序默认排序: 当查询计算了相关度时, 返回的结果默认按照相关度降序排序. 当没有计算相关度时(filter查询等), 或计算从出的相关度相同时(constant_score查询等), 顺序是随机的.  指定值字段排序: 使用sort参数, 来指定排序:   123456789GET /_search&amp;#123;    &quot;query&quot; : &amp;#123;        &quot;bool&quot; : &amp;#123;">
+<meta property="og:description" content="组合多条件查询 组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.  bool查询: bool查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。     参数 含义     must 文档 必须 匹配这些条件才能被包含进来。(计算相关度)   mus">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-29T08:20:35.000Z">
+<meta property="og:updated_time" content="2017-09-29T08:20:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Elasticsearch使用要点(五)">
-<meta name="twitter:description" content="排序默认排序: 当查询计算了相关度时, 返回的结果默认按照相关度降序排序. 当没有计算相关度时(filter查询等), 或计算从出的相关度相同时(constant_score查询等), 顺序是随机的.  指定值字段排序: 使用sort参数, 来指定排序:   123456789GET /_search&amp;#123;    &quot;query&quot; : &amp;#123;        &quot;bool&quot; : &amp;#123;">
+<meta name="twitter:title" content="Elasticsearch使用要点(四)">
+<meta name="twitter:description" content="组合多条件查询 组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.  bool查询: bool查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。     参数 含义     must 文档 必须 匹配这些条件才能被包含进来。(计算相关度)   mus">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/09/28/Elasticsearch_manner_5/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/09/26/es/Elasticsearch_manner_4/"/>
 
 
 
 
 
-  <title>Elasticsearch使用要点(五) | vonyan</title>
+  <title>Elasticsearch使用要点(四) | vonyan</title>
   
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/28/Elasticsearch_manner_5/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/26/es/Elasticsearch_manner_4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Elasticsearch使用要点(五)</h1>
+          <h1 class="post-title" itemprop="name headline">Elasticsearch使用要点(四)</h1>
         
 
         <div class="post-meta">
@@ -316,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T14:45:27+08:00">
-                2017-09-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-26T20:47:05+08:00">
+                2017-09-26
               </time>
             
 
@@ -376,31 +376,55 @@
       
 
       
-        <h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h2 id="默认排序"><a href="#默认排序" class="headerlink" title="默认排序:"></a>默认排序:</h2><ul>
-<li>当查询计算了相关度时, 返回的结果默认按照相关度降序排序.</li>
-<li>当没有计算相关度时(<code>filter</code>查询等), 或计算从出的相关度相同时(<code>constant_score</code>查询等), 顺序是随机的.</li>
-</ul>
-<h2 id="指定值字段排序"><a href="#指定值字段排序" class="headerlink" title="指定值字段排序:"></a>指定值字段排序:</h2><ul>
-<li><p>使用<code>sort</code>参数, 来指定排序:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"bool"</span> : &#123;</div><div class="line">            <span class="attr">"filter"</span> : &#123; <span class="attr">"term"</span> : &#123; <span class="attr">"user_id"</span> : <span class="number">1</span> &#125;&#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"sort"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125; //排序升降</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>返回的结果中将包含sort字段, 代表着用于排序的值.</p>
-<p><code>date</code>类型被用作排序字段时, es内部会将其转化为<code>unix timestamp</code>再进行排序.</p>
-<p>如不指定order, 默认的排序将是升序.</p>
+        <h1 id="组合多条件查询"><a href="#组合多条件查询" class="headerlink" title="组合多条件查询"></a>组合多条件查询</h1><blockquote>
+<p>组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.</p>
 </blockquote>
+<h2 id="bool查询"><a href="#bool查询" class="headerlink" title="bool查询:"></a>bool查询:</h2><blockquote>
+<p><code>bool</code>查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>must</code></td>
+<td style="text-align:center">文档 <strong>必须</strong> 匹配这些条件才能被包含进来。(<strong>计算相关度</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>must_not</code></td>
+<td style="text-align:center">文档 <strong>必须不</strong> 匹配这些条件才能被包含进来。(<strong>计算相关度</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>should</code></td>
+<td style="text-align:center">如果满足这些语句中的任意语句(or)，将增加 <strong>_score</strong> ，否则，无任何影响。(<strong>计算相关度</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>filter</code></td>
+<td style="text-align:center">必须 <strong>匹配</strong>，但它以不评分、过滤模式来进行。(<strong>不计算相关度</strong>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>filter</code>参数中的查询均不会计算相关度, 不会影响文档的相关度排名. 而且当一个查询不计算相关度时, 可以被es缓存在内存中, 提高性能.</li>
+<li>将查询移到 <code>bool</code> 查询的 <code>filter</code> 语句中, 这样它就自动的转成一个不评分的 <code>filter</code> .</li>
+<li><p>将 <code>bool</code> 查询包裹在 <code>filter</code> 语句中. 我们可以在过滤标准中增加布尔逻辑. 适用于复杂的过滤逻辑.通过混合布尔查询, 我们可以在我们的查询请求中灵活地编写 <code>scoring</code> 和 <code>filtering</code> 查询逻辑.</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"bool"</span>: &#123;</div><div class="line">		<span class="attr">"filter"</span>: &#123;</div><div class="line">			<span class="attr">"bool"</span>: &#123; </div><div class="line">				<span class="attr">"must"</span>: [</div><div class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"gte"</span>: <span class="string">"2014-01-01"</span> &#125;&#125;&#125;,</div><div class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"price"</span>: &#123; <span class="attr">"lte"</span>: <span class="number">29.99</span> &#125;&#125;&#125;</div><div class="line">				],</div><div class="line">				<span class="attr">"must_not"</span>: [</div><div class="line">				&#123; <span class="attr">"term"</span>: &#123; <span class="attr">"category"</span>: <span class="string">"ebooks"</span> &#125;&#125;</div><div class="line">				]</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="多级排序"><a href="#多级排序" class="headerlink" title="多级排序:"></a>多级排序:</h2><ul>
-<li><p>多级排序类似于MySQL的排序, 只有第一个排序字段相同时, 才使用第二个字段来排序.</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">        <span class="attr">"bool"</span> : &#123;</div><div class="line">            <span class="attr">"must"</span>:   &#123; <span class="attr">"match"</span>: &#123; <span class="attr">"tweet"</span>: <span class="string">"manage text search"</span> &#125;&#125;,</div><div class="line">            <span class="attr">"filter"</span> : &#123; <span class="attr">"term"</span> : &#123; <span class="attr">"user_id"</span> : <span class="number">2</span> &#125;&#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"sort"</span>: [</div><div class="line">        &#123; <span class="attr">"date"</span>:   &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125;,</div><div class="line">        &#123; <span class="attr">"_score"</span>: &#123; <span class="attr">"order"</span>: <span class="string">"desc"</span> &#125;&#125;// 排序可以使用score</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="constant-score查询"><a href="#constant-score查询" class="headerlink" title="constant_score查询:"></a>constant_score查询:</h2><blockquote>
+<p>可以使用它来取代只有 <strong>filter</strong> 语句的 <strong>bool</strong> 查询. 在性能上是完全相同的，但对于提高查询简洁性和清晰度有很大帮助。</p>
+</blockquote>
+<ul>
+<li><p><strong>constant_score</strong>查询将一个不变的常量评分应用于所有匹配的文档. 它被经常用于你只需要执行一个 <strong>filter</strong> 的情况下. </p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET students/_search</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">		<span class="attr">"constant_score"</span>: &#123;</div><div class="line">		  <span class="attr">"filter"</span>: &#123;</div><div class="line">		    <span class="attr">"term"</span>: &#123;</div><div class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></div><div class="line">		    &#125;</div><div class="line">		  &#125;,</div><div class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="多值字段排序"><a href="#多值字段排序" class="headerlink" title="多值字段排序:"></a>多值字段排序:</h2><ul>
-<li><p>多值字段可以是一个无序可重复集合. 排序时可以使用<code>mode</code>参数, 将集合转为单元素.</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"sort": &#123;</div><div class="line">    "dates": &#123;</div><div class="line">        "order": "asc",</div><div class="line">        "mode":  "min"</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>mode</code>可以接受的参数有: <code>min</code>, <code>max</code>, <code>avg</code>, <code>sum</code>.</p>
-</li>
+<h2 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h2><ul>
+<li>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</li>
 </ul>
 
       
@@ -432,8 +456,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/26/Elasticsearch_manner_4/" rel="next" title="Elasticsearch使用要点(四)">
-                <i class="fa fa-chevron-left"></i> Elasticsearch使用要点(四)
+              <a href="/2017/09/25/es/Elasticsearch_manner_3/" rel="next" title="Elasticsearch使用要点(三)">
+                <i class="fa fa-chevron-left"></i> Elasticsearch使用要点(三)
               </a>
             
           </div>
@@ -442,8 +466,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/12/CentOS-安装ffmpeg-实现amr-mp3/" rel="prev" title="CentOS 安装ffmpeg脚本 (实现amr -> mp3)">
-                CentOS 安装ffmpeg脚本 (实现amr -> mp3) <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/28/es/Elasticsearch_manner_5/" rel="prev" title="Elasticsearch使用要点(五)">
+                Elasticsearch使用要点(五) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -602,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#排序"><span class="nav-number">1.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#默认排序"><span class="nav-number">1.1.</span> <span class="nav-text">默认排序:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定值字段排序"><span class="nav-number">1.2.</span> <span class="nav-text">指定值字段排序:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多级排序"><span class="nav-number">1.3.</span> <span class="nav-text">多级排序:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多值字段排序"><span class="nav-number">1.4.</span> <span class="nav-text">多值字段排序:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#组合多条件查询"><span class="nav-number">1.</span> <span class="nav-text">组合多条件查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bool查询"><span class="nav-number">1.1.</span> <span class="nav-text">bool查询:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#constant-score查询"><span class="nav-number">1.2.</span> <span class="nav-text">constant_score查询:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explain查询"><span class="nav-number">1.3.</span> <span class="nav-text">explain查询:</span></a></li></ol></li></ol></div>
             
 
           </div>

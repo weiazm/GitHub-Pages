@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="es," />
+  <meta name="keywords" content="linux," />
 
 
 
@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="英文原版文档 转载地址 Text vs. keyword随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了string类型. 这个变动的根本原因是string类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全">
-<meta name="keywords" content="es">
+<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[转]ElasticSearch数据类型--string类型已死, 字符串数据永生">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/09/22/转-ElasticSearch数据类型-string类型已死-字符串数据永生/index.html">
+<meta property="og:title" content="linux系统负载以及JVM诊断常用命令">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="英文原版文档 转载地址 Text vs. keyword随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了string类型. 这个变动的根本原因是string类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全">
+<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-29T08:20:16.000Z">
+<meta property="og:updated_time" content="2017-09-29T08:19:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[转]ElasticSearch数据类型--string类型已死, 字符串数据永生">
-<meta name="twitter:description" content="英文原版文档 转载地址 Text vs. keyword随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了string类型. 这个变动的根本原因是string类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全">
+<meta name="twitter:title" content="linux系统负载以及JVM诊断常用命令">
+<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/09/22/转-ElasticSearch数据类型-string类型已死-字符串数据永生/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/"/>
 
 
 
 
 
-  <title>[转]ElasticSearch数据类型--string类型已死, 字符串数据永生 | vonyan</title>
+  <title>linux系统负载以及JVM诊断常用命令 | vonyan</title>
   
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/22/转-ElasticSearch数据类型-string类型已死-字符串数据永生/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">[转]ElasticSearch数据类型--string类型已死, 字符串数据永生</h1>
+          <h1 class="post-title" itemprop="name headline">linux系统负载以及JVM诊断常用命令</h1>
         
 
         <div class="post-meta">
@@ -316,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-22T19:51:24+08:00">
-                2017-09-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-17T14:22:47+08:00">
+                2017-08-17
               </time>
             
 
@@ -376,17 +376,37 @@
       
 
       
-        <p><a href="https://www.elastic.co/blog/strings-are-dead-long-live-strings" target="_blank" rel="external">英文原版文档</a></p>
-<p><a href="https://segmentfault.com/a/1190000008897731" target="_blank" rel="external">转载地址</a></p>
-<h2 id="Text-vs-keyword"><a href="#Text-vs-keyword" class="headerlink" title="Text vs. keyword"></a>Text vs. keyword</h2><p>随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了<strong>string</strong>类型. 这个变动的根本原因是<strong>string</strong>类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全文搜索(full-text search). 对ElasticSearch稍有了解的人都知道, 前者的字符串被称为<strong>not-analyzed</strong>字符, 而后者被称作<strong>analyzed</strong>字符串.</p>
-<p>事实上, 同一种类型用于应对两种不同的使用场景是会让人崩溃的, 因为有些选项只对其一的场景设置有效.例如<strong>position_increment_gap</strong>对<strong>not-analyzed</strong>字符就不会起作用, 而像<strong>ignore_above</strong>对于<strong>analyzed</strong>字符串就很难区分它到底是对整个字符串的值有效还是对单独的每个分词有效(在这种场景, <strong>ignore_above</strong>确实只对整个字符串值有效, 而对单个分词的限制可以使用<strong>limit</strong>设置).</p>
-<h2 id="新的默认类型"><a href="#新的默认类型" class="headerlink" title="新的默认类型"></a>新的默认类型</h2><p>做了这个类型分解之后, 我们对string字段的默认dynamic mappings 也做了改变. 在以前刚接接触ElasticSearch时, 如果需要对某个字段的所有取值做聚合, 你不得不对这些数据重做索引. 假如你正在处理的文档中包含一个city字段. 对这个字段做聚合的话会分别给出new和york的总数, 而非我们通常期望的New York的总数.让人沮丧的是为了达到我们希望的结果, 我们必须对这个字段重新进行索引.</p>
-<p>为了不让事情变得这么糟糕, ElasticSearch决定从Logstash中借取思路: 字符串将默认被同时映射成<strong>text</strong>和<strong>keyword</strong>类型. 例如对下面的文档进行索引后:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"foo"</span>: <span class="string">"bar"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>ElasticSearch将会为你创建下面的动态映射(dynamic mappings):</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"foo"</span>: &#123;</div><div class="line">        <span class="attr">"type"</span>: <span class="string">"text"</span>,</div><div class="line">        <span class="attr">"fields"</span>: &#123;</div><div class="line">            <span class="attr">"keyword"</span>: &#123;</div><div class="line">                <span class="attr">"type"</span>: <span class="string">"keyword"</span>,</div><div class="line">                <span class="attr">"ignore_above"</span>: <span class="number">256</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当然, 基于这个映射你即可以在<strong>foo</strong>字段上进行全文搜索, 也可以通过<strong>foo.keyword</strong>字段实现关键词搜索及数据聚合.</p>
-<p>后略…</p>
+        <h2 id="一些基本命令备忘"><a href="#一些基本命令备忘" class="headerlink" title="一些基本命令备忘"></a>一些基本命令备忘</h2><ul>
+<li><p>查看端口号被占用情况:</p>
+<pre><code>fuser -n tcp 9200
+</code></pre></li>
+<li><p>查看所有进程,以及cpu,内存占用:</p>
+<pre><code>ps aux
+</code></pre></li>
+<li><p>查看机器内存用量以及剩余:</p>
+<pre><code>free -m
+</code></pre></li>
+<li><p>查看指定进程内, 线程资源占用情况:</p>
+<pre><code>top -Hp pid
+</code></pre></li>
+<li><p>转换pid -&gt; nid:</p>
+<pre><code>printf &quot;%x\n&quot; pid
+</code></pre></li>
+<li><p>java堆统计实例数量,大小:</p>
+<pre><code>jmap -histo:live pid | head -100
+</code></pre></li>
+<li><p>java栈快照:</p>
+<pre><code>jstack -l  nid
+</code></pre></li>
+</ul>
+<ul>
+<li><p>文件目录大小排序显示:</p>
+<pre><code>du -m -d 1 | sort -k1 -n -t&apos; &apos;
+</code></pre></li>
+<li><p>磁盘剩余容量:</p>
+<pre><code>df
+</code></pre></li>
+</ul>
 
       
     </div>
@@ -404,7 +424,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/es/" rel="tag"># es</a>
+            <a href="/tags/linux/" rel="tag"># linux</a>
           
         </div>
       
@@ -417,18 +437,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/22/Elasticsearch_manner_2/" rel="next" title="Elasticsearch使用要点(二)">
-                <i class="fa fa-chevron-left"></i> Elasticsearch使用要点(二)
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/25/Elasticsearch_manner_3/" rel="prev" title="Elasticsearch使用要点(三)">
-                Elasticsearch使用要点(三) <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/15/es/Elasticsearch_manner_1/" rel="prev" title="Elasticsearch使用要点(一)">
+                Elasticsearch使用要点(一) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -587,7 +603,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-vs-keyword"><span class="nav-number">1.</span> <span class="nav-text">Text vs. keyword</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新的默认类型"><span class="nav-number">2.</span> <span class="nav-text">新的默认类型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些基本命令备忘"><span class="nav-number">1.</span> <span class="nav-text">一些基本命令备忘</span></a></li></ol></div>
             
 
           </div>
