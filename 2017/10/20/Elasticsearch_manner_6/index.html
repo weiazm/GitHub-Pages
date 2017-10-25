@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX() 等聚合操作. 聚合 是由 桶 和 指">
+<meta name="description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  ####注意: 聚合的结果不支持分页 概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX()">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch使用要点(六)">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/10/20/Elasticsearch_manner_6/index.html">
 <meta property="og:site_name" content="vonyan">
-<meta property="og:description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX() 等聚合操作. 聚合 是由 桶 和 指">
+<meta property="og:description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  ####注意: 聚合的结果不支持分页 概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX()">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-20T07:53:49.000Z">
+<meta property="og:updated_time" content="2017-10-25T11:29:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(六)">
-<meta name="twitter:description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX() 等聚合操作. 聚合 是由 桶 和 指">
+<meta name="twitter:description" content="聚合 (group by) 在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。  ####注意: 聚合的结果不支持分页 概念桶(Buckets): 满足特定条件的文档的集合. 类似于MySQL的GROUP BY. 指标(Metrics): 对桶内的文档进行统计计算. 类似MySQL的COUNT(), SUM(), MAX()">
 
 
 
@@ -379,6 +379,7 @@
         <h1 id="聚合-group-by"><a href="#聚合-group-by" class="headerlink" title="聚合 (group by)"></a>聚合 (group by)</h1><blockquote>
 <p>在es中, 聚合可以跟搜索合并为一个请求, 它们使用相同的数据结构。这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的。</p>
 </blockquote>
+<p>####注意: 聚合的结果不支持分页</p>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p><code>桶</code>(<strong>Buckets</strong>): 满足特定条件的文档的集合. 类似于MySQL的<strong>GROUP BY</strong>.</p>
 <p><code>指标</code>(<strong>Metrics</strong>): 对桶内的文档进行统计计算. 类似MySQL的<strong>COUNT()</strong>, <strong>SUM()</strong>, <strong>MAX()</strong> 等聚合操作.</p>
 <p><code>聚合</code> 是由 <code>桶</code> 和 <code>指标</code> 组成的。 聚合可能只有一个桶，可能只有一个指标，或者可能两个都有。也有可能有一些桶 <strong>嵌套</strong>(通过嵌套, 可以实现非常复杂的聚合统计) 在其他桶里面。</p>
