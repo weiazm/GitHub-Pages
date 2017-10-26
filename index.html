@@ -392,7 +392,7 @@
 <li>运行一段时间后一台服务器上的tomcat反复报java.lang.OutOfMemoryError: unable to create new native thread 异常. 而且跳板机登录上去后查看机器剩余内存还是很多. 没有什么头绪, 便调小了这台机器的部分tomcat实例内存大小, 空闲出了更多内存避免问题产生.</li>
 </ol>
 <h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>第二天这台机器又报出了java.lang.OutOfMemoryError: unable to create new native thread 异常. 拉楼上的OP君下来一起排查问题.OP君使用<strong>lsof</strong>命令发现一个tomcat实例占用了八千多个连接, 找到了进程, kill然后重启, 问题解决.</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>原因是socket泄露, 太多的socket未关掉(具体原因未知), JVM在创建线程时无法创建socket, 报了java.lang.OutOfMemoryError: unable to create new native thread 异常.</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>原因是socket泄露, 太多的socket未关掉(具体原因未知), JVM在创建线程时无法创建socket???(待查明), 报了java.lang.OutOfMemoryError: unable to create new native thread 异常.</p>
 
           
         

@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="樱丸小头子的blog">
 <meta property="og:description" content="前言去年公司范围内迁移redis -&amp;gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&amp;gt; 4.x . 升级了JAVA编译版本:1.7 -&amp;gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本. JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-26T07:59:01.000Z">
+<meta property="og:updated_time" content="2017-10-26T08:09:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线上服务器OOM问题排查记录">
 <meta name="twitter:description" content="前言去年公司范围内迁移redis -&amp;gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&amp;gt; 4.x . 升级了JAVA编译版本:1.7 -&amp;gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本. JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除,">
@@ -388,7 +388,7 @@
 <li>运行一段时间后一台服务器上的tomcat反复报java.lang.OutOfMemoryError: unable to create new native thread 异常. 而且跳板机登录上去后查看机器剩余内存还是很多. 没有什么头绪, 便调小了这台机器的部分tomcat实例内存大小, 空闲出了更多内存避免问题产生.</li>
 </ol>
 <h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>第二天这台机器又报出了java.lang.OutOfMemoryError: unable to create new native thread 异常. 拉楼上的OP君下来一起排查问题.OP君使用<strong>lsof</strong>命令发现一个tomcat实例占用了八千多个连接, 找到了进程, kill然后重启, 问题解决.</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>原因是socket泄露, 太多的socket未关掉(具体原因未知), JVM在创建线程时无法创建socket, 报了java.lang.OutOfMemoryError: unable to create new native thread 异常.</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>原因是socket泄露, 太多的socket未关掉(具体原因未知), JVM在创建线程时无法创建socket???(待查明), 报了java.lang.OutOfMemoryError: unable to create new native thread 异常.</p>
 
       
     </div>
