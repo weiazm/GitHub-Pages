@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux," />
+  <meta name="keywords" content="es," />
 
 
 
@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="微信js-sdk产生的录音文件格式为amr, 部分设备不支持该播放格式. 可以使用ffmpeg来进行格式转化. 以下是ffmpeg的安装脚本: 123456789101112131415161718192021222324252627282930313233wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gztar">
-<meta name="keywords" content="linux">
+<meta name="description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
+<meta name="keywords" content="es">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CentOS 安装ffmpeg脚本 (实现amr -&gt; mp3)">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/10/12/es/CentOS-安装ffmpeg-实现amr-mp3/index.html">
+<meta property="og:title" content="Elasticsearch使用要点(三)-分布式">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/09/25/es/Elasticsearch_manner_3_分布式/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="微信js-sdk产生的录音文件格式为amr, 部分设备不支持该播放格式. 可以使用ffmpeg来进行格式转化. 以下是ffmpeg的安装脚本: 123456789101112131415161718192021222324252627282930313233wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gztar">
+<meta property="og:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-16T11:04:41.000Z">
+<meta property="og:updated_time" content="2017-10-26T02:48:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CentOS 安装ffmpeg脚本 (实现amr -&gt; mp3)">
-<meta name="twitter:description" content="微信js-sdk产生的录音文件格式为amr, 部分设备不支持该播放格式. 可以使用ffmpeg来进行格式转化. 以下是ffmpeg的安装脚本: 123456789101112131415161718192021222324252627282930313233wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gztar">
+<meta name="twitter:title" content="Elasticsearch使用要点(三)-分布式">
+<meta name="twitter:description" content="分布式文档存储分片路由: 路由计算公式 shard = hash(routing) % number_of_primary_shards  这个公式决定了主分片数量在创建以后不可更改. 但是在后续的水平扩展中可以通过routing路由参数从指定的分片中获取数据.   节点,分片间数据交互参考:官方文档   分页查询: es使用以下两个参数来进行分页 size:显示应该返回的结果数量, 默认是 10">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/10/12/es/CentOS-安装ffmpeg-实现amr-mp3/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/09/25/es/Elasticsearch_manner_3_分布式/"/>
 
 
 
 
 
-  <title>CentOS 安装ffmpeg脚本 (实现amr -> mp3) | 樱丸小头子的blog</title>
+  <title>Elasticsearch使用要点(三)-分布式 | 樱丸小头子的blog</title>
   
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/12/es/CentOS-安装ffmpeg-实现amr-mp3/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/es/Elasticsearch_manner_3_分布式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CentOS 安装ffmpeg脚本 (实现amr -> mp3)</h1>
+          <h1 class="post-title" itemprop="name headline">Elasticsearch使用要点(三)-分布式</h1>
         
 
         <div class="post-meta">
@@ -316,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-12T17:25:39+08:00">
-                2017-10-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T16:44:27+08:00">
+                2017-09-25
               </time>
             
 
@@ -376,13 +376,55 @@
       
 
       
-        <p>微信js-sdk产生的录音文件格式为amr, 部分设备不支持该播放格式. 可以使用ffmpeg来进行格式转化.</p>
-<p>以下是ffmpeg的安装脚本:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz</div><div class="line">tar xvf yasm-1.3.0.tar.gz</div><div class="line"><span class="built_in">cd</span> yasm-1.3.0</div><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line">wget http://jaist.dl.sourceforge.net/project/lame/lame/3.99/lame-3.99.5.tar.gz  </div><div class="line">tar xvf lame-3.99.5.tar.gz</div><div class="line"><span class="built_in">cd</span> lame-3.99.5</div><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line">wget http://jaist.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-0.1.3.tar.gz</div><div class="line">tar xvf opencore-amr-0.1.3.tar.gz</div><div class="line"><span class="built_in">cd</span> opencore-amr-0.1.3</div><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line">wget http://ffmpeg.org/releases/ffmpeg-3.2.4.tar.bz2</div><div class="line">tar xvf ffmpeg-3.2.4.tar.bz2</div><div class="line"><span class="built_in">cd</span> ffmpeg-3.2.4</div><div class="line">./configure --<span class="built_in">enable</span>-version3 --<span class="built_in">enable</span>-libmp3lame --<span class="built_in">enable</span>-libopencore-amrnb --<span class="built_in">enable</span>-libopencore-amrwb</div><div class="line">make</div><div class="line">make install</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 64位的机器安装部分媒体支持库时, 默认的文件位置可能有问题, 建立软连接.</span></div><div class="line">ln -s /usr/<span class="built_in">local</span>/lib/libopencore-amrwb.so.0 /usr/lib64/libopencore-amrwb.so.0</div><div class="line">ln -s /usr/<span class="built_in">local</span>/lib/libopencore-amrnb.so.0 /usr/lib64/libopencore-amrnb.so.0</div><div class="line">ln -s /usr/<span class="built_in">local</span>/lib/libmp3lame.so.0 /usr/lib64/libmp3lame.so.0</div></pre></td></tr></table></figure>
-<p>java代码访问ffmpeg:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Process process = Runtime.getRuntime().exec(<span class="string">"ffmpeg -i "</span> + amrFile + <span class="string">" "</span> + mp3File);</div><div class="line">process.waitFor();</div></pre></td></tr></table></figure>
-<p>关于源码安装:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 命令可以用&amp;&amp;连接起来, 表示前者成功后才去执行后者.</span></div><div class="line">./configure  &amp;&amp;  make  &amp;&amp;  make  install</div><div class="line"></div><div class="line"><span class="comment"># configure 可以使用参数 --prefix= 指定安装目录.</span></div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/<span class="built_in">test</span></div><div class="line"></div><div class="line"><span class="comment"># 卸载可以在原来的make目录下用一次make uninstall:</span></div><div class="line">./make uninstall</div></pre></td></tr></table></figure>
+        <h1 id="分布式文档存储"><a href="#分布式文档存储" class="headerlink" title="分布式文档存储"></a>分布式文档存储</h1><h2 id="分片路由"><a href="#分片路由" class="headerlink" title="分片路由:"></a>分片路由:</h2><ul>
+<li><p>路由计算公式</p>
+<pre><code>shard = hash(routing) % number_of_primary_shards
+</code></pre><blockquote>
+<p>这个公式决定了主分片数量在创建以后不可更改.</p>
+<p>但是在后续的水平扩展中可以通过<code>routing</code>路由参数从指定的分片中获取数据.</p>
+</blockquote>
+</li>
+<li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="external">官方文档</a></p>
+</li>
+</ul>
+<h2 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h2><ul>
+<li><p>es使用以下两个参数来进行分页</p>
+<pre><code>size:显示应该返回的结果数量, 默认是 10
+from: 显示应该跳过的初始结果数量, 默认是 0
+</code></pre><blockquote>
+<p>深度分页问题: 当分页深度过大时, 有性能问题. 如from=10000, size=10. 则协调节点向所有的n个分片请求10010个文档数量. 协调节点获取了n <em> 10010个文档后, 排序找到前10个文档再丢弃n </em> 10010 - 10个文档.即在分布式系统中, 对结果排序的成本随分页的深度成指数上升.</p>
+<p>如果你 确实 需要从你的集群取回大量的文档, 你可以通过用 <code>scroll</code> 查询禁用排序使这个取回行为更有效率.    </p>
+</blockquote>
+</li>
+</ul>
+<h2 id="游标查询"><a href="#游标查询" class="headerlink" title="游标查询:"></a>游标查询:</h2><blockquote>
+<p><code>scroll</code> 查询 可以用来对 Elasticsearch 有效地执行大批量的文档查询, 而又不用付出深度分页那种代价. (使用场景: 数据导出)</p>
+</blockquote>
+<ul>
+<li>游标查询初始化时会取某个时间点的快照数据, 保存在某个位置. </li>
+<li>快照数据可以被指定过期时间.(过期时间会在每次查询时刷新. 故这个时间可以理解为一次请求的最大时间, 后续的连续请求会刷新过期时间. )</li>
+<li><p>初始化后索引上的任何变化会被忽略, 不会再反映到快照数据上.</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">	<span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>游标查询返回的结果会有一个<code>_scroll_id</code>字段, 值为base64编码的字符串.</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	GET /_search/scroll</div><div class="line">&#123;</div><div class="line">   "scroll": "1m", // 后续请求刷新的游标过期时间</div><div class="line">   "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAABVT7FlJSQ3VHeWhhVGlLQ0U5OF9qMGlhWmcAAAAAAAVU4xZ0ME5Uc0hkelFQMkJnZURKdjRxZE5RAAAAAAAFVOYWdDBOVHNIZHpRUDJCZ2VESnY0cWROUQAAAAAABVTlFnQwTlRzSGR6UVAyQmdlREp2NHFkTlEAAAAAAAVU5BZ0ME5Uc0hkelFQMkJnZURKdjRxZE5R"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>游标初始化后, 后续的游标查询需指定上次返回的<code>_scroll_id</code>字段, 返回的结果会自动接着上次返回的内容.</li>
+</ul>
+<h2 id="映射"><a href="#映射" class="headerlink" title="映射:"></a>映射:</h2><ul>
+<li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
+<li>字段可以是对象(一个json文档).</li>
+<li><p>内部对象索引后会被打平:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</div><div class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</div><div class="line">    <span class="attr">"user.gender"</span>:      [male],</div><div class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</div><div class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</div><div class="line">    <span class="attr">"user.name.first"</span>:  [john],</div><div class="line">    <span class="attr">"user.name.last"</span>:   [smith]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>内部对象数组也会被打平:</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">打平为:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">    <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
+
       
     </div>
     
@@ -399,7 +441,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag"># linux</a>
+            <a href="/tags/es/" rel="tag"># es</a>
           
         </div>
       
@@ -412,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/28/es/Elasticsearch_manner_5/" rel="next" title="Elasticsearch使用要点(五)">
-                <i class="fa fa-chevron-left"></i> Elasticsearch使用要点(五)
+              <a href="/2017/09/22/es/转-ElasticSearch数据类型-string类型已死-字符串数据永生/" rel="next" title="[转]ElasticSearch数据类型--string类型已死, 字符串数据永生">
+                <i class="fa fa-chevron-left"></i> [转]ElasticSearch数据类型--string类型已死, 字符串数据永生
               </a>
             
           </div>
@@ -422,8 +464,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/20/es/Elasticsearch_manner_6/" rel="prev" title="Elasticsearch使用要点(六)">
-                Elasticsearch使用要点(六) <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/26/es/Elasticsearch_manner_4_多条件查询/" rel="prev" title="Elasticsearch使用要点(四)-多条件查询">
+                Elasticsearch使用要点(四)-多条件查询 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -476,8 +518,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -563,6 +614,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式文档存储"><span class="nav-number">1.</span> <span class="nav-text">分布式文档存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分片路由"><span class="nav-number">1.1.</span> <span class="nav-text">分片路由:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页查询"><span class="nav-number">1.2.</span> <span class="nav-text">分页查询:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游标查询"><span class="nav-number">1.3.</span> <span class="nav-text">游标查询:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射"><span class="nav-number">1.4.</span> <span class="nav-text">映射:</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
