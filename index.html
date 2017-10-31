@@ -287,6 +287,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/31/algorithm/算法-KMP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/31/algorithm/算法-KMP/" itemprop="url">算法: KMP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T19:05:32+08:00">
+                2017-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="KMP-字符串匹配"><a href="#KMP-字符串匹配" class="headerlink" title="KMP-字符串匹配"></a>KMP-字符串匹配</h3><p>实现代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">kmpMatch</span><span class="params">(String source, String key)</span> </span>&#123;</div><div class="line">    <span class="comment">// 生成next数组</span></div><div class="line">    <span class="keyword">int</span>[] next = getNext(key);</div><div class="line">    <span class="keyword">int</span> result = -<span class="number">1</span>;</div><div class="line">    <span class="comment">// 两个数组指针</span></div><div class="line">    <span class="keyword">int</span> sLocation = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> kLocation = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (sLocation &lt; source.length()) &#123;</div><div class="line">        <span class="comment">// 如果两个字符相等了</span></div><div class="line">        <span class="keyword">if</span> (key.charAt(kLocation) == source.charAt(sLocation)) &#123;</div><div class="line">            <span class="keyword">if</span> (kLocation == key.length() - <span class="number">1</span>) &#123;<span class="comment">// key的最后一个字符. 说明匹配完成</span></div><div class="line">                result = sLocation - key.length() + <span class="number">1</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;<span class="comment">// 继续向后匹配</span></div><div class="line">                kLocation++;</div><div class="line">                sLocation++;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// 两个字符不相等</span></div><div class="line">            <span class="keyword">if</span> (kLocation == <span class="number">0</span>) &#123; <span class="comment">// 没有上一个匹配的字符, 继续往后匹配source</span></div><div class="line">                sLocation++;</div><div class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// key指针跳到上一个匹配的字符对应的next值</span></div><div class="line">                kLocation = next[kLocation - <span class="number">1</span>];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNext(String key) &#123;</div><div class="line">    <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[key.length()];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; key.length(); i++) &#123;</div><div class="line">        <span class="comment">// 自身与前缀子字符串</span></div><div class="line">        String prefix = key.substring(<span class="number">0</span>, i + <span class="number">1</span>);</div><div class="line">        result[i] = getNextValue(prefix);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getNextValue</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> value = <span class="number">0</span>;</div><div class="line">    <span class="comment">// 用于去重</span></div><div class="line">    Set&lt;String&gt; prefixes = Sets.newHashSet();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length() - <span class="number">1</span>; i++) &#123;</div><div class="line">        <span class="comment">// 前缀子字符串</span></div><div class="line">        String prefix = str.substring(<span class="number">0</span>, i + <span class="number">1</span>);</div><div class="line">        prefixes.add(prefix);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length() - <span class="number">1</span>; i++) &#123;</div><div class="line">        <span class="comment">// 后缀子字符串</span></div><div class="line">        String prefix = str.substring(str.length() - <span class="number">1</span> - i, str.length());</div><div class="line">        <span class="comment">// 判断是否有相同的子串在set中, 如果有重复的, 就更新结果.</span></div><div class="line">        value = prefixes.add(prefix) ? value : Math.max(value, prefix.length());</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/31/es/Elasticsearch-manner-7-映射/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1839,168 +1981,6 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/22/es/Elasticsearch_manner_2_创建_更新_删除/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="weihongyan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="樱丸小头子的blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/22/es/Elasticsearch_manner_2_创建_更新_删除/" itemprop="url">Elasticsearch使用要点(二)-创建,更新,删除</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-22T11:22:10+08:00">
-                2017-09-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><blockquote>
-<p>在es中, 文档是不可改变的, 更新文档可以直接对相同id的文档进行index 或者 update操作(相当于执行get,index操作). 在内部, es 将旧文档标记为已删除, 并增加一个全新的文档. 当被标记为删除的文档累计一定的数量或持续时间后, es会在后台清理这些文档.</p>
-</blockquote>
-<ul>
-<li>index文档时可以加<code>op_type=create</code>参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.</li>
-<li><p>创建时可以指定索引的主分片数量, 复制分片数量.</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"settings"</span>: &#123;</div><div class="line">        <span class="attr">"number_of_shards"</span> :   <span class="number">1</span>,</div><div class="line">        <span class="attr">"number_of_replicas"</span> : <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><ul>
-<li><p>更新或者创建时, 可以加<code>version=?</code>参数, 来使用乐观锁机制指定es中该文档当前的version值进行数据的更新. 类似redis事务的watch命令.(并发更新时, 可以使用时间戳作为version, 如:传入参数:<code>version=10&amp;version_type=external</code>, 避免因网络等因素, 导致的新更新被旧更新覆盖).</p>
-</li>
-<li><p>局部更新可以在update请求中指定<code>doc</code>属性, 来进行局部更新.</p>
-</li>
-<li>批量操作可以使用<code>bulk-api</code>, 实现定时,定量刷新提交策略.整合多个原子操作于一个es请求中. 注意:bulk中每一个操作是原子的, 但是bulk整个不是原子的, 无法实现事务.</li>
-</ul>
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>旧的es版本可以支持条件删除操作.</p>
-<p>5.0以后的版本<strong>不再支持条件删除</strong>, 只能通过文档id来删除.</p>
-<p>逻辑可以通过<code>scroll API</code>查询出所有满足条件的id, 再使用id来删除.</p>
-<p>java代码示例:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">batchDeleteByQuery</span><span class="params">(String index, String type, QueryBuilder queryBuilder)</span></span>&#123;</div><div class="line">    <span class="comment">// collect going to delete ids</span></div><div class="line">    <span class="keyword">long</span> ct = System.currentTimeMillis();</div><div class="line">    Set&lt;String&gt; ids = Sets.newHashSet();</div><div class="line">    SearchResponse response = <span class="keyword">this</span>.getClient()</div><div class="line">        .prepareSearch(index)</div><div class="line">        .setTypes(type)</div><div class="line">        .setQuery(queryBuilder)</div><div class="line">        .setSize(<span class="number">300</span>)</div><div class="line">        .setScroll(TimeValue.MINUS_ONE)</div><div class="line">        .setFetchSource(<span class="keyword">false</span>)</div><div class="line">        .execute()</div><div class="line">        .actionGet();</div><div class="line">    log.debug(<span class="string">"response:&#123;&#125; "</span>, response);</div><div class="line">    ids.addAll(Arrays.stream(response.getHits().getHits()).map(searchHitFields -&gt; searchHitFields.getId()).collect(</div><div class="line">        Collectors.toList()));</div><div class="line">    <span class="keyword">while</span> (ArrayUtils.isNotEmpty(response.getHits().getHits()))&#123;</div><div class="line">        response = <span class="keyword">this</span>.getClient()</div><div class="line">            .prepareSearchScroll(response.getScrollId())</div><div class="line">            .setScroll(TimeValue.MINUS_ONE)</div><div class="line">            .execute()</div><div class="line">            .actionGet();</div><div class="line">        log.debug(<span class="string">"response:&#123;&#125; "</span>, response);</div><div class="line">        ids.addAll(Arrays.stream(response.getHits().getHits()).map(searchHitFields -&gt; searchHitFields.getId()).collect(Collectors.toList()));</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// remove scroll</span></div><div class="line">    <span class="keyword">this</span>.getClient().prepareClearScroll().addScrollId(response.getScrollId()).execute().actionGet();</div><div class="line"></div><div class="line">    <span class="comment">// iterater to delete</span></div><div class="line">    <span class="keyword">for</span>(String id : ids)&#123;</div><div class="line">        <span class="keyword">this</span>.getDefaultBulkProcessor().add(<span class="keyword">new</span> DeleteRequest(index, type, id));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    log.info(<span class="string">"delete doc. index:&#123;&#125;, type:&#123;&#125;, ids size:&#123;&#125;, costs:&#123;&#125;ms, query:&#123;&#125; "</span>, index, type, ids.size(),</div><div class="line">        System.currentTimeMillis() - ct, queryBuilder);</div><div class="line">    log.debug(<span class="string">"delete ids:&#123;&#125; "</span>, ids);</div><div class="line">    <span class="keyword">return</span> ids.size();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2051,7 +2031,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
