@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点： String常量池. 从 Perm 区移动到了 Java Heap 区 String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.">
+<meta name="description" content="JVMjdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点： String常量池. 从 Perm 区移动到了 Java Heap 区 String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM-零碎知识点">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/11/03/jvm/JVM-零碎知识点/index.html">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/11/03/jvm/NIO/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点： String常量池. 从 Perm 区移动到了 Java Heap 区 String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.">
+<meta property="og:description" content="JVMjdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点： String常量池. 从 Perm 区移动到了 Java Heap 区 String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-03T10:07:45.000Z">
+<meta property="og:updated_time" content="2017-11-06T08:43:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM-零碎知识点">
-<meta name="twitter:description" content="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点： String常量池. 从 Perm 区移动到了 Java Heap 区 String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.">
+<meta name="twitter:description" content="JVMjdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点： String常量池. 从 Perm 区移动到了 Java Heap 区 String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.">
 
 
 
@@ -134,7 +134,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/11/03/jvm/JVM-零碎知识点/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/11/03/jvm/NIO/"/>
 
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/jvm/JVM-零碎知识点/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/jvm/NIO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -376,7 +376,7 @@
       
 
       
-        <h3 id="jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><a href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点：" class="headerlink" title="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点："></a>jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</h3><ol>
+        <h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><a href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点：" class="headerlink" title="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点："></a>jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</h3><ol>
 <li>String常量池. 从 Perm 区移动到了 Java Heap 区</li>
 <li>String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.</li>
 </ol>
@@ -499,7 +499,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -521,7 +521,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -580,7 +580,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><span class="nav-number">1.</span> <span class="nav-text">jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-number">1.</span> <span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><span class="nav-number">1.1.</span> <span class="nav-text">jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</span></a></li></ol></li></ol></div>
             
 
           </div>

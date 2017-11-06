@@ -287,6 +287,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/06/jvm/JVM-零碎知识点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/06/jvm/JVM-零碎知识点/" itemprop="url">NIO</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T16:43:07+08:00">
+                2017-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><blockquote>
+<p>摘自 <a href="https://zhuanlan.zhihu.com/p/23488863" target="_blank" rel="external"><em>美团点评技术团队<br>-知乎</em></a></p>
+</blockquote>
+<h3 id="服务端同步阻塞I-O的问题："><a href="#服务端同步阻塞I-O的问题：" class="headerlink" title="服务端同步阻塞I/O的问题："></a>服务端同步阻塞I/O的问题：</h3><ol>
+<li>线程的创建和销毁成本很高, 在Linux这样的操作系统中, 线程本质上就是一个进程. 创建和销毁都是重量级的系统函数.</li>
+<li>线程本身占用较大内存, 像Java的线程栈, 一般至少分配512K～1M的空间, 如果系统中的线程数过千, 恐怕整个JVM的内存都会被吃掉一半.</li>
+<li>线程的切换成本是很高. 操作系统发生线程切换的时候, 需要保留线程的上下文, 然后执行系统调用. 如果线程数过高, 可能执行线程切换的时间甚至会大于线程执行的时间, 这时候带来的表现往往是系统load偏高, CPU sy使用率特别高(超过20%以上), 导致系统几乎陷入不可用的状态.</li>
+<li>容易造成锯齿状的系统负载. 因为系统负载是用活动线程数或CPU核心数, 一旦线程数量高但外部网络环境不是很稳定, 就很容易造成大量请求的结果同时返回, 激活大量阻塞线程从而使系统负载压力过大.</li>
+</ol>
+<p>所以, 当面对十万甚至百万级连接的时候, 传统的BIO模型是无能为力的. 随着移动端应用的兴起和各种网络游戏的盛行, 百万级长连接日趋普遍, 此时, 必然需要一种更高效的I/O处理模型.</p>
+<h3 id="常见I-O模型对比："><a href="#常见I-O模型对比：" class="headerlink" title="常见I/O模型对比："></a>常见I/O模型对比：</h3><p><img src="https://pic2.zhimg.com/50/v2-f47206d5b5e64448744b85eaf568f92d_hd.jpg" alt="I/O模型图"></p>
+<p>以socket.read()为例子：</p>
+<ul>
+<li>传统的BIO里面socket.read(), 如果TCP RecvBuffer里没有数据, 函数会一直阻塞, 直到收到数据, 返回读到的数据.</li>
+<li>对于NIO, 如果TCP RecvBuffer有数据, 就把数据从网卡读到内存, 并且返回给用户. 反之则直接返回0, 永远不会阻塞.</li>
+<li>最新的AIO(Async I/O)里面会更进一步: 不但等待就绪是非阻塞的, 就连数据从网卡到内存的过程也是异步的.</li>
+</ul>
+<p>换句话说, BIO里用户最关心”我要读”, NIO里用户最关心”我可以读了”, 在AIO模型里用户更需要关注的是”读完了”.</p>
+<p>NIO一个重要的特点是: socket主要的读, 写, 注册和接收函数, 在等待就绪阶段都是非阻塞的, 真正的I/O操作是同步阻塞的(消耗CPU但性能非常高).</p>
+<h3 id="结合事件模型使用NIO同步非阻塞特性"><a href="#结合事件模型使用NIO同步非阻塞特性" class="headerlink" title="结合事件模型使用NIO同步非阻塞特性:"></a>结合事件模型使用NIO同步非阻塞特性:</h3><p>NIO的读写函数可以立刻返回, 这就给了我们不开线程利用CPU的最好机会: 如果一个连接不能读写(socket.read()返回0或者socket.write()返回0), 我们可以把这件事记下来, 记录的方式通常是在Selector上注册标记位, 然后切换到其它就绪的连接(channel)继续进行读写.</p>
+<p>单线程事件模型伪代码实例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ChannelHandler</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">channelReadable</span><span class="params">(Channel channel)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">channelWritable</span><span class="params">(Channel channel)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Channel</span></span>&#123;</div><div class="line"> Socket socket;</div><div class="line"> Event event;<span class="comment">//读，写或者连接</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//IO线程主循环:</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">IoThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</div><div class="line">	Channel channel;</div><div class="line">	<span class="keyword">while</span>(channel=Selector.select())&#123;<span class="comment">//阻塞选择就绪的事件和对应的连接</span></div><div class="line">      <span class="keyword">if</span>(channel.event==accept)&#123;</div><div class="line">         registerNewChannelHandler(channel);<span class="comment">//如果是新连接，则注册一个新的读写处理器</span></div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span>(channel.event==write)&#123;</div><div class="line">         getChannelHandler(channel).channelWritable(channel);<span class="comment">//如果可以写，则执行写事件</span></div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span>(channel.event==read)&#123;</div><div class="line">          getChannelHandler(channel).channelReadable(channel);<span class="comment">//如果可以读，则执行读事件</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">   &#125;</div><div class="line">   Map&lt;Channel，ChannelHandler&gt; handlerMap;<span class="comment">//所有channel的对应事件处理器</span></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p><img src="https://pic2.zhimg.com/50/v2-22efc734724d07251f8293e2f1143639_hd.jpg" alt=""></p>
+<p>NIO由原来的阻塞读写变成了单线程轮询事件, 找到可以进行读写的网络描述符进行读写. 除了事件的轮询是阻塞的, 剩余的I/O操作都是纯CPU操作.</p>
+<p>需要的线程主要包括以下几种:</p>
+<ol>
+<li>事件分发器. 单线程选择就绪的事件.</li>
+<li>I/O处理器, 包括connect, read, write等, 这种纯CPU操作, 一般开启CPU核心个线程就可以.</li>
+<li>业务线程, 在处理完I/O后, 业务一般还会有自己的业务逻辑, 有的还会有其他的阻塞I/O, 如DB操作, RPC等. 只要有阻塞, 就需要单独的线程.</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/mysql/MySQL-零碎知识点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -460,7 +631,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/jvm/JVM-零碎知识点/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/jvm/NIO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -479,7 +650,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/11/03/jvm/JVM-零碎知识点/" itemprop="url">JVM-零碎知识点</a></h1>
+                <a class="post-title-link" href="/2017/11/03/jvm/NIO/" itemprop="url">JVM-零碎知识点</a></h1>
         
 
         <div class="post-meta">
@@ -553,7 +724,7 @@
       
         
           
-            <h3 id="jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><a href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点：" class="headerlink" title="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点："></a>jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</h3><ol>
+            <h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><a href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点：" class="headerlink" title="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点："></a>jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</h3><ol>
 <li>String常量池. 从 Perm 区移动到了 Java Heap 区</li>
 <li>String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.</li>
 </ol>
@@ -1767,197 +1938,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/26/es/Elasticsearch_manner_4_多条件查询/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="weihongyan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="樱丸小头子的blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/26/es/Elasticsearch_manner_4_多条件查询/" itemprop="url">Elasticsearch使用要点(四)-多条件查询</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-26T20:47:05+08:00">
-                2017-09-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="组合多条件查询"><a href="#组合多条件查询" class="headerlink" title="组合多条件查询"></a>组合多条件查询</h1><blockquote>
-<p>组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.</p>
-</blockquote>
-<h2 id="bool查询"><a href="#bool查询" class="headerlink" title="bool查询:"></a>bool查询:</h2><blockquote>
-<p><code>bool</code>查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">参数</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>must</code></td>
-<td style="text-align:center">文档 <strong>必须</strong> 匹配这些条件才能被包含进来。(<strong>计算相关度</strong>)</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>must_not</code></td>
-<td style="text-align:center">文档 <strong>必须不</strong> 匹配这些条件才能被包含进来。(<strong>计算相关度</strong>)</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>should</code></td>
-<td style="text-align:center">如果满足这些语句中的任意语句(or)，将增加 <strong>_score</strong> ，否则，无任何影响。(<strong>计算相关度</strong>)</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>filter</code></td>
-<td style="text-align:center">必须 <strong>匹配</strong>，但它以不评分、过滤模式来进行。(<strong>不计算相关度</strong>)</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>filter</code>参数中的查询均不会计算相关度, 不会影响文档的相关度排名. 而且当一个查询不计算相关度时, 可以被es缓存在内存中, 提高性能.</li>
-<li>将查询移到 <code>bool</code> 查询的 <code>filter</code> 语句中, 这样它就自动的转成一个不评分的 <code>filter</code> .</li>
-<li><p>将 <code>bool</code> 查询包裹在 <code>filter</code> 语句中. 我们可以在过滤标准中增加布尔逻辑. 适用于复杂的过滤逻辑.通过混合布尔查询, 我们可以在我们的查询请求中灵活地编写 <code>scoring</code> 和 <code>filtering</code> 查询逻辑.</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"bool"</span>: &#123;</div><div class="line">		<span class="attr">"filter"</span>: &#123;</div><div class="line">			<span class="attr">"bool"</span>: &#123; </div><div class="line">				<span class="attr">"must"</span>: [</div><div class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"gte"</span>: <span class="string">"2014-01-01"</span> &#125;&#125;&#125;,</div><div class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"price"</span>: &#123; <span class="attr">"lte"</span>: <span class="number">29.99</span> &#125;&#125;&#125;</div><div class="line">				],</div><div class="line">				<span class="attr">"must_not"</span>: [</div><div class="line">				&#123; <span class="attr">"term"</span>: &#123; <span class="attr">"category"</span>: <span class="string">"ebooks"</span> &#125;&#125;</div><div class="line">				]</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="constant-score查询"><a href="#constant-score查询" class="headerlink" title="constant_score查询:"></a>constant_score查询:</h2><blockquote>
-<p>可以使用它来取代只有 <strong>filter</strong> 语句的 <strong>bool</strong> 查询. 在性能上是完全相同的，但对于提高查询简洁性和清晰度有很大帮助。</p>
-</blockquote>
-<ul>
-<li><p><strong>constant_score</strong>查询将一个不变的常量评分应用于所有匹配的文档. 它被经常用于你只需要执行一个 <strong>filter</strong> 的情况下. </p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET students/_search</div><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">		<span class="attr">"constant_score"</span>: &#123;</div><div class="line">		  <span class="attr">"filter"</span>: &#123;</div><div class="line">		    <span class="attr">"term"</span>: &#123;</div><div class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></div><div class="line">		    &#125;</div><div class="line">		  &#125;,</div><div class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h2><ul>
-<li>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2008,7 +1988,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2030,7 +2010,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
