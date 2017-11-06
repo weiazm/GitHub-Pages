@@ -98,13 +98,13 @@
 <meta name="keywords" content="JDK">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NIO">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/11/06/jvm/JVM-零碎知识点/index.html">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/11/06/jvm/NIO/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
 <meta property="og:description" content="NIO 摘自 美团点评技术团队-知乎  服务端同步阻塞I/O的问题： 线程的创建和销毁成本很高, 在Linux这样的操作系统中, 线程本质上就是一个进程. 创建和销毁都是重量级的系统函数. 线程本身占用较大内存, 像Java的线程栈, 一般至少分配512K～1M的空间, 如果系统中的线程数过千, 恐怕整个JVM的内存都会被吃掉一半. 线程的切换成本是很高. 操作系统发生线程切换的时候, 需要保留线">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://pic2.zhimg.com/50/v2-f47206d5b5e64448744b85eaf568f92d_hd.jpg">
 <meta property="og:image" content="https://pic2.zhimg.com/50/v2-22efc734724d07251f8293e2f1143639_hd.jpg">
-<meta property="og:updated_time" content="2017-11-06T08:54:54.000Z">
+<meta property="og:updated_time" content="2017-11-06T09:38:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NIO">
 <meta name="twitter:description" content="NIO 摘自 美团点评技术团队-知乎  服务端同步阻塞I/O的问题： 线程的创建和销毁成本很高, 在Linux这样的操作系统中, 线程本质上就是一个进程. 创建和销毁都是重量级的系统函数. 线程本身占用较大内存, 像Java的线程栈, 一般至少分配512K～1M的空间, 如果系统中的线程数过千, 恐怕整个JVM的内存都会被吃掉一半. 线程的切换成本是很高. 操作系统发生线程切换的时候, 需要保留线">
@@ -137,7 +137,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/11/06/jvm/JVM-零碎知识点/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/11/06/jvm/NIO/"/>
 
 
 
@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/06/jvm/JVM-零碎知识点/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/06/jvm/NIO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -380,7 +380,7 @@
 
       
         <h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><blockquote>
-<p>摘自 <a href="https://zhuanlan.zhihu.com/p/23488863" target="_blank" rel="external"><em>美团点评技术团队<br>-知乎</em></a></p>
+<p>摘自 <a href="https://zhuanlan.zhihu.com/p/23488863" target="_blank" rel="external"><em>美团点评技术团队-知乎</em></a></p>
 </blockquote>
 <h3 id="服务端同步阻塞I-O的问题："><a href="#服务端同步阻塞I-O的问题：" class="headerlink" title="服务端同步阻塞I/O的问题："></a>服务端同步阻塞I/O的问题：</h3><ol>
 <li>线程的创建和销毁成本很高, 在Linux这样的操作系统中, 线程本质上就是一个进程. 创建和销毁都是重量级的系统函数.</li>
