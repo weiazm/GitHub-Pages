@@ -1737,6 +1737,8 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Process process = Runtime.getRuntime().exec(<span class="string">"ffmpeg -i "</span> + amrFile + <span class="string">" "</span> + mp3File);</div><div class="line">process.waitFor();</div></pre></td></tr></table></figure>
 <p>关于源码安装:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 命令可以用&amp;&amp;连接起来, 表示前者成功后才去执行后者.</span></div><div class="line">./configure  &amp;&amp;  make  &amp;&amp;  make  install</div><div class="line"></div><div class="line"><span class="comment"># configure 可以使用参数 --prefix= 指定安装目录.</span></div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/<span class="built_in">test</span></div><div class="line"></div><div class="line"><span class="comment"># 卸载可以在原来的make目录下用一次make uninstall:</span></div><div class="line">./make uninstall</div></pre></td></tr></table></figure>
+<p>使用ffmpeg生成视频封面:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffmpeg -ss 00:00:01 -i VID_1509953174887.mp4 -vframes 1 -y -f image2 test1.jpg</div></pre></td></tr></table></figure>
           
         
       
