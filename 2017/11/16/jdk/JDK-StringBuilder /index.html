@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JVM," />
+  <meta name="keywords" content="JDK," />
 
 
 
@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="前言去年公司范围内迁移redis -&amp;gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&amp;gt; 4.x . 升级了JAVA编译版本:1.7 -&amp;gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本. JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除,">
-<meta name="keywords" content="JVM">
+<meta name="description" content="先说StringString类被final修饰, 不可以被继承. 内部用char数组来保存字符串, 并且类变量多数也是final的, 一些操作方法比如:substring(), concat()等方法都是构造一个新的char数组, new一个String对象来实现的. 字符串用”+”连接相当于新建了一个String对象.(编译器识别到字符串相加操作会优化成StringBuilder, 同时若编译期">
+<meta name="keywords" content="JDK">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线上服务器OOM问题排查记录">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/10/26/jvm/线上服务器OOM问题排查记录/index.html">
+<meta property="og:title" content="JDK-StringBuilder">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/11/16/jdk/JDK-StringBuilder /index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="前言去年公司范围内迁移redis -&amp;gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&amp;gt; 4.x . 升级了JAVA编译版本:1.7 -&amp;gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本. JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除,">
+<meta property="og:description" content="先说StringString类被final修饰, 不可以被继承. 内部用char数组来保存字符串, 并且类变量多数也是final的, 一些操作方法比如:substring(), concat()等方法都是构造一个新的char数组, new一个String对象来实现的. 字符串用”+”连接相当于新建了一个String对象.(编译器识别到字符串相加操作会优化成StringBuilder, 同时若编译期">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-26T08:09:16.000Z">
+<meta property="og:updated_time" content="2017-11-16T15:12:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="线上服务器OOM问题排查记录">
-<meta name="twitter:description" content="前言去年公司范围内迁移redis -&amp;gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&amp;gt; 4.x . 升级了JAVA编译版本:1.7 -&amp;gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本. JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除,">
+<meta name="twitter:title" content="JDK-StringBuilder">
+<meta name="twitter:description" content="先说StringString类被final修饰, 不可以被继承. 内部用char数组来保存字符串, 并且类变量多数也是final的, 一些操作方法比如:substring(), concat()等方法都是构造一个新的char数组, new一个String对象来实现的. 字符串用”+”连接相当于新建了一个String对象.(编译器识别到字符串相加操作会优化成StringBuilder, 同时若编译期">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/10/26/jvm/线上服务器OOM问题排查记录/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/11/16/jdk/JDK-StringBuilder /"/>
 
 
 
 
 
-  <title>线上服务器OOM问题排查记录 | 樱丸小头子的blog</title>
+  <title>JDK-StringBuilder | 樱丸小头子的blog</title>
   
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/26/jvm/线上服务器OOM问题排查记录/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/16/jdk/JDK-StringBuilder /">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">线上服务器OOM问题排查记录</h1>
+          <h1 class="post-title" itemprop="name headline">JDK-StringBuilder</h1>
         
 
         <div class="post-meta">
@@ -316,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T15:20:15+08:00">
-                2017-10-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-16T22:25:07+08:00">
+                2017-11-16
               </time>
             
 
@@ -376,19 +376,12 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>去年公司范围内迁移redis -&gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&gt; 4.x . 升级了JAVA编译版本:1.7 -&gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本.</p>
-<p>JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除, Metaspace的新增. 新增了G1GC辣鸡收集器. 便一直想着追潮流升级一下, 找时间去优化一下JVM配参.</p>
-<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>一台机器报了<strong>OOM-heap space</strong>异常, 在调整了 <code>-Xmx</code> 与 <code>-Xms</code> 参数之后觉得有必要去搞一下新的JVM配参了. 于是改了几个tomcat实例的参数然后重启. 参数如下:</p>
-<p>旧参数:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-Djava.util.Arrays.useLegacyMergeSort=true</div><div class="line">-server</div><div class="line">-Xmx512m</div><div class="line">-Xms512m</div><div class="line">-Xmn256m</div><div class="line">-Xss512k</div><div class="line">-XX:PermSize=64m</div><div class="line">-XX:MaxPermSize=128m</div><div class="line">-XX:+UseConcMarkSweepGC</div><div class="line">-XX:+UseParNewGC</div><div class="line">-XX:CMSFullGCsBeforeCompaction=5</div><div class="line">-XX:+UseCMSCompactAtFullCollection</div><div class="line">-XX:+PrintGCDetails</div><div class="line">-XX:+PrintGCTimeStamps</div><div class="line">-Xloggc:xxxxxxxxxxxxx</div><div class="line">-XX:+HeapDumpOnOutOfMemoryError</div><div class="line">-XX:HeapDumpPath=xxxxxxxxxxxxxx</div></pre></td></tr></table></figure>
-<p>新参数(由于机器最近由8G内存升了16G, 空闲了很多内存资源, heap可以开大点):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">-Djava.util.Arrays.useLegacyMergeSort=true</div><div class="line">-server</div><div class="line">-Xmx1024m</div><div class="line">-Xms1024m </div><div class="line">-Xss512k</div><div class="line">-XX:MaxMetaspaceSize=128m</div><div class="line">-XX:+UseG1GC</div><div class="line">-XX:-UseAdaptiveSizePolicy</div><div class="line">-XX:+DisableExplicitGC</div><div class="line">-XX:+UseFastAccessorMethods</div><div class="line">-verbose:gc</div><div class="line">-XX:+PrintGCDetails</div><div class="line">-XX:+PrintGCDateStamps</div><div class="line">-XX:+PrintGCTimeStamps</div><div class="line">-XX:+UseGCLogFileRotation</div><div class="line">-XX:GCLogFileSize=256M</div><div class="line">-XX:NumberOfGCLogFiles=4</div><div class="line">-Xloggc:xxxxxxxxxxxx</div><div class="line">-XX:+HeapDumpOnOutOfMemoryError</div><div class="line">-XX:HeapDumpPath=xxxxxxxxxxx</div></pre></td></tr></table></figure>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
-<li>改了几台服务器, 运行一段时间后部分重量级业务模块报了OOM-MetaSpace异常, 并且服务响应卡顿, dump堆文件与top命令排查后发现问题主要是MetaSpace满了反复触发GC, 导致GC线程占用CPU过高. 发现后便立即调大了<code>-XX:MaxMetaspaceSize</code>参数, 并且找了一个tomcat实例加上了一些VisualVM监控参数, 观察了一段时间. 问题得以解决.</li>
-<li>运行一段时间后一台服务器上的tomcat反复报java.lang.OutOfMemoryError: unable to create new native thread 异常. 而且跳板机登录上去后查看机器剩余内存还是很多. 没有什么头绪, 便调小了这台机器的部分tomcat实例内存大小, 空闲出了更多内存避免问题产生.</li>
-</ol>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>第二天这台机器又报出了java.lang.OutOfMemoryError: unable to create new native thread 异常. 拉楼上的OP君下来一起排查问题.OP君使用<strong>lsof</strong>命令发现一个tomcat实例占用了八千多个连接, 找到了进程, kill然后重启, 问题解决.</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>原因是socket泄露, 太多的socket未关掉(具体原因未知), JVM在创建线程时无法创建socket???(待查明), 报了java.lang.OutOfMemoryError: unable to create new native thread 异常.</p>
+        <h2 id="先说String"><a href="#先说String" class="headerlink" title="先说String"></a>先说String</h2><p>String类被final修饰, 不可以被继承. 内部用char数组来保存字符串, 并且类变量多数也是final的, 一些操作方法比如:substring(), concat()等方法都是构造一个新的char数组, new一个String对象来实现的. 字符串用”+”连接相当于新建了一个String对象.(编译器识别到字符串相加操作会优化成StringBuilder, 同时若编译期间就能确定字符串相加的值或final域, 那么会直接被优化为结果).</p>
+<p>不可变类可是使用池技术来优化相同内容的对象占用的内存空间. 结合intern()方法, 可以把new出来的String对象刷新入常量池.</p>
+<h4 id="问题-String-str-new-String-“abc”-创建了多少个对象"><a href="#问题-String-str-new-String-“abc”-创建了多少个对象" class="headerlink" title="问题: String str = new String(“abc”) 创建了多少个对象?"></a>问题: String str = new String(“abc”) 创建了多少个对象?</h4><pre><code>类加载? 代码执行?
+</code></pre><h2 id="StringBuilder"><a href="#StringBuilder" class="headerlink" title="StringBuilder"></a>StringBuilder</h2><h4 id="StringBuilder内部持有非final的char数组-类似ArrayList有扩容机制"><a href="#StringBuilder内部持有非final的char数组-类似ArrayList有扩容机制" class="headerlink" title="StringBuilder内部持有非final的char数组, 类似ArrayList有扩容机制:"></a>StringBuilder内部持有非final的char数组, 类似ArrayList有扩容机制:</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 在执行append前, 会确保容量</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacityInternal</span><span class="params">(<span class="keyword">int</span> minimumCapacity)</span> </span>&#123;</div><div class="line">    <span class="comment">// overflow-conscious code</span></div><div class="line">    <span class="comment">// 超过了长度了</span></div><div class="line">    <span class="keyword">if</span> (minimumCapacity - value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">        value = Arrays.copyOf(value, newCapacity(minimumCapacity));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">newCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</div><div class="line">    <span class="comment">// overflow-conscious code</span></div><div class="line">    <span class="comment">// 这里长度翻倍</span></div><div class="line">    <span class="keyword">int</span> newCapacity = (value.length &lt;&lt; <span class="number">1</span>) + <span class="number">2</span>;</div><div class="line">    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>) &#123;</div><div class="line">        newCapacity = minCapacity;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (newCapacity &lt;= <span class="number">0</span> || MAX_ARRAY_SIZE - newCapacity &lt; <span class="number">0</span>)</div><div class="line">        ? hugeCapacity(minCapacity)</div><div class="line">        : newCapacity;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hugeCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (Integer.MAX_VALUE - minCapacity &lt; <span class="number">0</span>) &#123; <span class="comment">// overflow</span></div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (minCapacity &gt; MAX_ARRAY_SIZE)</div><div class="line">        ? minCapacity : MAX_ARRAY_SIZE;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="null-safe"><a href="#null-safe" class="headerlink" title="null safe"></a>null safe</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// null值时执行下面代码</span></div><div class="line"><span class="function"><span class="keyword">private</span> AbstractStringBuilder <span class="title">appendNull</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> c = count;</div><div class="line">    ensureCapacityInternal(c + <span class="number">4</span>);</div><div class="line">    <span class="keyword">final</span> <span class="keyword">char</span>[] value = <span class="keyword">this</span>.value;</div><div class="line">    value[c++] = <span class="string">'n'</span>;</div><div class="line">    value[c++] = <span class="string">'u'</span>;</div><div class="line">    value[c++] = <span class="string">'l'</span>;</div><div class="line">    value[c++] = <span class="string">'l'</span>;</div><div class="line">    count = c;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="StringBuffer"><a href="#StringBuffer" class="headerlink" title="StringBuffer"></a>StringBuffer</h2><p>这个嘛, StringBuilder方法加同步.</p>
 
       
     </div>
@@ -406,7 +399,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JVM/" rel="tag"># JVM</a>
+            <a href="/tags/JDK/" rel="tag"># JDK</a>
           
         </div>
       
@@ -419,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/20/es/Elasticsearch_manner_6_聚合/" rel="next" title="Elasticsearch使用要点(六)-聚合">
-                <i class="fa fa-chevron-left"></i> Elasticsearch使用要点(六)-聚合
+              <a href="/2017/11/07/algorithm/算法-二叉树构造遍历等/" rel="next" title="算法: 二叉树构造遍历等">
+                <i class="fa fa-chevron-left"></i> 算法: 二叉树构造遍历等
               </a>
             
           </div>
@@ -428,10 +421,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/30/algorithm/算法-几种排序汇总备忘/" rel="prev" title="算法: 几种排序汇总备忘">
-                算法: 几种排序汇总备忘 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -589,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作"><span class="nav-number">2.</span> <span class="nav-text">操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决"><span class="nav-number">4.</span> <span class="nav-text">解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">5.</span> <span class="nav-text">分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先说String"><span class="nav-number">1.</span> <span class="nav-text">先说String</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题-String-str-new-String-“abc”-创建了多少个对象"><span class="nav-number">1.0.1.</span> <span class="nav-text">问题: String str = new String(“abc”) 创建了多少个对象?</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StringBuilder"><span class="nav-number">2.</span> <span class="nav-text">StringBuilder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#StringBuilder内部持有非final的char数组-类似ArrayList有扩容机制"><span class="nav-number">2.0.1.</span> <span class="nav-text">StringBuilder内部持有非final的char数组, 类似ArrayList有扩容机制:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null-safe"><span class="nav-number">2.0.2.</span> <span class="nav-text">null safe</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StringBuffer"><span class="nav-number">3.</span> <span class="nav-text">StringBuffer</span></a></li></ol></div>
             
 
           </div>
