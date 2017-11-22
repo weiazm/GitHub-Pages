@@ -287,6 +287,405 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/26/jvm/线上服务器OOM问题排查记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/26/jvm/线上服务器OOM问题排查记录/" itemprop="url">线上服务器OOM问题排查记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T15:20:15+08:00">
+                2017-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>去年公司范围内迁移redis -&gt; codis时, 顺手整理了一遍公用service的pom依赖, 抽离了公用的依赖. 升级了Spring版本:3.x -&gt; 4.x . 升级了JAVA编译版本:1.7 -&gt; 1.8 (可以享用新的集合API, 流等). 但是tomcat的JVM配置参数还是旧的1.7版本.</p>
+<p>JVM配参对比1.7与1.8版本之间的最大变化莫过于Perm区的移除, Metaspace的新增. 新增了G1GC辣鸡收集器. 便一直想着追潮流升级一下, 找时间去优化一下JVM配参.</p>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>一台机器报了<strong>OOM-heap space</strong>异常, 在调整了 <code>-Xmx</code> 与 <code>-Xms</code> 参数之后觉得有必要去搞一下新的JVM配参了. 于是改了几个tomcat实例的参数然后重启. 参数如下:</p>
+<p>旧参数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-Djava.util.Arrays.useLegacyMergeSort=true</div><div class="line">-server</div><div class="line">-Xmx512m</div><div class="line">-Xms512m</div><div class="line">-Xmn256m</div><div class="line">-Xss512k</div><div class="line">-XX:PermSize=64m</div><div class="line">-XX:MaxPermSize=128m</div><div class="line">-XX:+UseConcMarkSweepGC</div><div class="line">-XX:+UseParNewGC</div><div class="line">-XX:CMSFullGCsBeforeCompaction=5</div><div class="line">-XX:+UseCMSCompactAtFullCollection</div><div class="line">-XX:+PrintGCDetails</div><div class="line">-XX:+PrintGCTimeStamps</div><div class="line">-Xloggc:xxxxxxxxxxxxx</div><div class="line">-XX:+HeapDumpOnOutOfMemoryError</div><div class="line">-XX:HeapDumpPath=xxxxxxxxxxxxxx</div></pre></td></tr></table></figure>
+<p>新参数(由于机器最近由8G内存升了16G, 空闲了很多内存资源, heap可以开大点):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">-Djava.util.Arrays.useLegacyMergeSort=true</div><div class="line">-server</div><div class="line">-Xmx1024m</div><div class="line">-Xms1024m </div><div class="line">-Xss512k</div><div class="line">-XX:MaxMetaspaceSize=128m</div><div class="line">-XX:+UseG1GC</div><div class="line">-XX:-UseAdaptiveSizePolicy</div><div class="line">-XX:+DisableExplicitGC</div><div class="line">-XX:+UseFastAccessorMethods</div><div class="line">-verbose:gc</div><div class="line">-XX:+PrintGCDetails</div><div class="line">-XX:+PrintGCDateStamps</div><div class="line">-XX:+PrintGCTimeStamps</div><div class="line">-XX:+UseGCLogFileRotation</div><div class="line">-XX:GCLogFileSize=256M</div><div class="line">-XX:NumberOfGCLogFiles=4</div><div class="line">-Xloggc:xxxxxxxxxxxx</div><div class="line">-XX:+HeapDumpOnOutOfMemoryError</div><div class="line">-XX:HeapDumpPath=xxxxxxxxxxx</div></pre></td></tr></table></figure>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
+<li>改了几台服务器, 运行一段时间后部分重量级业务模块报了OOM-MetaSpace异常, 并且服务响应卡顿, dump堆文件与top命令排查后发现问题主要是MetaSpace满了反复触发GC, 导致GC线程占用CPU过高. 发现后便立即调大了<code>-XX:MaxMetaspaceSize</code>参数, 并且找了一个tomcat实例加上了一些VisualVM监控参数, 观察了一段时间. 问题得以解决.</li>
+<li>运行一段时间后一台服务器上的tomcat反复报java.lang.OutOfMemoryError: unable to create new native thread 异常. 而且跳板机登录上去后查看机器剩余内存还是很多. 没有什么头绪, 便调小了这台机器的部分tomcat实例内存大小, 空闲出了更多内存避免问题产生.</li>
+</ol>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>第二天这台机器又报出了java.lang.OutOfMemoryError: unable to create new native thread 异常. 拉楼上的OP君下来一起排查问题.OP君使用<strong>lsof</strong>命令发现一个tomcat实例占用了八千多个连接, 找到了进程, kill然后重启, 问题解决.</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>原因是socket泄露, 太多的socket未关掉(具体原因未知), JVM在创建线程时无法创建socket???(待查明), 报了java.lang.OutOfMemoryError: unable to create new native thread 异常.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/22/linux/tcp知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/22/linux/tcp知识/" itemprop="url">TCP连接-握手挥手, 重传, 流量控制, 拥塞控制等</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-22T16:00:00+08:00">
+                2017-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>非原创 部分摘取自 <a href="http://blog.csdn.net/kzq_qmi/article/details/46940463" target="_blank" rel="external">CSDN</a></p>
+<p>原作者写的很棒</p>
+<h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>注意 seq ack syn</p>
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>注意 fin ack</p>
+<h2 id="重传"><a href="#重传" class="headerlink" title="重传"></a>重传</h2><blockquote>
+<p>报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。</p>
+</blockquote>
+<h3 id="超时重传"><a href="#超时重传" class="headerlink" title="超时重传"></a>超时重传</h3><p>决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（<code>RTO</code>）值。当报文使用TCP传输时，重传计时器启动，收到ACK时计时器停止。报文发送至接收到ACK的时间称为往返时间（<code>RTT</code>）。<strong>对若干次时间取平均值，该值用于确定最终RTO值。</strong></p>
+<p>每次发送数据包时，发送的数据报都有seq号，接收端收到数据后，会回复ack进行确认，表示某一seq号数据已经收到。当报文发送某个seq包之后，等待一段时间，但接收方尚未发送TCP ACK报文，发送方假设源报文丢失并将其重传。<strong>重传之后，RTO值加倍</strong>；如果在2倍RTO值到达之前还是没有收到ACK报文，就再次重传。如果仍然没有收到ACK，那么RTO值再次加倍。如此持续下去，<strong>每次重传RTO都翻倍</strong>，直到收到ACK报文或发送方达到配置的<strong>最大重传次数</strong>。 </p>
+<p>最大重传次数取决于发送操作系统的配置值。默认情况下，Windows主机默认重传5次。大多数Linux系统默认最大15次。两种操作系统都可配置。</p>
+<h3 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h3><p>接受数据一方发现有数据包丢掉了（并不是所期望的值或报文乱序）。就会发送<strong>重复ACK报文</strong>告诉发送端重传丢失的报文。 </p>
+<p>当重传主机从<strong>发送端接收到3个重复ACK时</strong>，它会假设此报文确实在传送中丢失，并且立即发送一个<strong>快速重传</strong>。一旦触发了快速重传，所有正在传输的其他报文都被放入队列中，直到快速重传报文发送为止。过程如下图所示：</p>
+<p><img src="http://img.blog.csdn.net/20150718102858936" alt=""></p>
+<p>比较超时重传和快速重传，可以发现<strong>超时重传是发送端在傻等超时，然后触发重传</strong>；而<strong>快速重传则是接收端主动告诉发送端数据没收到，然后触发发送端重传</strong>。 </p>
+<h2 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h2><blockquote>
+<p>滑动窗口</p>
+</blockquote>
+<p>窗口大小”<strong>意味着接收方能接收数据的大小</strong>”，这也是说接收端设备再应用程序读取buffer中数据之前，能从对端连接处理多少数据。比如说server端窗口大小是360，那么就意味着server端一次只能从客户端接收不超过360bytes的数据。当server端收到数据，它会将数据放到buffer里，然后server端必须对这份数据做两件事：</p>
+<ol>
+<li>server端必须发送一个 ACK 到client端来确认数据已经收到 </li>
+<li>server端必须处理这份数据，把它交给对应的应用程序</li>
+</ol>
+<p>接收方收到数据后会确认，但是数据并不一定是里面就是从buffer里取出的，这是受应用层逻辑控制的。所以很有可能如果接收数据过快，而取出数据更慢，就会导致buffer满。一旦这种情况发生，窗口大小就开始调整来防止接收方负载过高。</p>
+<p>TCP头里有一个字段叫<strong>Window</strong>，又叫Advertised-Window，这个字段是<strong>接收端告诉发送端自己还有多少缓冲区可以接收数据</strong>。于是发送端就可以根据这个接收端的处理能力来发送数据，而不会导致接收端处理不过来。　　　Window是一个16bit位字段，它代表的是窗口的字节容量，也就是TCP的标准窗口最大为2^16-1=65535个字节。 </p>
+<p>另外在TCP的选项字段中还包含了一个TCP窗口扩大因子，option-kind为3，option-length为3个字节，option-data取值范围0-14。窗口扩大因子用来扩大TCP窗口，可把原来16bit的窗口，扩大为31bit。 </p>
+<p><img src="http://img.blog.csdn.net/20150718103040083" alt=""></p>
+<p>对于TCP会话的发送方，任何时候在其发送缓存内的数据都可以分为4类，“已经发送并得到对端ACK的”，“已经发送但还未收到对端ACK的”，“未发送但对端允许发送的”，“未发送且对端不允许发送”。<strong>“已经发送但还未收到对端ACK的”和“未发送但对端允许发送的”这两部分数据称之为发送窗口。</strong></p>
+<p><img src="http://img.blog.csdn.net/20150718103157063" alt=""><br><img src="http://img.blog.csdn.net/20150718103218167" alt=""></p>
+<h3 id="滑动窗口协议"><a href="#滑动窗口协议" class="headerlink" title="滑动窗口协议"></a>滑动窗口协议</h3><ol>
+<li><p>比特滑动窗口协议:</p>
+<p> 当发送窗口和接收窗口的大小固定为1时，滑动窗口协议退化为停等协议（stop－and－wait）。<strong>该协议规定发送方每发送一帧后就要停下来，等待接收方已正确接收的确认（acknowledgement）返回后才能继续发送下一帧。</strong>由于接收方需要判断接收到的帧是新发的帧还是重新发送的帧，因此发送方要为每一个帧加一个序号。由于停等协议规定只有一帧完全发送成功后才能发送新的帧，因而只用一比特来编号就够了。</p>
+</li>
+<li><p>后退n协议:</p>
+<p> 由于停等协议要为每一个帧进行确认后才继续发送下一帧，大大降低了信道利用率，因此又提出了后退n协议。后退n协议中，发送方在发完一个数据帧后，不停下来等待应答帧，而是连续发送若干个数据帧，即使在连续发送过程中收到了接收方发来的应答帧，也可以继续发送。且发送方在每发送完一个数据帧时都要设置超时定时器。只要在所设置的超时时间内仍未收到确认帧，就要重发相应的数据帧。如：<strong>当发送方发送了N个帧后，若发现该N帧的前一个帧在计时器超时后仍未返回其确认信息，则该帧被判为出错或丢失，此时发送方就不得不重新发送出错帧及其后的N帧</strong>。</p>
+<p> 来看下面的例子，这里假设n=9：</p>
+<p> <img src="http://img.blog.csdn.net/20150718103400908" alt=""></p>
+<p> 首先发送方一口气发送10个数据帧，前面两个帧正确返回了，数据帧2出现了错误，这时发送方被迫重新发送2-8这7个帧，接受方也必须丢弃之前接受的3-8这几个帧。</p>
+<p> 从这里不难看出，后退n协议<strong>一方面因连续发送数据帧而提高了效率</strong>，但另一方面，在重传时又必须<strong>把原来已正确传送过的数据帧进行重传使传送效率降低</strong>。由此可见，若传输信道的传输质量很差因而误码率较大时，连续测协议不一定优于停止等待协议。此协议中的发送窗口的大小为k，接收窗口仍是1。</p>
+</li>
+<li><p>选择重传协议:</p>
+<p> 在后退n协议中，接收方若发现错误帧就不再接收后续的帧，即使是正确到达的帧，这显然是一种浪费。<strong>另一种效率更高的策略是当接收方发现某帧出错后，其后继续送来的正确的帧虽然不能立即递交给接收方的高层，但接收方仍可收下来，存放在一个缓冲区中，同时要求发送方重新传送出错的那一帧。</strong></p>
+<p> 但是必须强调一点,接收方永远不会把分组失序地交给应用层.在他们被交付给应用层之前,先要等待那些更早发出来的分组到达。一旦收到重新传来的帧后，就可以原已存于缓冲区中的其余帧一并按正确的顺序递交高层。这种方法称为选择重发(SELECTICE REPEAT)，其工作过程如图所示。显然，选择重发减少了浪费，但要求接收方有足够大的缓冲区空间。 </p>
+<p> <img src="http://img.blog.csdn.net/20150718103441574" alt=""></p>
+</li>
+</ol>
+<h3 id="零窗口问题"><a href="#零窗口问题" class="headerlink" title="零窗口问题"></a>零窗口问题</h3><p>某些情况下，服务器无法再处理从客户端发送的数据。可能是由于内存不足，处理能力不够，或其他原因。这可能会造成数据被丢弃以及传输暂停，但接收窗口能够帮助减小负面影响。 </p>
+<p>当上述情况发生时，服务器会发送<strong>窗口为0</strong>的报文。当客户端接收到此报文时，它会<strong>暂停所有数据传输</strong>，但会保持与服务器的连接以<strong>传输探测</strong>（keep-alive Zero Window Probe）报文。探测报文在客户端以稳定间隙发送，以查看服务器接收窗口状态。<strong>一旦服务器能够再次处理数据，将会返回非零值窗口大小</strong>，传输会恢复。下图示例了零窗口通知过程。</p>
+<p><img src="http://img.blog.csdn.net/20150718103512042" alt=""></p>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><p>滑动窗用来做流量控制。流量控制只关注发送端和接受端自身的状况，而没有考虑整个网络的通信情况。拥塞控制，则是基于整个网络来考虑的。考虑一下这样的场景：某一时刻网络上的延时突然增加，那么，TCP对这个事做出的应对只有重传数据，但是，重传会导致网络的负担更重，于是会导致更大的延迟以及更多的丢包，于是，这个情况就会进入恶性循环被不断地放大。试想一下，如果一个网络内有成千上万的TCP连接都这么行事，那么马上就会形成“网络风暴”，TCP这个协议就会拖垮整个网络。为此，TCP引入了拥塞控制策略。拥塞策略算法主要包括：<strong>慢启动，拥塞避免，拥塞发生，快速恢复。</strong></p>
+<p>对于拥塞现象，我们可以进一步用下图来描述。当网络负载较小时，吞吐量基本上随着负载的增长而增长，呈线性关系，响应时间增长缓慢。当负载达到网络容量时，吞吐量呈现出缓慢增长，而响应时间急剧增加，这一点称为Knee。假如负载继续增加，路由器开始丢包，当负载超过一定量时，吞吐量开始急剧下降，这一点称为Cliff。 </p>
+<p><img src="http://img.blog.csdn.net/20150718103749387" alt=""></p>
+<p>拥塞控制机制实际上包含拥塞避免（congestion avoidance）和拥塞控制（congestion control）两种策略。前者的目的是使网络运行在Knee四周，避免拥塞的发生；而后者则是使得网络运行在Cliff的左侧区域。前者是一种“预防”措施，维持网络的高吞吐量、低延迟状态，避免进入拥塞；后者是一种“恢复”措施，使网络从拥塞中恢复过来，进入正常的运行状态。</p>
+<ol>
+<li><p>慢热启动算法:</p>
+<p> TCP拥塞控制所使用的一种算法称为慢性启动（slow start），这种算法是基于这样的想法，它在开始时设置拥塞窗口大小（cwnd）<br>为一个最长段长度（MSS），每次接到一个确认时，窗口的大小就增加一个MSS值。窗口是慢速启动的，但是按<strong>指数规则增长</strong>。</p>
+</li>
+</ol>
+<pre><code>* 开始　　　　　—&gt; cwnd = 1 
+* 经过1个RTT后 —&gt; cwnd = 2*1 = 2 
+* 经过2个RTT后 —&gt; cwnd = 2*2= 4 
+* 经过3个RTT后 —&gt; cwnd = 4*2 = 8
+* 如果带宽为W，那么经过RTT*log2W时间就可以占满带宽。
+</code></pre><p>　　<br>　　<img src="http://img.blog.csdn.net/20150718104112095" alt="">当然，慢速启动不能一直继续下去，到达某个值必须停止该阶段。发送方保存一个称为ssthresh（<strong>慢速启动阈值</strong>）变量，当拥塞窗口中的字节达到这个阈值时，慢速启动阶段结束而下一个阶段开始。在大多数实现中，ssthresh值是65536个字节。</p>
+<ol>
+<li><p>拥塞避免：加法增加:</p>
+<p> 以慢速启动算法开始，则拥塞窗口大小按指数规则增长，这样增长太快了。为了在拥塞发生之前避免拥塞，必须降低指数增长的速度。 </p>
+<p> 拥塞避免的主要思想是加法增大，也就是cwnd的值不再指数级往上升，开始<strong>加法增加</strong>。此时当窗口中所有的报文段都被确认时，cwnd的大小加1，cwnd的值就随着RTT开始线性增加，这样就可以<strong>避免增长过快导致网络拥塞，慢慢的增加调整到网络的最佳值</strong>。</p>
+</li>
+<li><p>拥塞发生算法：乘性减少:</p>
+<p> <img src="http://img.blog.csdn.net/20150718104228469" alt=""></p>
+<p> 之前提到过，重传是在两种情况下发生：</p>
+<ol>
+<li><p><strong>如果RTO超时，那么存在非常严重的拥塞的可能性</strong>；包可能已在网络中丢失。在这种情况下，<strong>TCP做出强烈的反应</strong>。 </p>
+<ul>
+<li><strong>设置阈值为cwnd的一半</strong>。 </li>
+<li><strong>重新设置cwnd为1</strong>。 </li>
+<li><strong>启动慢速启动阶段</strong>。</li>
+</ul>
+</li>
+<li><p>如果<strong>收到3个相同的ACK，那么存在着轻度拥塞</strong>的可能性。TCP在收到乱序到达包时就会立即发送ACK，TCP利用3个相同的ACK来判定数据包的丢失，此时进行快速重传。 在这种情况下<strong>，TCP做出轻度的反应</strong>。 </p>
+<ul>
+<li><strong>设置阈值为cwnd的一半。</strong> </li>
+<li><strong>设置cwnd为阈值（有些实现是阈值加上3)</strong></li>
+<li><strong>启动拥塞避免阶段</strong>。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<ol>
+<li><p>快速恢复:</p>
+<p> “快速恢复”算法是在“快速重传”算法后添加的，<strong>当收到3个重复ACK时，TCP最后进入的不是拥塞避免阶段，而是快速恢复阶段。</strong>快速重传和快速恢复算法一般同时使用。快速恢复的思想是“数据包守恒”原则，即同一个时刻在网络中的数据包数量是恒定的，只有当“老”数据包离开了网络后，才能向网络中发送一个“新”的数据包，如果发送方收到一个重复的ACK，那么根据TCP的ACK机制就表明有一个数据包离开了网络，于是cwnd加1。如果能够严格按照该原则那么网络中很少会发生拥塞，事实上拥塞控制的目的也就在修正违反该原则的地方。 </p>
+<p> 快速恢复状态是一种介于慢启动和拥塞避免之间的状态。它像慢启动，其中cwnd以指数增长，但是cwnd以ssthresh加3MSS（而不是1）开始。当TCP进入快速恢复阶段，可能发生三种主要事件。如果重复ACK继续到达，那么TCP保持这种状态，但是cwnd呈指数增长。如果发生超时，TCP假设网络中有真实的拥塞，并进入慢启动状态。如果一个新的（非重复）ACK到达，TCP进入拥塞避免阶段，但是将cwnd的大小减小到ssthresh值，好像三次重复ACK没有发生过一样，并且转换是从慢启动状态到拥塞避免状态。 </p>
+<p> 具体来说快速恢复的主要步骤是： </p>
+<ol>
+<li><p><strong>当收到3个重复ACK时，把ssthresh设置为cwnd的一半，把cwnd设置为ssthresh的值加3，然后重传丢失的报文段，加3的原因是因为收到3个重复的ACK，表明有3个“老”的数据包离开了网络。</strong> </p>
+</li>
+<li><p><strong>再收到重复的ACK时，拥塞窗口增加1。</strong></p>
+</li>
+<li><p><strong>当收到新的数据包的ACK时，把cwnd设置为第一步中的ssthresh的值。原因是因为该ACK确认了新的数据，说明从重复ACK时的数据都已收到，该恢复过程已经结束，可以回到恢复之前的状态了，也即再次进入拥塞避免状态。注意，如果在此过程出现超时，则重新进入慢启动阶段。</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/20/es/Elasticsearch_manner_6_聚合/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1703,183 +2102,11 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="weihongyan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="樱丸小头子的blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/" itemprop="url">linux系统负载以及JVM诊断常用命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-17T14:22:47+08:00">
-                2017-08-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一些基本命令备忘"><a href="#一些基本命令备忘" class="headerlink" title="一些基本命令备忘"></a>一些基本命令备忘</h2><ul>
-<li><p>查看端口号被占用情况:</p>
-<pre><code>fuser -n tcp 9200
-</code></pre></li>
-<li><p>查看所有进程,以及cpu,内存占用:</p>
-<pre><code>ps aux
-</code></pre></li>
-<li><p>查看机器内存用量以及剩余:</p>
-<pre><code>free -m
-</code></pre></li>
-<li><p>查看指定进程内, 线程资源占用情况:</p>
-<pre><code>top -Hp pid
-</code></pre></li>
-<li><p>转换pid -&gt; nid:</p>
-<pre><code>printf &quot;%x\n&quot; pid
-</code></pre></li>
-<li><p>java堆统计实例数量,大小:</p>
-<pre><code>jmap -histo:live pid | head -100
-</code></pre></li>
-<li><p>java栈快照:</p>
-<pre><code>jstack -l  nid
-</code></pre></li>
-</ul>
-<ul>
-<li><p>文件目录大小排序显示:</p>
-<pre><code>du -m -d 1 | sort -k1 -n -t&apos; &apos;
-</code></pre></li>
-<li><p>磁盘剩余容量:</p>
-<pre><code>df
-</code></pre></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1925,7 +2152,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1947,7 +2174,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
