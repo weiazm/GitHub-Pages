@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux," />
+  <meta name="keywords" content="计算机网络," />
 
 
 
@@ -94,18 +94,24 @@
 
 
 
-<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
-<meta name="keywords" content="linux">
+<meta name="description" content="前一段儿时间去美团外卖组面试, 被问到HTTPS相关的问题, 回答的不是很好, 想着整理一下. 部分摘取自 &amp;lt;&amp;lt;图解HTTP&amp;gt;&amp;gt;  未加密HTTP存在的问题 通信使用明文, 内容可能被窃听. 无法证明报文完整性, 内容可能被篡改. 不验证通信方的身份, 可能遭遇伪装.  加密HTTP的手段 使用基于SSL(Secure Socket Layer, 安全套接层)或TLS(Tr">
+<meta name="keywords" content="计算机网络">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux系统负载以及JVM诊断常用命令">
-<meta property="og:url" content="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/index.html">
+<meta property="og:title" content="HTTPS相关">
+<meta property="og:url" content="http://blog.vonyan.cn/2017/11/24/network/HTTPS/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta property="og:description" content="前一段儿时间去美团外卖组面试, 被问到HTTPS相关的问题, 回答的不是很好, 想着整理一下. 部分摘取自 &amp;lt;&amp;lt;图解HTTP&amp;gt;&amp;gt;  未加密HTTP存在的问题 通信使用明文, 内容可能被窃听. 无法证明报文完整性, 内容可能被篡改. 不验证通信方的身份, 可能遭遇伪装.  加密HTTP的手段 使用基于SSL(Secure Socket Layer, 安全套接层)或TLS(Tr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-29T08:19:58.000Z">
+<meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/59c0e69d130c7338b40ffda17b8051f3/WX20171127-1155212x.png">
+<meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/0dbcbabb9c9613ff3a23ef4d02b570f0/WX20171127-1430152x.png">
+<meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/606049eaa591c639e7e5ec9ed99c3a81/WX20171127-1453162x.png">
+<meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/4a020fd9774f39940ca3cd789664abfe/WX20171127-1452302x.png">
+<meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/156b7054541e5ae04f1baff35a897ffe/WX20171127-1454552x.png">
+<meta property="og:updated_time" content="2017-11-27T07:40:10.600Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux系统负载以及JVM诊断常用命令">
-<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta name="twitter:title" content="HTTPS相关">
+<meta name="twitter:description" content="前一段儿时间去美团外卖组面试, 被问到HTTPS相关的问题, 回答的不是很好, 想着整理一下. 部分摘取自 &amp;lt;&amp;lt;图解HTTP&amp;gt;&amp;gt;  未加密HTTP存在的问题 通信使用明文, 内容可能被窃听. 无法证明报文完整性, 内容可能被篡改. 不验证通信方的身份, 可能遭遇伪装.  加密HTTP的手段 使用基于SSL(Secure Socket Layer, 安全套接层)或TLS(Tr">
+<meta name="twitter:image" content="http://imgs.genshuixue.com/0baijiatools/59c0e69d130c7338b40ffda17b8051f3/WX20171127-1155212x.png">
 
 
 
@@ -134,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/"/>
+  <link rel="canonical" href="http://blog.vonyan.cn/2017/11/24/network/HTTPS/"/>
 
 
 
 
 
-  <title>linux系统负载以及JVM诊断常用命令 | 樱丸小头子的blog</title>
+  <title>HTTPS相关 | 樱丸小头子的blog</title>
   
 
 
@@ -287,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/24/network/HTTPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
@@ -304,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux系统负载以及JVM诊断常用命令</h1>
+          <h1 class="post-title" itemprop="name headline">HTTPS相关</h1>
         
 
         <div class="post-meta">
@@ -316,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-17T14:22:47+08:00">
-                2017-08-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-24T17:19:00+08:00">
+                2017-11-24
               </time>
             
 
@@ -376,37 +382,61 @@
       
 
       
-        <h2 id="一些基本命令备忘"><a href="#一些基本命令备忘" class="headerlink" title="一些基本命令备忘"></a>一些基本命令备忘</h2><ul>
-<li><p>查看端口号被占用情况:</p>
-<pre><code>fuser -n tcp 9200
-</code></pre></li>
-<li><p>查看所有进程,以及cpu,内存占用:</p>
-<pre><code>ps aux
-</code></pre></li>
-<li><p>查看机器内存用量以及剩余:</p>
-<pre><code>free -m
-</code></pre></li>
-<li><p>查看指定进程内, 线程资源占用情况:</p>
-<pre><code>top -Hp pid
-</code></pre></li>
-<li><p>转换pid -&gt; nid:</p>
-<pre><code>printf &quot;%x\n&quot; pid
-</code></pre></li>
-<li><p>java堆统计实例数量,大小:</p>
-<pre><code>jmap -histo:live pid | head -100
-</code></pre></li>
-<li><p>java栈快照:</p>
-<pre><code>jstack -l  nid
-</code></pre></li>
-</ul>
-<ul>
-<li><p>文件目录大小排序显示:</p>
-<pre><code>du -m -d 1 | sort -k1 -n -t&apos; &apos;
-</code></pre></li>
-<li><p>磁盘剩余容量:</p>
-<pre><code>df
-</code></pre></li>
-</ul>
+        <p>前一段儿时间去美团外卖组面试, 被问到HTTPS相关的问题, 回答的不是很好, 想着整理一下.</p>
+<p>部分摘取自 &lt;&lt;图解HTTP&gt;&gt; </p>
+<h2 id="未加密HTTP存在的问题"><a href="#未加密HTTP存在的问题" class="headerlink" title="未加密HTTP存在的问题"></a>未加密HTTP存在的问题</h2><ol>
+<li>通信使用明文, 内容可能被窃听.</li>
+<li>无法证明报文完整性, 内容可能被篡改.</li>
+<li>不验证通信方的身份, 可能遭遇伪装.</li>
+</ol>
+<h2 id="加密HTTP的手段"><a href="#加密HTTP的手段" class="headerlink" title="加密HTTP的手段"></a>加密HTTP的手段</h2><ol>
+<li><p>使用基于SSL(Secure Socket Layer, 安全套接层)或TLS(Transport Layer Security, 安全层传输协议)的<strong>HTTPS</strong>.</p>
+<p> <strong>HTTPS是业界的标准加密做法.</strong></p>
+</li>
+<li><p>对内容加密.</p>
+<p> 要求客户端和服务端同时具备加密与解密的机制, 但是内容仍有被篡改的风险.</p>
+</li>
+</ol>
+<blockquote>
+<p>TLS是以SSL为原型开发的, 可以统称为SSL. 目前主流版本分别是SSL3.0, TLS1.0.</p>
+</blockquote>
+<h2 id="HTTP-加密-认证-完整性保护-HTTPS"><a href="#HTTP-加密-认证-完整性保护-HTTPS" class="headerlink" title="HTTP+加密+认证+完整性保护 = HTTPS"></a>HTTP+加密+认证+完整性保护 = HTTPS</h2><blockquote>
+<p>通常, HTTP直接和TCP通信. 当使用SSL时, 则演变成先和SSL通信, 再由SSL和TCP通信. 即由<code>HTTP-&gt;TCP-&gt;IP</code>演变为<code>HTTP-&gt;SSL-&gt;TCP-&gt;IP</code>.</p>
+</blockquote>
+<h4 id="两种加密方式"><a href="#两种加密方式" class="headerlink" title="两种加密方式:"></a>两种加密方式:</h4><ol>
+<li><p>共享(对称)密钥加密.</p>
+<p> 加密解密使用相同的密钥, 面临的困境是: 密钥安全地转交以及保管.</p>
+</li>
+<li><p>公开(非对称)密钥加密.</p>
+<blockquote>
+<p>解决了共享密钥加密的密钥转交问题.</p>
+</blockquote>
+<p> 使用一对密钥进行加密. 一把叫私有密钥, 一把为公开密钥.加密方式: 发送方使用对方的公钥加密, 对方收到加密的信息后, 再使用自己的私钥进行解密. </p>
+<p> 根据密文与公钥解密原文是很困难的, 相当于对离散对数求值.</p>
+</li>
+</ol>
+<h4 id="HTTPS使用混合加密机制"><a href="#HTTPS使用混合加密机制" class="headerlink" title="HTTPS使用混合加密机制:"></a>HTTPS使用混合加密机制:</h4><p>公开密钥加密与共享密钥加密相比, 其处理速度要慢. 故可以充分利用两者的优势: <strong>使用公开密钥加密方式交换共享密钥, 之后则使用共享密钥加密要传输的信息.</strong></p>
+<p><img src="http://imgs.genshuixue.com/0baijiatools/59c0e69d130c7338b40ffda17b8051f3/WX20171127-1155212x.png" alt=""></p>
+<h4 id="如何证明公钥的正确性–证书"><a href="#如何证明公钥的正确性–证书" class="headerlink" title="如何证明公钥的正确性–证书:"></a>如何证明公钥的正确性–证书:</h4><p>可以使用数字证书认证机构(CA, Certificate Authority)颁发的公钥证书.业务流程:</p>
+<p><img src="http://imgs.genshuixue.com/0baijiatools/0dbcbabb9c9613ff3a23ef4d02b570f0/WX20171127-1430152x.png" alt=""></p>
+<ol>
+<li>服务器维护者向CA提出公钥申请.</li>
+<li>CA判明申请者的身份, 对公钥做数字签名, 把公钥绑定到公钥证书.</li>
+<li>服务器将这个CA颁发的公钥证书发送给客户端.</li>
+<li>客户端对证书的数字签名进行验证. 验证通过则说明: CA的有效性, 服务器的公钥可信赖.</li>
+<li>客户端使用公钥加密发送给服务端.</li>
+<li>服务端使用私钥解密报文.</li>
+</ol>
+<blockquote>
+<p>多数的开发商会事先在浏览器内部植入常用的CA的公开密钥, 以避免公钥的转交问题.</p>
+</blockquote>
+<h2 id="关于HTTPS的建立过程"><a href="#关于HTTPS的建立过程" class="headerlink" title="关于HTTPS的建立过程"></a>关于HTTPS的建立过程</h2><p><img src="http://imgs.genshuixue.com/0baijiatools/606049eaa591c639e7e5ec9ed99c3a81/WX20171127-1453162x.png" alt=""><br><img src="http://imgs.genshuixue.com/0baijiatools/4a020fd9774f39940ca3cd789664abfe/WX20171127-1452302x.png" alt=""><br><img src="http://imgs.genshuixue.com/0baijiatools/156b7054541e5ae04f1baff35a897ffe/WX20171127-1454552x.png" alt=""></p>
+<p>CBC模式的加密方法为: 将前一个明文块加密后XOR下一个明文块, 然后再对结果加密. 第一个块则需要特殊生成(上图中的初始向量).</p>
+<h2 id="HTTPS的问题"><a href="#HTTPS的问题" class="headerlink" title="HTTPS的问题"></a>HTTPS的问题</h2><ol>
+<li>通信慢. 除去了TCP连接与HTTP请求/响应外, 还需要进行SSL通信.</li>
+<li>客户端与服务端都需要进行加密/解密的处理运算, 占用CPU与内存资源.</li>
+</ol>
+<p>处理办法: 只针对与敏感操作使用HTTPS加密.</p>
 
       
     </div>
@@ -424,7 +454,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag"># linux</a>
+            <a href="/tags/计算机网络/" rel="tag"># 计算机网络</a>
           
         </div>
       
@@ -437,15 +467,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/11/22/network/tcp知识/" rel="next" title="TCP连接-握手挥手, 重传, 流量控制, 拥塞控制等">
+                <i class="fa fa-chevron-left"></i> TCP连接-握手挥手, 重传, 流量控制, 拥塞控制等
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/15/es/Elasticsearch_manner_1_查询/" rel="prev" title="Elasticsearch使用要点(一)-查询">
-                Elasticsearch使用要点(一)-查询 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -603,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些基本命令备忘"><span class="nav-number">1.</span> <span class="nav-text">一些基本命令备忘</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#未加密HTTP存在的问题"><span class="nav-number">1.</span> <span class="nav-text">未加密HTTP存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加密HTTP的手段"><span class="nav-number">2.</span> <span class="nav-text">加密HTTP的手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="nav-number">3.</span> <span class="nav-text">HTTP+加密+认证+完整性保护 = HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#两种加密方式"><span class="nav-number">3.0.1.</span> <span class="nav-text">两种加密方式:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS使用混合加密机制"><span class="nav-number">3.0.2.</span> <span class="nav-text">HTTPS使用混合加密机制:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何证明公钥的正确性–证书"><span class="nav-number">3.0.3.</span> <span class="nav-text">如何证明公钥的正确性–证书:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于HTTPS的建立过程"><span class="nav-number">4.</span> <span class="nav-text">关于HTTPS的建立过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS的问题"><span class="nav-number">5.</span> <span class="nav-text">HTTPS的问题</span></a></li></ol></div>
             
 
           </div>
