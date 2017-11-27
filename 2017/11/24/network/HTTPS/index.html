@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/606049eaa591c639e7e5ec9ed99c3a81/WX20171127-1453162x.png">
 <meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/4a020fd9774f39940ca3cd789664abfe/WX20171127-1452302x.png">
 <meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/156b7054541e5ae04f1baff35a897ffe/WX20171127-1454552x.png">
-<meta property="og:updated_time" content="2017-11-27T07:42:58.942Z">
+<meta property="og:updated_time" content="2017-11-27T07:59:06.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTPS相关">
 <meta name="twitter:description" content="前一段儿时间去美团外卖组面试, 被问到HTTPS相关的问题, 回答的不是很好, 想着整理一下. 部分摘取自 &amp;lt;&amp;lt;图解HTTP&amp;gt;&amp;gt;  未加密HTTP存在的问题 通信使用明文, 内容可能被窃听. 无法证明报文完整性, 内容可能被篡改. 不验证通信方的身份, 可能遭遇伪装.  加密HTTP的手段 使用基于SSL(Secure Socket Layer, 安全套接层)或TLS(Tr">
@@ -431,10 +431,40 @@
 <p>多数的开发商会事先在浏览器内部植入常用的CA的公开密钥, 以避免公钥的转交问题.</p>
 </blockquote>
 <h2 id="关于HTTPS的建立过程"><a href="#关于HTTPS的建立过程" class="headerlink" title="关于HTTPS的建立过程"></a>关于HTTPS的建立过程</h2><p><img src="http://imgs.genshuixue.com/0baijiatools/606049eaa591c639e7e5ec9ed99c3a81/WX20171127-1453162x.png" alt=""><br><img src="http://imgs.genshuixue.com/0baijiatools/4a020fd9774f39940ca3cd789664abfe/WX20171127-1452302x.png" alt=""><br><img src="http://imgs.genshuixue.com/0baijiatools/156b7054541e5ae04f1baff35a897ffe/WX20171127-1454552x.png" alt=""></p>
+<ol>
+<li>客户端首先会将自己支持的加密算法，打个包告诉服务器端。</li>
+<li><p>服务器端从客户端发来的加密算法中，选出一组加密算法和HASH算法（注，HASH也属于加密），并将自己的身份信息以证书的形式发回给客户端。而证书中包含了网站的地址，加密用的公钥，以及证书的颁发机构等；</p>
+<p> 这里有提到公钥的概念是故事中没有的。我们常见的加密算法一般是一些对称的算法，如凯撒加密；对称算法即加密用的密钥和解密用的密钥是一个。如故事中的密钥是4。还有一种加密解密算法称之为非对称算法。这种算法加密用的密钥（公钥）和解密用的密钥（私钥）是两个不同的密钥；通过公钥加密的内容一定要使用私钥才能够解密。</p>
+<p> 这里，服务器就将自己用来加密用的公钥一同发还给客户端，而私钥则服务器保存着，用户解密客户端加密过后的内容。</p>
+</li>
+<li><p>客户端收到了服务器发来的数据包后，会做这么几件事情：</p>
+<ul>
+<li>验证一下证书是否合法。一般来说，证书是用来标示一个站点是否合法的标志。如果说该证书由权威的第三方颁发和签名的，则说明证书合法。</li>
+<li>如果证书合法，或者客户端接受和信任了不合法的证书，则客户端就会随机产生一串序列号，使用服务器发来的公钥进行加密。这时候，一条返回的消息就基本就绪。</li>
+<li>最后使用服务器挑选的HASH算法，将刚才的消息使用刚才的随机数进行加密，生成相应的消息校验值，与刚才的消息一同发还给服务器。</li>
+</ul>
+</li>
+<li><p>服务器接受到客户端发来的消息后，会做这么几件事情：</p>
+<ul>
+<li>使用私钥解密上面第2）中公钥加密的消息，得到客户端产生的随机序列号。</li>
+<li>使用该随机序列号，对该消息进行加密，验证的到的校验值是否与客户端发来的一致。如果一致则说明消息未被篡改，可以信任。</li>
+<li>最后，使用该随机序列号，加上之前第2步中选择的加密算法，加密一段握手消息，发还给客户端。同时HASH值也带上。</li>
+</ul>
+</li>
+<li><p>客户端收到服务器端的消息后，接着做这么几件事情：</p>
+<ul>
+<li>计算HASH值是否与发回的消息一致</li>
+<li>检查消息是否为握手消息</li>
+</ul>
+</li>
+</ol>
+<p>6、握手结束后，客户端和服务器端使用握手阶段产生的随机数以及挑选出来的算法进行对称加解密的传输。</p>
 <p>CBC模式的加密方法为: 将前一个明文块加密后XOR下一个明文块, 然后再对结果加密. 第一个块则需要特殊生成(上图中的初始向量).</p>
-<h2 id="HTTPS的问题"><a href="#HTTPS的问题" class="headerlink" title="HTTPS的问题"></a>HTTPS的问题</h2><ol>
+<p>协商决定加密组件相当于沟通选择彼此支持的加密算法.</p>
+<h2 id="HTTPS存在的问题"><a href="#HTTPS存在的问题" class="headerlink" title="HTTPS存在的问题"></a>HTTPS存在的问题</h2><ol>
 <li>通信慢. 除去了TCP连接与HTTP请求/响应外, 还需要进行SSL通信.</li>
 <li>客户端与服务端都需要进行加密/解密的处理运算, 占用CPU与内存资源.</li>
+<li>证书成本.</li>
 </ol>
 <p>处理办法: 只针对与敏感操作使用HTTPS加密.</p>
 
@@ -633,7 +663,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#未加密HTTP存在的问题"><span class="nav-number">1.</span> <span class="nav-text">未加密HTTP存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加密HTTP的手段"><span class="nav-number">2.</span> <span class="nav-text">加密HTTP的手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="nav-number">3.</span> <span class="nav-text">HTTP+加密+认证+完整性保护 = HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#两种加密方式"><span class="nav-number">3.0.1.</span> <span class="nav-text">两种加密方式:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS使用混合加密机制"><span class="nav-number">3.0.2.</span> <span class="nav-text">HTTPS使用混合加密机制:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何证明公钥的正确性–证书"><span class="nav-number">3.0.3.</span> <span class="nav-text">如何证明公钥的正确性–证书:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于HTTPS的建立过程"><span class="nav-number">4.</span> <span class="nav-text">关于HTTPS的建立过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS的问题"><span class="nav-number">5.</span> <span class="nav-text">HTTPS的问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#未加密HTTP存在的问题"><span class="nav-number">1.</span> <span class="nav-text">未加密HTTP存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加密HTTP的手段"><span class="nav-number">2.</span> <span class="nav-text">加密HTTP的手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="nav-number">3.</span> <span class="nav-text">HTTP+加密+认证+完整性保护 = HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#两种加密方式"><span class="nav-number">3.0.1.</span> <span class="nav-text">两种加密方式:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS使用混合加密机制"><span class="nav-number">3.0.2.</span> <span class="nav-text">HTTPS使用混合加密机制:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何证明公钥的正确性–证书"><span class="nav-number">3.0.3.</span> <span class="nav-text">如何证明公钥的正确性–证书:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于HTTPS的建立过程"><span class="nav-number">4.</span> <span class="nav-text">关于HTTPS的建立过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS存在的问题"><span class="nav-number">5.</span> <span class="nav-text">HTTPS存在的问题</span></a></li></ol></div>
             
 
           </div>
