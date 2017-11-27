@@ -94,13 +94,13 @@
 
 
 
-<meta name="description" content="非原创 部分摘取自 CSDN 原作者写的很棒 三次握手注意 seq ack syn 四次挥手注意 fin ack 重传 报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。  超时重传决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK时计时器停止。报文发送至接">
+<meta name="description" content="非原创 部分摘取自 CSDN 原作者写的很棒 三次握手注意 seq ack syn 四次挥手注意 fin ack 与断开后的等待两个TTL 重传 报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。  超时重传决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK">
 <meta name="keywords" content="计算机网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP连接-握手挥手, 重传, 流量控制, 拥塞控制等">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/11/22/network/tcp知识/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="非原创 部分摘取自 CSDN 原作者写的很棒 三次握手注意 seq ack syn 四次挥手注意 fin ack 重传 报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。  超时重传决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK时计时器停止。报文发送至接">
+<meta property="og:description" content="非原创 部分摘取自 CSDN 原作者写的很棒 三次握手注意 seq ack syn 四次挥手注意 fin ack 与断开后的等待两个TTL 重传 报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。  超时重传决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://img.blog.csdn.net/20150718102858936">
 <meta property="og:image" content="http://img.blog.csdn.net/20150718103040083">
@@ -112,10 +112,10 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20150718103749387">
 <meta property="og:image" content="http://img.blog.csdn.net/20150718104112095">
 <meta property="og:image" content="http://img.blog.csdn.net/20150718104228469">
-<meta property="og:updated_time" content="2017-11-22T09:27:50.075Z">
+<meta property="og:updated_time" content="2017-11-27T11:34:16.487Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP连接-握手挥手, 重传, 流量控制, 拥塞控制等">
-<meta name="twitter:description" content="非原创 部分摘取自 CSDN 原作者写的很棒 三次握手注意 seq ack syn 四次挥手注意 fin ack 重传 报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。  超时重传决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK时计时器停止。报文发送至接">
+<meta name="twitter:description" content="非原创 部分摘取自 CSDN 原作者写的很棒 三次握手注意 seq ack syn 四次挥手注意 fin ack 与断开后的等待两个TTL 重传 报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。  超时重传决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20150718102858936">
 
 
@@ -390,7 +390,7 @@
         <p>非原创 部分摘取自 <a href="http://blog.csdn.net/kzq_qmi/article/details/46940463" target="_blank" rel="external">CSDN</a></p>
 <p>原作者写的很棒</p>
 <h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>注意 seq ack syn</p>
-<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>注意 fin ack</p>
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>注意 fin ack 与断开后的等待两个TTL</p>
 <h2 id="重传"><a href="#重传" class="headerlink" title="重传"></a>重传</h2><blockquote>
 <p>报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失。</p>
 </blockquote>
