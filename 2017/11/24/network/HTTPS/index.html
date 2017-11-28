@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/606049eaa591c639e7e5ec9ed99c3a81/WX20171127-1453162x.png">
 <meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/4a020fd9774f39940ca3cd789664abfe/WX20171127-1452302x.png">
 <meta property="og:image" content="http://imgs.genshuixue.com/0baijiatools/156b7054541e5ae04f1baff35a897ffe/WX20171127-1454552x.png">
-<meta property="og:updated_time" content="2017-11-27T07:59:06.516Z">
+<meta property="og:updated_time" content="2017-11-28T02:20:53.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTPS相关">
 <meta name="twitter:description" content="前一段儿时间去美团外卖组面试, 被问到HTTPS相关的问题, 回答的不是很好, 想着整理一下. 部分摘取自 &amp;lt;&amp;lt;图解HTTP&amp;gt;&amp;gt;  未加密HTTP存在的问题 通信使用明文, 内容可能被窃听. 无法证明报文完整性, 内容可能被篡改. 不验证通信方的身份, 可能遭遇伪装.  加密HTTP的手段 使用基于SSL(Secure Socket Layer, 安全套接层)或TLS(Tr">
@@ -457,8 +457,9 @@
 <li>检查消息是否为握手消息</li>
 </ul>
 </li>
+<li><p>握手结束后，客户端和服务器端使用握手阶段产生的随机数以及挑选出来的算法进行对称加解密的传输。</p>
+</li>
 </ol>
-<p>6、握手结束后，客户端和服务器端使用握手阶段产生的随机数以及挑选出来的算法进行对称加解密的传输。</p>
 <p>CBC模式的加密方法为: 将前一个明文块加密后XOR下一个明文块, 然后再对结果加密. 第一个块则需要特殊生成(上图中的初始向量).</p>
 <p>协商决定加密组件相当于沟通选择彼此支持的加密算法.</p>
 <h2 id="HTTPS存在的问题"><a href="#HTTPS存在的问题" class="headerlink" title="HTTPS存在的问题"></a>HTTPS存在的问题</h2><ol>
