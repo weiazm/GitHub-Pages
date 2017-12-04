@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="java两种客户端 节点客户端 TransportClient  注意: 生成过程中报异常需close(),否则有线程泄露风险.    待续…">
+<meta name="description" content="java两种客户端 节点客户端 TransportClient  生成过程中报异常需close(),否则有线程泄露风险. client.transport.sniff参数, 开启机器探测功能.    待续…">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch使用要点(八)-Java客户端">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/11/20/es/Elasticsearch-manner-8-java-client/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="java两种客户端 节点客户端 TransportClient  注意: 生成过程中报异常需close(),否则有线程泄露风险.    待续…">
+<meta property="og:description" content="java两种客户端 节点客户端 TransportClient  生成过程中报异常需close(),否则有线程泄露风险. client.transport.sniff参数, 开启机器探测功能.    待续…">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-20T03:44:43.000Z">
+<meta property="og:updated_time" content="2017-12-04T09:58:08.173Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elasticsearch使用要点(八)-Java客户端">
-<meta name="twitter:description" content="java两种客户端 节点客户端 TransportClient  注意: 生成过程中报异常需close(),否则有线程泄露风险.    待续…">
+<meta name="twitter:description" content="java两种客户端 节点客户端 TransportClient  生成过程中报异常需close(),否则有线程泄露风险. client.transport.sniff参数, 开启机器探测功能.    待续…">
 
 
 
@@ -378,9 +378,11 @@
       
         <h2 id="java两种客户端"><a href="#java两种客户端" class="headerlink" title="java两种客户端"></a>java两种客户端</h2><ol>
 <li><p>节点客户端 TransportClient</p>
-<p> 注意: 生成过程中报异常需close(),否则有线程泄露风险.</p>
+<ul>
+<li>生成过程中报异常需close(),否则有线程泄露风险.</li>
+<li><code>client.transport.sniff</code>参数, 开启机器探测功能.</li>
+</ul>
 </li>
-<li></li>
 </ol>
 <p>待续…</p>
 
