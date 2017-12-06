@@ -287,6 +287,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/12/06/jdk/JDK-ThreadLocal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/06/jdk/JDK-ThreadLocal/" itemprop="url">JDK-StringBuilder</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-06T16:30:07+08:00">
+                2017-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p><code>ThreadLocal</code>意为线程本地变量, 使用了<code>Thread</code>类的域-<code>ThreadLocalMap</code>来实现数据的线程范围访问. 不同的线程操作的是各自的<code>ThreadLocalMap</code>.</p>
+<p><code>ThreadLocalMap</code>本质是一个使用<strong>线性探测法</strong>实现的一个<code>HashMap</code>. 这个map的<strong>key是<code>ThreadLocal</code>对象, value是存储元素.</strong></p>
+<p><code>ThreadLocalMap</code>继承了<code>WeakReference</code>, 它的key是弱引用. 这么做的方式是防止内存泄露:</p>
+<ul>
+<li><p>强引用key：<code>ThreadLocal</code>被设置为null，由于<code>ThreadLocalMap</code>持有<code>ThreadLocal</code>的强引用，如果不手动删除，那么<code>ThreadLocal</code>将不会回收，产生内存泄漏。</p>
+</li>
+<li><p>弱引用key：<code>ThreadLocal</code>被设置为null，由于<code>ThreadLocalMap</code>持有<code>ThreadLocal</code>的弱引用，<strong>即便不手动删除，<code>ThreadLocal</code>仍会被回收</strong>，<strong><code>ThreadLocalMap</code>在之后调用set()、getEntry()和remove()函数时会清除所有key为null的Entry。</strong></p>
+</li>
+</ul>
+<p>需要注意的问题:</p>
+<ul>
+<li><p>ThreadLocalMap仅仅含有这些被动措施来补救内存泄漏问题。如果你在之后没有调用ThreadLocalMap的set()、getEntry()和remove()函数的话，那么仍然会存在内存泄漏问题。<br><strong>在使用线程池的情况下，如果不及时进行清理，内存泄漏问题事小，甚至还会产生程序逻辑上的问题。所以，为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。</strong></p>
+</li>
+<li><p>子线程可继承父线程的<code>ThreadLocal</code> -&gt; <strong><code>InheritableThreadLocal</code></strong></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/24/network/HTTPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1880,148 +2037,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/10/31/algorithm/算法-KMP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="weihongyan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="樱丸小头子的blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/31/algorithm/算法-KMP/" itemprop="url">算法: KMP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T19:05:32+08:00">
-                2017-10-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="KMP-字符串匹配"><a href="#KMP-字符串匹配" class="headerlink" title="KMP-字符串匹配"></a>KMP-字符串匹配</h3><p>实现代码:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">kmpMatch</span><span class="params">(String source, String key)</span> </span>&#123;</div><div class="line">    <span class="comment">// 生成next数组</span></div><div class="line">    <span class="keyword">int</span>[] next = getNext(key);</div><div class="line">    <span class="keyword">int</span> result = -<span class="number">1</span>;</div><div class="line">    <span class="comment">// 两个数组指针</span></div><div class="line">    <span class="keyword">int</span> sLocation = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> kLocation = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (sLocation &lt; source.length()) &#123;</div><div class="line">        <span class="comment">// 如果两个字符相等了</span></div><div class="line">        <span class="keyword">if</span> (key.charAt(kLocation) == source.charAt(sLocation)) &#123;</div><div class="line">            <span class="keyword">if</span> (kLocation == key.length() - <span class="number">1</span>) &#123;<span class="comment">// key的最后一个字符. 说明匹配完成</span></div><div class="line">                result = sLocation - key.length() + <span class="number">1</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;<span class="comment">// 继续向后匹配</span></div><div class="line">                kLocation++;</div><div class="line">                sLocation++;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// 两个字符不相等</span></div><div class="line">            <span class="keyword">if</span> (kLocation == <span class="number">0</span>) &#123; <span class="comment">// 没有上一个匹配的字符, 继续往后匹配source</span></div><div class="line">                sLocation++;</div><div class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// key指针跳到上一个匹配的字符对应的next值</span></div><div class="line">                kLocation = next[kLocation - <span class="number">1</span>];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNext(String key) &#123;</div><div class="line">    <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[key.length()];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; key.length(); i++) &#123;</div><div class="line">        <span class="comment">// 自身与前缀子字符串</span></div><div class="line">        String prefix = key.substring(<span class="number">0</span>, i + <span class="number">1</span>);</div><div class="line">        result[i] = getNextValue(prefix);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getNextValue</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> value = <span class="number">0</span>;</div><div class="line">    <span class="comment">// 用于去重</span></div><div class="line">    Set&lt;String&gt; prefixes = Sets.newHashSet();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length() - <span class="number">1</span>; i++) &#123;</div><div class="line">        <span class="comment">// 前缀子字符串</span></div><div class="line">        String prefix = str.substring(<span class="number">0</span>, i + <span class="number">1</span>);</div><div class="line">        prefixes.add(prefix);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length() - <span class="number">1</span>; i++) &#123;</div><div class="line">        <span class="comment">// 后缀子字符串</span></div><div class="line">        String prefix = str.substring(str.length() - <span class="number">1</span> - i, str.length());</div><div class="line">        <span class="comment">// 判断是否有相同的子串在set中, 如果有重复的, 就更新结果.</span></div><div class="line">        value = prefixes.add(prefix) ? value : Math.max(value, prefix.length());</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2072,7 +2087,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
