@@ -112,7 +112,7 @@
 <meta property="og:description" content="refer:官方文档 zk数据模型zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:  不能包含空字符(\u0000). 不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F. 不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://zookeeper.apache.org/doc/r3.4.11/images/state_dia.jpg">
-<meta property="og:updated_time" content="2018-02-13T08:25:07.517Z">
+<meta property="og:updated_time" content="2018-02-13T08:38:22.097Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zk官方文档要点">
 <meta name="twitter:description" content="refer:官方文档 zk数据模型zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:  不能包含空字符(\u0000). 不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F. 不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符">
@@ -341,7 +341,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T16:25:07+08:00">2018-02-13</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T16:38:22+08:00">2018-02-13</time>
             
           </span>
 
@@ -453,7 +453,8 @@
 <li>该session已经挂掉了或者有问题.</li>
 <li>client在向server发送请求期间connection断开了.</li>
 </ol>
-
+<p><strong>Added in 3.2.0 – SessionMovedException</strong>: 有一个clients通常看不见的exception叫做SessionMovedException. 当一个session重连到另一个server上后, 旧session继续发送请求时发生这个异常.这个异常发生的原因是客户端发送给server的请求由于网络延迟原因delay了, client重连到新的server上后这个包才到旧的server上. 旧server收到这个包后会主动关闭这些connection. clients通常看不到这些error是因为它们的旧connection已经关闭了. 一种情况下, clients能够看到这个错误是在两个client使用了相同的sessionId与密码去重连session并建立了相同的连接. 其中一个client会建立成功, 另一个会断开.</p>
+<h1 id="ZooKeeper-Watches"><a href="#ZooKeeper-Watches" class="headerlink" title="ZooKeeper Watches"></a>ZooKeeper Watches</h1>
       
     </div>
     
@@ -668,7 +669,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#zk数据模型"><span class="nav-number">1.</span> <span class="nav-text">zk数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ZNodes"><span class="nav-number">1.1.</span> <span class="nav-text">ZNodes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-in-ZooKeeper"><span class="nav-number">1.2.</span> <span class="nav-text">Time in ZooKeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper-Stat-Structure"><span class="nav-number">1.3.</span> <span class="nav-text">ZooKeeper Stat Structure</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Sessions"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper Sessions</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#zk数据模型"><span class="nav-number">1.</span> <span class="nav-text">zk数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ZNodes"><span class="nav-number">1.1.</span> <span class="nav-text">ZNodes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-in-ZooKeeper"><span class="nav-number">1.2.</span> <span class="nav-text">Time in ZooKeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper-Stat-Structure"><span class="nav-number">1.3.</span> <span class="nav-text">ZooKeeper Stat Structure</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Sessions"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper Sessions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Watches"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper Watches</span></a></li></ol></div>
             
 
           </div>
@@ -715,16 +716,20 @@
 
 
 
-  <span class="post-meta-divider">|</span>
-  <span id="busuanzi_container_site_pv">
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<span class="post-meta-divider">|</span>
+
+<span id="busuanzi_container_site_pv">
     总访问量<span id="busuanzi_value_site_pv"></span>次
-  </span>
+</span>
 
-  <span class="post-meta-divider">|</span>
+<span class="post-meta-divider">|</span>
 
-  <span id="busuanzi_container_site_uv">
-    访客数<span id="busuanzi_value_site_uv"></span>人次
-  </span>
+<span id="busuanzi_container_site_uv">
+  访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
         
 
 
