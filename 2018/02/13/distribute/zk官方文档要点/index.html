@@ -112,7 +112,7 @@
 <meta property="og:description" content="refer:官方文档 zk数据模型zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:  不能包含空字符(\u0000). 不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F. 不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://zookeeper.apache.org/doc/r3.4.11/images/state_dia.jpg">
-<meta property="og:updated_time" content="2018-02-13T09:29:48.885Z">
+<meta property="og:updated_time" content="2018-02-13T10:41:40.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zk官方文档要点">
 <meta name="twitter:description" content="refer:官方文档 zk数据模型zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:  不能包含空字符(\u0000). 不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F. 不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符">
@@ -341,7 +341,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T17:29:48+08:00">2018-02-13</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T18:41:40+08:00">2018-02-13</time>
             
           </span>
 
@@ -458,7 +458,26 @@
 <ul>
 <li><strong>One-time trigger</strong>: 当data变更时, 一个watch event会被发送给client. 例如如果一个客户端操作getData(“/znode1”, true) 过了一会儿 /znode1 的data被改变或者删除了, 客户端会收到/znode1的watch event. 如果/znode1再一次改变了, 除非client再一次在读操作中设置了watch否则不会给client发送watch event.</li>
 <li><strong>Sent to the client</strong>: 这个强调了一个event是单向发送给client的, 但是有可能在变更操作返回succ之后到达client. watches被异步地发送给watchers. zk提供了以下时序的保证: <strong>一个client永远不会在watch event到达之前看到数据的变更</strong>. 网络延迟或者其他因素可能导致不同的client接收watch event与update succ的时间不同. 但是关键之处在于不同的client看到的everything的顺序是不变的.</li>
-<li><strong>The data for which the watch was set</strong>: </li>
+<li><strong>The data for which the watch was set</strong>: 这个是指一个znode的变化会有不同的方式. 你可以认为zk维护着两组watches的list: data watches与child watches. getData()与exists()方法可以设置data watches, getChildren()方法可以设置child watches. 考虑到以上方法的返回数据, setData()将会触发data watches, create()将会触发生成的znode的data watch与其父节点的child watch, delete()将同样触发data watch与child watch.</li>
+</ul>
+<p>watches被client连接的zk-server本地维护. 这样设计使watches的维护,分发与触发变得轻量级. 当一个client连接到一个新的server上时, watch的session event将被触发. 当与server断开连接后, watches不会被接收到, 当client重新连接后, 如果需要, 之前注册的watches都将被重新注册并且触发. 有一种情况可能会导致watch丢失: 在watch的节点还未生成的情况下, 如果在断开连接期间，该节点被创建又被删除，那么watch事件会丢失.</p>
+<h2 id="Semantics-of-Watches"><a href="#Semantics-of-Watches" class="headerlink" title="Semantics of Watches"></a>Semantics of Watches</h2><p>我们能够通过获取zk状态的三个读方法设置watches: exists(), getData(), getChildren(). 下方详细地列出了watch能够触发的事件与启用他们的调用:</p>
+<ul>
+<li>Created event: Enabled with a call to exists.</li>
+<li>Deleted event: Enabled with a call to exists, getData, and getChildren.</li>
+<li>Changed event: Enabled with a call to exists and getData.</li>
+<li>Child event: Enabled with a call to getChildren.</li>
+</ul>
+<h2 id="What-ZooKeeper-Guarantees-about-Watches"><a href="#What-ZooKeeper-Guarantees-about-Watches" class="headerlink" title="What ZooKeeper Guarantees about Watches"></a>What ZooKeeper Guarantees about Watches</h2><ul>
+<li>watches相对于其他时间, 其他watches, 异步相应来说是有序的. zk-client保证了所有分发的顺序.</li>
+<li>对于一个znode, client收到的watch event总是在其看到新的数据之前.</li>
+<li>来自zk的watch event的顺序取决于zk-service接收到update的顺序.</li>
+</ul>
+<h2 id="Things-to-Remember-about-Watches"><a href="#Things-to-Remember-about-Watches" class="headerlink" title="Things to Remember about Watches"></a>Things to Remember about Watches</h2><ul>
+<li>watches是一次性的触发器. 如果你得到了一个watch event并且还想获得未来的变更通知, 你必须再设置另一个watch.</li>
+<li><strong>因为watches是一次性触发器, 并且在获得event与发送新请求去获得一个watch之间有延迟, 你不能可靠地看到发生在zk中的znode的每个变更. 你要准备好去处理获取event与重设watch之间znode可能的多次变更的情况(你可能不关心这种情况, 但是至少你要知道它可能会发生).</strong></li>
+<li>一个watch对象, 或者方法, 仅会被触发一次. 例如, 同一个watch对象既通过exists()操作也通过getData()注册了, 然后节点被删除了, watch对象将被触发一次. </li>
+<li>当你与一个server断开连接时(例如server挂了), 你再重连之前不会收到任何watches. 因为这个原因, session events会被发送到所有的watch handlers. 使用session events来进入一个安全模式: 你可能在断开期间收不到任何events, 所以在这个模式下你应该谨慎地搞事情.</li>
 </ul>
 
       
@@ -675,7 +694,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#zk数据模型"><span class="nav-number">1.</span> <span class="nav-text">zk数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ZNodes"><span class="nav-number">1.1.</span> <span class="nav-text">ZNodes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-in-ZooKeeper"><span class="nav-number">1.2.</span> <span class="nav-text">Time in ZooKeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper-Stat-Structure"><span class="nav-number">1.3.</span> <span class="nav-text">ZooKeeper Stat Structure</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Sessions"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper Sessions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Watches"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper Watches</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#zk数据模型"><span class="nav-number">1.</span> <span class="nav-text">zk数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ZNodes"><span class="nav-number">1.1.</span> <span class="nav-text">ZNodes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-in-ZooKeeper"><span class="nav-number">1.2.</span> <span class="nav-text">Time in ZooKeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper-Stat-Structure"><span class="nav-number">1.3.</span> <span class="nav-text">ZooKeeper Stat Structure</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Sessions"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper Sessions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ZooKeeper-Watches"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper Watches</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Semantics-of-Watches"><span class="nav-number">3.1.</span> <span class="nav-text">Semantics of Watches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-ZooKeeper-Guarantees-about-Watches"><span class="nav-number">3.2.</span> <span class="nav-text">What ZooKeeper Guarantees about Watches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Things-to-Remember-about-Watches"><span class="nav-number">3.3.</span> <span class="nav-text">Things to Remember about Watches</span></a></li></ol></li></ol></div>
             
 
           </div>
