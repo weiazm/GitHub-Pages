@@ -20,6 +20,9 @@
 
 
 
+
+
+
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
@@ -37,36 +40,7 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
-
-
-
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
 
 
 
@@ -75,23 +49,58 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
 
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
   <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
-
-
-
-
 
 
 <meta name="description" content="一人我饮酒醉 七八个小姐姐一起睡">
@@ -107,28 +116,6 @@
 
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: true,
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
 
 
 
@@ -136,8 +123,11 @@
 
 
 
-
-
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
   <title>樱丸小头子的blog</title>
   
 
@@ -147,6 +137,34 @@
 
 
 
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
@@ -158,12 +176,11 @@
   
 
   <div class="container sidebar-position-left 
-   page-home 
- ">
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
+      <div class="header-inner"> <div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
@@ -197,61 +214,37 @@
         
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
         </li>
       
         
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
         </li>
       
         
         <li class="menu-item menu-item-commonweal">
           <a href="/404/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
-            
-            公益404
-          </a>
+            <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />Commonweal 404</a>
         </li>
       
 
@@ -263,9 +256,15 @@
 </nav>
 
 
+  
+
+
 
  </div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
@@ -282,6 +281,224 @@
   
   
 
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2018/02/13/distribute/zk官方文档要点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/13/distribute/zk官方文档要点/" itemprop="url">zk官方文档要点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-13T14:11:05+08:00">2018-02-13</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T16:25:07+08:00">2018-02-13</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>refer:<a href="http://zookeeper.apache.org/doc/r3.4.11/zookeeperProgrammers.html" target="_blank" rel="external">官方文档</a></p>
+<h1 id="zk数据模型"><a href="#zk数据模型" class="headerlink" title="zk数据模型"></a>zk数据模型</h1><p>zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:</p>
+<ul>
+<li>不能包含空字符(\u0000).</li>
+<li>不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F.</li>
+<li>不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符.</li>
+<li>“.”可以作为命名空间的组成, 但是不能单独使用(zk没有相对路径).</li>
+<li>“zookeeper”被认为是保留字.</li>
+</ul>
+<h2 id="ZNodes"><a href="#ZNodes" class="headerlink" title="ZNodes"></a>ZNodes</h2><p>zk中的每个节点即是znode. znode维护着包含版本号, 权限控制列表, 时间戳等的状态结构. 版本号与时间戳让zk保证了数据的更新. 每一次znode的数据有变化, 版本号会增加, 每当客户端接收到变更数据时也会接收到对应的版本号. 当客户端执行更新或者删除操作时也必须提供对应的znode的版本号, 如果版本号不匹配当前的数据, 变更将会失败.</p>
+<p>zk不适合作为存储系统而是用于管理协调数据. 存储的数据可以是配置信息, 状态等, 它们的共性是数据量较小(KB级别). 存储体积较大的数据会由于replica导致存储以及网络的开销造成延迟.</p>
+<p>znode是程序员需要关注的主要对象. znode有以下几个指的被关注的特性:</p>
+<ul>
+<li><strong>Watches</strong>: clients能够在znode上设置watches. <strong>znode发生变更时能够触发并清除watch</strong>. 当watch被触发时, zk向client发送一个通知.</li>
+<li><strong>Data Access</strong>: 存储在znode中的数据能够自动地被读写. 读能够获取znode中的所有数据, 对应地, 写也能替换znode中的所有数据. 每个znode有一个Access Control List (ACL)来做权限控制.</li>
+<li><strong>Ephemeral Nodes</strong>: zk允许创建临时节点. 这种znode的生命周期与创建它的session连接相同, session结束znode即被删除.临时节点因为这种特性不允许拥有子节点. </li>
+<li><strong>Sequence Nodes</strong>: 创建znode时, zk可以在路径的末尾添加唯一自增序号, 这种znode可以被用来实现分布式锁或者分布式队列.</li>
+</ul>
+<h2 id="Time-in-ZooKeeper"><a href="#Time-in-ZooKeeper" class="headerlink" title="Time in ZooKeeper"></a>Time in ZooKeeper</h2><ul>
+<li><strong>Zxid</strong>: 每次zk状态的变更会接收到唯一且自增的zxid(ZooKeeper Transaction Id)形式的时间戳. 这代表着zk的所有变更的时序.</li>
+<li><strong>Version numbers</strong>: znode的每次变更会导致该znode的version number加1. version代表znode的变更次数, cversion代表该znode的子节点的变更次数, aversion代表该znode的ACL的变更次数.</li>
+<li><strong>Ticks</strong>: 当使用zk集群时, zk-server之间使用ticks来定义事件的事件状态. 例如状态上传, session超时, 链接超时等等. tick time间接地暴露了session的最小超时时间(往返tick时间). </li>
+<li><strong>Real time</strong>: zk不使用real time或者clock time, 而是将时间戳保存在znode的状态结构中, 包括生成时间, 修改时间.</li>
+</ul>
+<h2 id="ZooKeeper-Stat-Structure"><a href="#ZooKeeper-Stat-Structure" class="headerlink" title="ZooKeeper Stat Structure"></a>ZooKeeper Stat Structure</h2><p>zk中的znode的状态结构由以下构成:</p>
+<ul>
+<li><strong>czxid</strong>: 该znode创建时的zxid.</li>
+<li><strong>mzxid</strong>: 该znode最近修改时的zxid.</li>
+<li><strong>pzxid</strong>: 该znode最近修改子节点时的zxid.</li>
+<li><strong>ctime</strong>: 该znode创建时的毫秒时间戳.</li>
+<li><strong>mtime</strong>: 该znode最近一次修改时的毫秒时间戳.</li>
+<li><strong>version</strong>: 该znode的data修改次数.</li>
+<li><strong>cversion</strong>: 该znode的子节点的修改次数.</li>
+<li><strong>aversion</strong>: 该znode的ACL的修改次数.</li>
+<li><strong>ephemeralOwner</strong>: 倘若该znode是临时节点, 代表创建者的sessionId. 若不是临时节点, 这个值为0.</li>
+<li><strong>dataLength</strong>: 该znode的data的数据大小.</li>
+<li><strong>numChildren</strong>: 该znode的子节点数量.</li>
+</ul>
+<h1 id="ZooKeeper-Sessions"><a href="#ZooKeeper-Sessions" class="headerlink" title="ZooKeeper Sessions"></a>ZooKeeper Sessions</h1><p>zk-client通过其语言绑定的实现连接到zk-service便创建一个session. session的状态图如下:</p>
+<p><img src="http://zookeeper.apache.org/doc/r3.4.11/images/state_dia.jpg" alt=""></p>
+<p>为了创建一个client-session, 应用需提供逗号分隔的host:port pairs. zk客户端会随机选中某个server地址并试图连接上去.如果这个连接失败了或者由于其他原因断开了, 客户端会自动连接下一个server直到连接被建立.</p>
+<p><strong>Added in 3.2.0</strong>: 在连接的字符串后面可以添加chroot后缀, client的所有命令将会变为相对于该root的操作. 如:”127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002/app/a”. 这样做的好处是便于了隔离.</p>
+<p>当client连接到zk-service后, zk创建一个64-bit的number代表zk的session并分配给client.如果client连接到另一个zk-server, 它将会把sessionId作为连接握手请求的一部分. 为了安全起见, server会给sessionId生成密码并在client创建session时返回给client. client在重连session到一个新的server时会发送密码与sessionId.</p>
+<p>client创建zk-session时有一个超时时间的参数. 目前的实现要求超时时间至少是tickTime的两倍, 最大是tickTime的20倍.</p>
+<p>当一个client(session)成为zk-cluster的一部分时, 它将在创建session时指定的server列表中搜索, 最终client与其中一个server的连接被建立后, session将会进入”connected”状态或者”expired”状态(取决于是否超时). 连接断开后我们不推荐你新建一个session对象, zk-client会为你处理重连. 只有接收到session过期事件后才会强制创建一个新的session.</p>
+<p>session的过期是由zk-cluster自己管理的, 不是客户端. 当client建立与zk-cluster的session时提供了”timeout”参数. 这个值被zk-cluster用来决定何时client的session会过期. 当zk-cluster在timeout时间内接收不到消息时, 过期事件会发生. 当session过期后, zk-cluster会立即删除掉该session拥有的所有临时节点, 并且触发这些节点的watches. <strong>在这期间, 这个client依然与zk-cluster是失联状态, 它只有重连到集群上时才知道自己的session过期了</strong>.</p>
+<p>过期的session的watcher观察到的state变化:</p>
+<ol>
+<li>connected: session建立了, client与zk-cluster通信中.</li>
+<li>… client与zk-cluster发生了网络分区.</li>
+<li>disconnected: client与zk-cluster断开连接了.</li>
+<li>… 过了一段时间, 超时后, zk-cluster将该会话过期了, client还没意识到什么事情.</li>
+<li>… 过了一段时间, client与zk-cluster网络恢复了.</li>
+<li>expired: 最后client重连了zk-cluster, 它被通知超时了.</li>
+</ol>
+<p>session创建调用的另一个参数是默认的watcher. 当client的state发生任何变更时, watchers会被通知. 例如, 如果client与server失去了连接或者session过期了等, client会被通知. 该watcher应该考虑到断开连接的初始状态(如在client发送state变更事件给watcher之前). 比如新建连接时, 第一个发送给watcher的事件应该是session connection事件.</p>
+<p>session通过client发送的心跳来保持存活状态. 心跳请求不仅让zk-server知道client是否活跃, 也让client知道server是否还正常. 心跳请求的间隔应该既能保证正常的使用, 也能及时检测到连接的断开从而重连到一个新的server.</p>
+<p>一旦与server的连接被建立好, 基本上有两种情况会导致client发生connectionloss.</p>
+<ol>
+<li>该session已经挂掉了或者有问题.</li>
+<li>client在向server发送请求期间connection断开了.</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -292,7 +509,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -316,15 +533,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-06T16:30:07+08:00">
-                2017-12-06
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-06T16:30:07+08:00">2017-12-06</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-12-06T17:15:06+08:00">2017-12-06</time>
             
           </span>
 
@@ -337,14 +569,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -357,38 +585,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  344字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1分钟
-                </span>
-              
-            </div>
           
 
           
@@ -445,9 +645,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -470,6 +667,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -480,7 +679,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -504,15 +703,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-24T17:19:00+08:00">
-                2017-11-24
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-24T17:19:00+08:00">2017-11-24</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-28T10:20:53+08:00">2017-11-28</time>
             
           </span>
 
@@ -525,14 +739,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -545,38 +755,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,615字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6分钟
-                </span>
-              
-            </div>
           
 
           
@@ -703,9 +885,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -728,6 +907,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -738,7 +919,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -762,15 +943,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-22T16:00:00+08:00">
-                2017-11-22
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-22T16:00:00+08:00">2017-11-22</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-27T19:34:16+08:00">2017-11-27</time>
             
           </span>
 
@@ -783,14 +979,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -803,38 +995,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,994字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  14分钟
-                </span>
-              
-            </div>
           
 
           
@@ -976,9 +1140,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -1001,6 +1162,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -1011,7 +1174,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1035,15 +1198,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-20T11:40:44+08:00">
-                2017-11-20
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-20T11:40:44+08:00">2017-11-20</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-12-04T17:58:08+08:00">2017-12-04</time>
             
           </span>
 
@@ -1056,14 +1234,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -1076,38 +1250,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  47字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1分钟
-                </span>
-              
-            </div>
           
 
           
@@ -1157,9 +1303,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -1182,6 +1325,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -1192,7 +1337,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1216,15 +1361,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-16T22:25:07+08:00">
-                2017-11-16
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-16T22:25:07+08:00">2017-11-16</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-16T23:12:47+08:00">2017-11-16</time>
             
           </span>
 
@@ -1237,14 +1397,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -1257,38 +1413,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  366字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2分钟
-                </span>
-              
-            </div>
           
 
           
@@ -1335,9 +1463,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -1360,6 +1485,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -1370,7 +1497,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1394,15 +1521,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-07T11:38:00+08:00">
-                2017-11-07
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-07T11:38:00+08:00">2017-11-07</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-07T11:39:26+08:00">2017-11-07</time>
             
           </span>
 
@@ -1415,14 +1557,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -1435,38 +1573,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  325字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2分钟
-                </span>
-              
-            </div>
           
 
           
@@ -1511,9 +1621,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -1536,6 +1643,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -1546,7 +1655,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1570,15 +1679,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-07T11:38:00+08:00">
-                2017-11-07
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-07T11:38:00+08:00">2017-11-07</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-07T11:44:10+08:00">2017-11-07</time>
             
           </span>
 
@@ -1591,14 +1715,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -1611,38 +1731,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  737字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5分钟
-                </span>
-              
-            </div>
           
 
           
@@ -1684,9 +1776,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -1709,6 +1798,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -1719,7 +1810,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1743,15 +1834,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T16:43:07+08:00">
-                2017-11-06
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-06T16:43:07+08:00">2017-11-06</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-30T20:36:41+08:00">2017-11-30</time>
             
           </span>
 
@@ -1764,14 +1870,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -1784,38 +1886,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,077字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4分钟
-                </span>
-              
-            </div>
           
 
           
@@ -1886,9 +1960,6 @@
       
 
       
-      
-
-      
 
       
       
@@ -1911,6 +1982,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -1921,7 +1994,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weihongyan">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1945,15 +2018,30 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T15:13:15+08:00">
-                2017-11-03
-              </time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-03T15:13:15+08:00">2017-11-03</time>
             
 
             
+            
+              
+                
+              
+            
 
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-27T19:30:34+08:00">2017-11-27</time>
             
           </span>
 
@@ -1966,14 +2054,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
 
                 
                 
@@ -1986,38 +2070,10 @@
           
 
           
+          
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3,228字
-                </span>
-              
 
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  11分钟
-                </span>
-              
-            </div>
           
 
           
@@ -2154,185 +2210,6 @@
       
 
       
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/jvm/JVM-零碎知识点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="weihongyan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="樱丸小头子的blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/03/jvm/JVM-零碎知识点/" itemprop="url">JVM-零碎知识点</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T14:49:07+08:00">
-                2017-11-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术文章/" itemprop="url" rel="index">
-                    <span itemprop="name">技术文章</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  74字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点："><a href="#jdk7-版本对-intern-操作和常量池都做了一定的修改。主要包括2点：" class="headerlink" title="jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点："></a>jdk7 版本对 intern 操作和常量池都做了一定的修改。主要包括2点：</h3><ol>
-<li>String常量池. 从 Perm 区移动到了 Java Heap 区</li>
-<li>String#intern方法. 如果存在堆中的对象, 会直接保存对象的引用, 而不会重新创建对象.</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-
-      
 
       
       
@@ -2359,9 +2236,6 @@
           </div>
           
 
-
-          
-
         </div>
         
           
@@ -2382,101 +2256,112 @@
 
       
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
-               alt="weihongyan" />
-          <p class="site-author-name" itemprop="name">weihongyan</p>
-           
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="weihongyan" />
+            
+              <p class="site-author-name" itemprop="name">weihongyan</p>
               <p class="site-description motion-element" itemprop="description">一人我饮酒醉 七八个小姐姐一起睡</p>
+          </div>
+
           
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/weiazm" target="_blank" title="GitHub"><i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://leetcode.com/weihongyan" target="_blank" title="LeetCode"><i class="fa fa-fw fa-globe"></i>LeetCode</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/3569209981" target="_blank" title="微博"><i class="fa fa-fw fa-globe"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
         </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives/">
-                <span class="site-state-item-count">23</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">7</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/weiazm" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                    
-                      GitHub
-                    
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://leetcode.com/weihongyan" target="_blank" title="LeetCode">
-                  
-                    <i class="fa fa-fw fa-globe"></i>
-                  
-                    
-                      LeetCode
-                    
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://weibo.com/3569209981" target="_blank" title="微博">
-                  
-                    <i class="fa fa-fw fa-weibo"></i>
-                  
-                    
-                      微博
-                    
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
       </section>
 
       
@@ -2493,48 +2378,34 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
-<div class="copyright" >
-  
-  &copy;  2017 &mdash; 
-  <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">weihongyan</span>
 
   
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-area-chart"></i>
-    </span>
-    
-      <span class="post-meta-item-text">Site words total count&#58;</span>
-    
-    <span title="Site words total count">
-      20.2k
-    </span>
+
   
 </div>
 
 
-  <div class="powered-by">
-    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-  </div>
 
-  <span class="post-meta-divider">|</span>
 
-  <div class="theme-info">
-    主题 &mdash;
-    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-      NexT.Mist
-    </a>
-  </div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
 
 
   <span class="post-meta-divider">|</span>
 
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.0.3</div>
+
+
+
+
+  <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
     总访问量<span id="busuanzi_value_site_pv"></span>次
   </span>
@@ -2544,7 +2415,6 @@
   <span id="busuanzi_container_site_uv">
     访客数<span id="busuanzi_value_site_uv"></span>人次
   </span>
-
         
 
 
@@ -2562,6 +2432,8 @@
         <i class="fa fa-arrow-up"></i>
         
       </div>
+    
+
     
 
   </div>
@@ -2582,7 +2454,6 @@
 
 
 
-  
 
 
 
@@ -2595,55 +2466,49 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
 
 
 
   
   
-
-  
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
 
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
-
-
-
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
 
   
 
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
 
 
 
@@ -2668,15 +2533,13 @@
 
 
 
-  
-
-
-
 
 
   
 
-  
+
+
+
 
   
 
@@ -2687,5 +2550,15 @@
   
 
   
+  
+
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
