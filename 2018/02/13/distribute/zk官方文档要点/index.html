@@ -112,7 +112,7 @@
 <meta property="og:description" content="refer:官方文档 zk数据模型zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:  不能包含空字符(\u0000). 不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F. 不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://zookeeper.apache.org/doc/r3.4.11/images/state_dia.jpg">
-<meta property="og:updated_time" content="2018-02-13T10:41:40.188Z">
+<meta property="og:updated_time" content="2018-02-13T10:42:47.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zk官方文档要点">
 <meta name="twitter:description" content="refer:官方文档 zk数据模型zk的命名空间中的每个节点既能关联数据也能有子节点.节点的路径总是被表示为斜杠分割的绝对路径, 并且不允许使用相对路径. 路径的以及节点的命名遵守以下规则:  不能包含空字符(\u0000). 不能包含无法显示字符:\u0001 - \u0019 and \u007F - \u009F. 不包含\ud800 -uF8FFF, \uFFF0 - uFFFF范围的字符">
@@ -341,7 +341,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T18:41:40+08:00">2018-02-13</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T18:42:47+08:00">2018-02-13</time>
             
           </span>
 
@@ -479,6 +479,7 @@
 <li>一个watch对象, 或者方法, 仅会被触发一次. 例如, 同一个watch对象既通过exists()操作也通过getData()注册了, 然后节点被删除了, watch对象将被触发一次. </li>
 <li>当你与一个server断开连接时(例如server挂了), 你再重连之前不会收到任何watches. 因为这个原因, session events会被发送到所有的watch handlers. 使用session events来进入一个安全模式: 你可能在断开期间收不到任何events, 所以在这个模式下你应该谨慎地搞事情.</li>
 </ul>
+<p>TBC…</p>
 
       
     </div>
