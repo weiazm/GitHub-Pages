@@ -218,15 +218,9 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
         </li>
       
         
@@ -236,9 +230,15 @@
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
         </li>
       
         
@@ -340,7 +340,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T16:38:22+08:00">2018-02-13</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T17:13:46+08:00">2018-02-13</time>
             
           </span>
 
@@ -455,7 +455,11 @@
 <li>client在向server发送请求期间connection断开了.</li>
 </ol>
 <p><strong>Added in 3.2.0 – SessionMovedException</strong>: 有一个clients通常看不见的exception叫做SessionMovedException. 当一个session重连到另一个server上后, 旧session继续发送请求时发生这个异常.这个异常发生的原因是客户端发送给server的请求由于网络延迟原因delay了, client重连到新的server上后这个包才到旧的server上. 旧server收到这个包后会主动关闭这些connection. clients通常看不到这些error是因为它们的旧connection已经关闭了. 一种情况下, clients能够看到这个错误是在两个client使用了相同的sessionId与密码去重连session并建立了相同的连接. 其中一个client会建立成功, 另一个会断开.</p>
-<h1 id="ZooKeeper-Watches"><a href="#ZooKeeper-Watches" class="headerlink" title="ZooKeeper Watches"></a>ZooKeeper Watches</h1>
+<h1 id="ZooKeeper-Watches"><a href="#ZooKeeper-Watches" class="headerlink" title="ZooKeeper Watches"></a>ZooKeeper Watches</h1><p>zk中所有的读操作: getData(), getChildren(), exists() 有设置watch的选项. 这里是zk对于watch的定义: 一个watch event是一个一次性触发器, 当watch设置到的data发生变更时会被触发. 有三点需要注意的地方:</p>
+<ul>
+<li><strong>One-time trigger</strong>: </li>
+</ul>
+
           
         
       
