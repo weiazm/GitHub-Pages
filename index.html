@@ -340,7 +340,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T17:13:46+08:00">2018-02-13</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-13T17:29:48+08:00">2018-02-13</time>
             
           </span>
 
@@ -457,7 +457,9 @@
 <p><strong>Added in 3.2.0 – SessionMovedException</strong>: 有一个clients通常看不见的exception叫做SessionMovedException. 当一个session重连到另一个server上后, 旧session继续发送请求时发生这个异常.这个异常发生的原因是客户端发送给server的请求由于网络延迟原因delay了, client重连到新的server上后这个包才到旧的server上. 旧server收到这个包后会主动关闭这些connection. clients通常看不到这些error是因为它们的旧connection已经关闭了. 一种情况下, clients能够看到这个错误是在两个client使用了相同的sessionId与密码去重连session并建立了相同的连接. 其中一个client会建立成功, 另一个会断开.</p>
 <h1 id="ZooKeeper-Watches"><a href="#ZooKeeper-Watches" class="headerlink" title="ZooKeeper Watches"></a>ZooKeeper Watches</h1><p>zk中所有的读操作: getData(), getChildren(), exists() 有设置watch的选项. 这里是zk对于watch的定义: 一个watch event是一个一次性触发器, 当watch设置到的data发生变更时会被触发. 有三点需要注意的地方:</p>
 <ul>
-<li><strong>One-time trigger</strong>: </li>
+<li><strong>One-time trigger</strong>: 当data变更时, 一个watch event会被发送给client. 例如如果一个客户端操作getData(“/znode1”, true) 过了一会儿 /znode1 的data被改变或者删除了, 客户端会收到/znode1的watch event. 如果/znode1再一次改变了, 除非client再一次在读操作中设置了watch否则不会给client发送watch event.</li>
+<li><strong>Sent to the client</strong>: 这个强调了一个event是单向发送给client的, 但是有可能在变更操作返回succ之后到达client. watches被异步地发送给watchers. zk提供了以下时序的保证: <strong>一个client永远不会在watch event到达之前看到数据的变更</strong>. 网络延迟或者其他因素可能导致不同的client接收watch event与update succ的时间不同. 但是关键之处在于不同的client看到的everything的顺序是不变的.</li>
+<li><strong>The data for which the watch was set</strong>: </li>
 </ul>
 
           
