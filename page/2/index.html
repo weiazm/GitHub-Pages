@@ -288,6 +288,259 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/mysql/MySQL-零碎知识点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/03/mysql/MySQL-零碎知识点/" itemprop="url">MySQL-零碎知识点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-03T15:13:15+08:00">2017-11-03</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-27T19:30:34+08:00">2017-11-27</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="建索引几个原则"><a href="#建索引几个原则" class="headerlink" title="建索引几个原则"></a>建索引几个原则</h2><ol>
+<li><p>最左前缀匹配原则, 非常重要的原则, mysql会一直向右匹配直到遇到范围查询(&gt;, &lt;, between, like)就停止匹配.</p>
+<blockquote>
+<p>比如a = 1 and b = 2 and c &gt; 3 and d = 4 如果建立(a,b,c,d)顺序的索引, d是用不到索引的; 如果建立(a,b,d,c)的索引则都可以用到, a,b,d的顺序可以任意调整.</p>
+</blockquote>
+</li>
+<li><p>=和in可以乱序.</p>
+<blockquote>
+<p>比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序, mysql的查询优化器会帮你优化成索引可以识别的形式.</p>
+</blockquote>
+</li>
+<li><p>尽量选择区分度高的列作为索引,区分度的公式是<code>count(distinct col)/count(*)</code>, 表示字段不重复的比例, 比例越大我们扫描的记录数越少, 唯一键的区分度是1, 而一些状态, 性别字段可能在大数据面前区分度就是0.</p>
+<blockquote>
+<p>一般需要join的字段我们都要求是0.1以上，即平均1条扫描10条记录.</p>
+</blockquote>
+</li>
+<li><p>索引列不能参与计算, 保持列”干净”.</p>
+<blockquote>
+<p>比如from_unixtime(create_time) = ‘2014-05-29’就不能使用到索引, 原因很简单, b+树中存的都是数据表中的字段值, 但进行检索时, 需要把所有元素都应用函数才能比较, 显然成本太大. 所以语句应该写成create_time = unix_timestamp(‘2014-05-29’).</p>
+</blockquote>
+</li>
+<li><p>尽量的扩展索引, 不要新建索引.</p>
+<blockquote>
+<p>比如表中已经有a的索引, 现在要加(a,b)的索引, 那么只需要修改原来的索引即可.</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="使用索引几个原则"><a href="#使用索引几个原则" class="headerlink" title="使用索引几个原则"></a>使用索引几个原则</h2><ol>
+<li>部分or逻辑可以使用union改造.</li>
+<li>慢sql使用desc 或者 explain来分析执行计划.</li>
+<li>varchar等值比较写单引号.</li>
+</ol>
+<h2 id="InnoDB锁"><a href="#InnoDB锁" class="headerlink" title="InnoDB锁"></a>InnoDB锁</h2><p>InnoDB行锁是通过给索引上的索引项加锁来实现的，<strong>只有通过索引条件检索数据，InnoDB才使用行级锁，否则，InnoDB将使用表锁</strong></p>
+<h4 id="select-加锁语法"><a href="#select-加锁语法" class="headerlink" title="select 加锁语法"></a>select 加锁语法</h4><pre><code>共享锁：SELECT * FROM table_name WHERE ... LOCK IN SHARE MODE
+排他锁：SELECT * FROM table_name WHERE ... FOR UPDATE
+</code></pre><h4 id="行锁与表锁"><a href="#行锁与表锁" class="headerlink" title="行锁与表锁"></a>行锁与表锁</h4><ol>
+<li>在不通过索引条件查询的时候，InnoDB确实使用的是表锁，而不是行锁。</li>
+<li>由于MySQL的行锁是针对索引加的锁，不是针对记录加的锁，所以虽然是访问不同行的记录，但是如果是使用相同的索引键，是会出现锁冲突的。</li>
+<li>当表有多个索引的时候，不同的事务可以使用不同的索引锁定不同的行，另外，不论是使用主键索引、唯一索引或普通索引，InnoDB都会使用行锁来对数据加锁。</li>
+<li>即便在条件中使用了索引字段，但是否使用索引来检索数据是由MySQL通过判断不同执行计划的代价来决定的，如果MySQL认为全表扫描效率更高，比如对一些很小的表，它就不会使用索引，这种情况下InnoDB将使用表锁，而不是行锁。因此，在分析锁冲突时，别忘了检查SQL的执行计划，以确认是否真正使用了索引。</li>
+</ol>
+<h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h4><p>当我们用范围条件而不是相等条件检索数据，并请求共享或排他锁时，InnoDB会给符合条件的已有数据记录的索引项加锁；</p>
+<p><strong>对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP)”，InnoDB也会对这个“间隙”加锁</strong>，这种锁机制就是所谓的间隙锁（Next-Key锁）。</p>
+<p>例：<br>假如emp表中只有101条记录，其empid的值分别是 1,2,…,100,101，下面的SQL：</p>
+<pre><code>mysql&gt; select * from emp where empid &gt; 100 for update;
+</code></pre><p>是一个范围条件的检索，<strong>InnoDB不仅会对符合条件的empid值为101的记录加锁，也会对empid大于101（这些记录并不存在）的“间隙”加锁。</strong></p>
+<p>InnoDB使用间隙锁的目的：</p>
+<ol>
+<li>防止幻读，以满足相关隔离级别的要求。对于上面的例子，要是不使用间隙锁，如果其他事务插入了empid大于100的任何记录，那么本事务如果再次执行上述语句，就会发生幻读；</li>
+<li>为了满足其恢复和复制的需要。</li>
+</ol>
+<p>很显然，在使用范围条件检索并锁定记录时，即使某些不存在的键值也会被无辜的锁定，而造成在锁定的时候无法插入锁定键值范围内的任何数据。在某些场景下这可能会对性能造成很大的危害。</p>
+<p>除了间隙锁给InnoDB带来性能的负面影响之外，通过索引实现锁定的方式还存在其他几个较大的性能隐患：</p>
+<ol>
+<li>当Query无法利用索引的时候，InnoDB会放弃使用行级别锁定而改用表级别的锁定，造成并发性能的降低；</li>
+<li>当Query使用的索引并不包含所有过滤条件的时候，数据检索使用到的索引键锁住的数据可能有部分并不属于该Query的结果集的行列，但是也会被锁定，因为间隙锁锁定的是一个范围，而不是具体的索引键；</li>
+<li>当Query在使用索引定位数据的时候，如果使用的索引键一样但访问的数据行不同的时候（索引只是过滤条件的一部分），一样会被锁定。</li>
+</ol>
+<p>因此，在实际应用开发中，尤其是并发插入比较多的应用，我们要尽量优化业务逻辑，<strong>尽量使用相等条件来访问更新数据，避免使用范围条件即避免使用间隙锁</strong>.</p>
+<p>还要特别说明的是，InnoDB除了通过范围条件加锁时使用间隙锁外，如果使用相等条件请求给一个不存在的记录加锁，InnoDB也会使用间隙锁。</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>MyISAM由于只有表锁,故是<code>deadlock free</code>的，这是因为MyISAM总是一次获得所需的全部锁，要么全部满足，要么等待，因此不会出现死锁。</p>
+<p>但在InnoDB中，除单个SQL组成的事务外，锁是逐步获得的，当两个事务都需要获得对方持有的排他锁才能继续完成事务，这种循环锁等待就是典型的死锁。</p>
+<p>在InnoDB的事务管理和锁定机制中，有专门检测死锁的机制，会在系统中产生死锁之后的<strong>很短时间内就检测到该死锁的存在</strong>。当InnoDB检测到系统中产生了死锁之后，<strong>InnoDB会通过相应的判断来选这产生死锁的两个事务中较小的(插入、更新或者删除的数据量较小)事务来回滚，而让另外一个较大的事务成功完成。</strong></p>
+<p>但是有一点需要注意的就是，当产生死锁的场景中涉及到不止InnoDB存储引擎的时候，InnoDB是没办法检测到该死锁的，这时候就只能通过锁定超时限制参数<strong>InnoDB_lock_wait_timeout</strong>来解决。这个参数并不是只用来解决死锁问题，在并发访问比较高的情况下，如果大量事务因无法立即获得所需的锁而挂起，会占用大量计算机资源，造成严重性能问题，甚至拖跨数据库。我们通过设置合适的锁等待超时阈值，可以避免这种情况发生。</p>
+<h4 id="几种避免死锁的常用方法"><a href="#几种避免死锁的常用方法" class="headerlink" title="几种避免死锁的常用方法"></a>几种避免死锁的常用方法</h4><ol>
+<li>在应用中，如果不同的程序会并发存取多个表，应尽量约定以相同的顺序来访问表，这样可以大大降低产生死锁的机会。</li>
+<li>在程序以批量方式处理数据的时候，如果事先对数据排序，保证每个线程按固定的顺序来处理记录，也可以大大降低出现死锁的可能。</li>
+<li>在事务中，如果要更新记录，应该直接申请足够级别的锁，即排他锁，而不应先申请共享锁，更新时再申请排他锁，因为当用户申请排他锁时，其他事务可能又已经获得了相同记录的共享锁，从而造成锁冲突，甚至死锁。</li>
+<li>在<code>REPEATABLE-READ</code>隔离级别下，如果两个线程同时对相同条件记录用SELECT…FOR UPDATE加排他锁，在没有符合该条件记录情况下，两个线程都会加锁成功。程序发现记录尚不存在，就试图插入一条新记录，如果两个线程都这么做，就会出现死锁。这种情况下，将隔离级别改成<code>READ COMMITTED</code>，就可避免问题。<br>（5）当隔离级别为<code>READ COMMITTED</code>时，如果两个线程都先执行SELECT…FOR UPDATE，判断是否存在符合条件的记录，如果没有，就插入记录。此时，只有一个线程能插入成功，另一个线程会出现锁等待，当第1个线程提交后，第2个线程会因主键重出错，但虽然这个线程出错了，却会获得一个排他锁。这时如果有第3个线程又来申请排他锁，也会出现死锁。对于这种情况，可以直接做插入操作，然后再捕获主键重异常，或者在遇到主键重错误时，总是执行ROLLBACK释放获得的排他锁。</li>
+</ol>
+<h2 id="什么时候使用表锁"><a href="#什么时候使用表锁" class="headerlink" title="什么时候使用表锁"></a>什么时候使用表锁</h2><p>对于InnoDB表，在绝大部分情况下都应该使用行级锁，因为事务和行锁往往是我们之所以选择InnoDB表的理由。但在个别特殊事务中，也可以考虑使用表级锁：</p>
+<ol>
+<li>事务需要更新大部分或全部数据，表又比较大，如果使用默认的行锁，不仅这个事务执行效率低，而且可能造成其他事务长时间锁等待和锁冲突，这种情况下可以考虑使用表锁来提高该事务的执行速度。</li>
+<li>事务涉及多个表，比较复杂，很可能引起死锁，造成大量事务回滚。这种情况也可以考虑一次性锁定事务涉及的表，从而避免死锁、减少数据库因事务回滚带来的开销。<br>当然，应用中这两种事务不能太多，否则，就应该考虑使用MyISAM表了。</li>
+</ol>
+<p>在InnoDB下，使用表锁要注意以下两点:</p>
+<ol>
+<li>使用LOCK TABLES虽然可以给InnoDB加表级锁，但必须说明的是，表锁不是由InnoDB存储引擎层管理的，而是由其上一层──MySQL Server负责的，仅当autocommit=0、InnoDB_table_locks=1（默认设置）时，InnoDB层才能知道MySQL加的表锁，MySQL Server也才能感知InnoDB加的行锁，这种情况下，InnoDB才能自动识别涉及表级锁的死锁，否则，InnoDB将无法自动检测并处理这种死锁。</li>
+<li><p>在用 LOCK TABLES对InnoDB表加锁时要注意，要将AUTOCOMMIT设为0，否则MySQL不会给表加锁；事务结束前，不要用UNLOCK TABLES释放表锁，因为UNLOCK TABLES会隐含地提交事务；COMMIT或ROLLBACK并不能释放用LOCK TABLES加的表级锁，必须用UNLOCK TABLES释放表锁。正确的方式见如下语句：</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SET</span> AUTOCOMMIT=<span class="number">0</span>;</div><div class="line"><span class="keyword">LOCK</span> <span class="keyword">TABLES</span> t1 WRITE, t2 <span class="keyword">READ</span>, ...;</div><div class="line">[<span class="keyword">do</span> something <span class="keyword">with</span> <span class="keyword">tables</span> t1 <span class="keyword">and</span> t2 here];</div><div class="line"><span class="keyword">COMMIT</span>;</div><div class="line"><span class="keyword">UNLOCK</span> <span class="keyword">TABLES</span>;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="锁相关的优化"><a href="#锁相关的优化" class="headerlink" title="锁相关的优化"></a>锁相关的优化</h2><p>尽量避免锁的做法:</p>
+<ol>
+<li>尽可能让所有的数据检索都通过索引来完成，从而避免InnoDB因为无法通过索引键加锁而升级为表级锁定；</li>
+<li>合理设计索引，让InnoDB在索引键上面加锁的时候尽可能准确，尽可能的缩小锁定范围，避免造成不必要的锁定而影响其他Query的执行；</li>
+<li>尽可能减少基于范围的数据检索过滤条件，避免因为间隙锁带来的负面影响而锁定了不该锁定的记录；</li>
+<li>尽量控制事务的大小，减少锁定的资源量和锁定时间长度；</li>
+<li>在业务环境允许的情况下，尽量使用较低级别的事务隔离，以减少MySQL因为实现事务隔离级别所带来的附加成本。</li>
+</ol>
+<p>锁发生后的优化:</p>
+<ol>
+<li>类似业务模块中，尽可能按照相同的访问顺序来访问，防止产生死锁；</li>
+<li>在同一个事务中，尽可能做到一次锁定所需要的所有资源，减少死锁产生概率；</li>
+<li>对于非常容易产生死锁的业务部分，可以尝试使用升级锁定颗粒度，通过表级锁定来减少死锁产生的概率。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/11/03/jvm/JVM-零碎知识点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1932,211 +2185,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/es/Elasticsearch_manner_3_分布式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="weihongyan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="樱丸小头子的blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/25/es/Elasticsearch_manner_3_分布式/" itemprop="url">Elasticsearch使用要点(三)-分布式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-25T16:44:27+08:00">2017-09-25</time>
-            
-
-            
-            
-              
-                
-              
-            
-
-            
-              
-              <span class="post-meta-divider">|</span>
-              
-
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified&#58;</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2017-10-26T10:48:23+08:00">2017-10-26</time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="分布式文档存储"><a href="#分布式文档存储" class="headerlink" title="分布式文档存储"></a>分布式文档存储</h1><h2 id="分片路由"><a href="#分片路由" class="headerlink" title="分片路由:"></a>分片路由:</h2><ul>
-<li><p>路由计算公式</p>
-<pre><code>shard = hash(routing) % number_of_primary_shards
-</code></pre><blockquote>
-<p>这个公式决定了主分片数量在创建以后不可更改.</p>
-<p>但是在后续的水平扩展中可以通过<code>routing</code>路由参数从指定的分片中获取数据.</p>
-</blockquote>
-</li>
-<li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="external">官方文档</a></p>
-</li>
-</ul>
-<h2 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h2><ul>
-<li><p>es使用以下两个参数来进行分页</p>
-<pre><code>size:显示应该返回的结果数量, 默认是 10
-from: 显示应该跳过的初始结果数量, 默认是 0
-</code></pre><blockquote>
-<p>深度分页问题: 当分页深度过大时, 有性能问题. 如from=10000, size=10. 则协调节点向所有的n个分片请求10010个文档数量. 协调节点获取了n <em> 10010个文档后, 排序找到前10个文档再丢弃n </em> 10010 - 10个文档.即在分布式系统中, 对结果排序的成本随分页的深度成指数上升.</p>
-<p>如果你 确实 需要从你的集群取回大量的文档, 你可以通过用 <code>scroll</code> 查询禁用排序使这个取回行为更有效率.    </p>
-</blockquote>
-</li>
-</ul>
-<h2 id="游标查询"><a href="#游标查询" class="headerlink" title="游标查询:"></a>游标查询:</h2><blockquote>
-<p><code>scroll</code> 查询 可以用来对 Elasticsearch 有效地执行大批量的文档查询, 而又不用付出深度分页那种代价. (使用场景: 数据导出)</p>
-</blockquote>
-<ul>
-<li>游标查询初始化时会取某个时间点的快照数据, 保存在某个位置. </li>
-<li>快照数据可以被指定过期时间.(过期时间会在每次查询时刷新. 故这个时间可以理解为一次请求的最大时间, 后续的连续请求会刷新过期时间. )</li>
-<li><p>初始化后索引上的任何变化会被忽略, 不会再反映到快照数据上.</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">	<span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>游标查询返回的结果会有一个<code>_scroll_id</code>字段, 值为base64编码的字符串.</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	GET /_search/scroll</div><div class="line">&#123;</div><div class="line">   "scroll": "1m", // 后续请求刷新的游标过期时间</div><div class="line">   "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAABVT7FlJSQ3VHeWhhVGlLQ0U5OF9qMGlhWmcAAAAAAAVU4xZ0ME5Uc0hkelFQMkJnZURKdjRxZE5RAAAAAAAFVOYWdDBOVHNIZHpRUDJCZ2VESnY0cWROUQAAAAAABVTlFnQwTlRzSGR6UVAyQmdlREp2NHFkTlEAAAAAAAVU5BZ0ME5Uc0hkelFQMkJnZURKdjRxZE5R"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>游标初始化后, 后续的游标查询需指定上次返回的<code>_scroll_id</code>字段, 返回的结果会自动接着上次返回的内容.</li>
-</ul>
-<h2 id="映射"><a href="#映射" class="headerlink" title="映射:"></a>映射:</h2><ul>
-<li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
-<li>字段可以是对象(一个json文档).</li>
-<li><p>内部对象索引后会被打平:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</div><div class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</div><div class="line">    <span class="attr">"user.gender"</span>:      [male],</div><div class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</div><div class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</div><div class="line">    <span class="attr">"user.name.first"</span>:  [john],</div><div class="line">    <span class="attr">"user.name.last"</span>:   [smith]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>内部对象数组也会被打平:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">打平为:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">    <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2188,7 +2236,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2232,7 +2280,9 @@ from: 显示应该跳过的初始结果数量, 默认是 0
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
