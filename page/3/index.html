@@ -288,6 +288,213 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/26/es/Elasticsearch_manner_4_多条件查询/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weihongyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="樱丸小头子的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/26/es/Elasticsearch_manner_4_多条件查询/" itemprop="url">Elasticsearch使用要点(四)-多条件查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-26T20:47:05+08:00">2017-09-26</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-07T14:43:55+08:00">2017-11-07</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术文章/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="组合多条件查询"><a href="#组合多条件查询" class="headerlink" title="组合多条件查询"></a>组合多条件查询</h1><blockquote>
+<p>组合多条件查询是生产过程中使用场景较多的查询, 故在此单独作为一篇来记录.</p>
+</blockquote>
+<h2 id="bool查询"><a href="#bool查询" class="headerlink" title="bool查询:"></a>bool查询:</h2><h4 id="注意-query查询terms条件元素数量有1024大小的限制-超过会报错-org-elasticsearch-common-io-stream-NotSerializableExceptionWrapper-too-many-clauses-maxClauseCount-is-set-to-1024"><a href="#注意-query查询terms条件元素数量有1024大小的限制-超过会报错-org-elasticsearch-common-io-stream-NotSerializableExceptionWrapper-too-many-clauses-maxClauseCount-is-set-to-1024" class="headerlink" title="注意: query查询terms条件元素数量有1024大小的限制, 超过会报错:org.elasticsearch.common.io.stream.NotSerializableExceptionWrapper: too_many_clauses: maxClauseCount is set to 1024."></a>注意: query查询terms条件元素数量有1024大小的限制, 超过会报错:<code>org.elasticsearch.common.io.stream.NotSerializableExceptionWrapper: too_many_clauses: maxClauseCount is set to 1024</code>.</h4><h4 id="解决办法-使用filter查询或者改es配置文件-参考-amp-文档"><a href="#解决办法-使用filter查询或者改es配置文件-参考-amp-文档" class="headerlink" title="解决办法: 使用filter查询或者改es配置文件. 参考 &amp; 文档"></a>解决办法: 使用filter查询或者改es配置文件. <a href="https://gitlab.com/gitlab-org/gitlab-ee/issues/1776" target="_blank" rel="noopener"><em>参考</em></a> &amp; <a href="http://george-stathis.com/2013/10/18/setting-the-booleanquery-maxclausecount-in-elasticsearch/" target="_blank" rel="noopener"><em>文档</em></a></h4><blockquote>
+<p><code>bool</code>查询能够将多个查询条件组合在一起, 每一个子查询都独自地计算文档的相关性得分。一旦他们的得分被计算出来， bool 查询就将这些得分进行合并并且返回一个代表整个布尔操作的得分。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>must</code></td>
+<td style="text-align:center">文档 <strong>必须</strong> 匹配这些条件才能被包含进来。(<strong>计算相关度</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>must_not</code></td>
+<td style="text-align:center">文档 <strong>必须不</strong> 匹配这些条件才能被包含进来。(<strong>计算相关度</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>should</code></td>
+<td style="text-align:center">如果满足这些语句中的任意语句(or)，将增加 <strong>_score</strong> ，否则，无任何影响。(<strong>计算相关度</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>filter</code></td>
+<td style="text-align:center">必须 <strong>匹配</strong>，但它以不评分、过滤模式来进行。(<strong>不计算相关度</strong>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>filter</code>参数中的查询均不会计算相关度, 不会影响文档的相关度排名. 而且当一个查询不计算相关度时, 可以被es缓存在内存中, 提高性能.</li>
+<li>将查询移到 <code>bool</code> 查询的 <code>filter</code> 语句中, 这样它就自动的转成一个不评分的 <code>filter</code> .</li>
+<li><p>将 <code>bool</code> 查询包裹在 <code>filter</code> 语句中. 我们可以在过滤标准中增加布尔逻辑. 适用于复杂的过滤逻辑.通过混合布尔查询, 我们可以在我们的查询请求中灵活地编写 <code>scoring</code> 和 <code>filtering</code> 查询逻辑.</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"bool"</span>: &#123;</span><br><span class="line">		<span class="attr">"filter"</span>: &#123;</span><br><span class="line">			<span class="attr">"bool"</span>: &#123; </span><br><span class="line">				<span class="attr">"must"</span>: [</span><br><span class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"date"</span>: &#123; <span class="attr">"gte"</span>: <span class="string">"2014-01-01"</span> &#125;&#125;&#125;,</span><br><span class="line">				&#123; <span class="attr">"range"</span>: &#123; <span class="attr">"price"</span>: &#123; <span class="attr">"lte"</span>: <span class="number">29.99</span> &#125;&#125;&#125;</span><br><span class="line">				],</span><br><span class="line">				<span class="attr">"must_not"</span>: [</span><br><span class="line">				&#123; <span class="attr">"term"</span>: &#123; <span class="attr">"category"</span>: <span class="string">"ebooks"</span> &#125;&#125;</span><br><span class="line">				]</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="constant-score查询"><a href="#constant-score查询" class="headerlink" title="constant_score查询:"></a>constant_score查询:</h2><blockquote>
+<p>可以使用它来取代只有 <strong>filter</strong> 语句的 <strong>bool</strong> 查询. 在性能上是完全相同的，但对于提高查询简洁性和清晰度有很大帮助。</p>
+</blockquote>
+<ul>
+<li><p><strong>constant_score</strong>查询将一个不变的常量评分应用于所有匹配的文档. 它被经常用于你只需要执行一个 <strong>filter</strong> 的情况下. </p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET students/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"query"</span>: &#123;</span><br><span class="line">		<span class="attr">"constant_score"</span>: &#123;</span><br><span class="line">		  <span class="attr">"filter"</span>: &#123;</span><br><span class="line">		    <span class="attr">"term"</span>: &#123;</span><br><span class="line">		      <span class="attr">"name.keyword"</span>: <span class="string">"12"</span></span><br><span class="line">		    &#125;</span><br><span class="line">		  &#125;,</span><br><span class="line">		  <span class="attr">"boost"</span>: <span class="number">1.2</span> // 代表常量评分</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="explain查询"><a href="#explain查询" class="headerlink" title="explain查询:"></a>explain查询:</h2><ul>
+<li>通过<code>explain</code>参数, 可以让返回结果中假如数据所在的分片 or 节点信息.  或者解释某一文档为何(不)被返回. 这个查询的代价很昂贵, 仅在开发调试时使用.</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.vonyan.cn/2017/09/25/es/Elasticsearch_manner_3_分布式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -397,10 +604,12 @@
 <pre><code>shard = hash(routing) % number_of_primary_shards
 </code></pre><blockquote>
 <p>这个公式决定了主分片数量在创建以后不可更改.</p>
+</blockquote>
+<blockquote>
 <p>但是在后续的水平扩展中可以通过<code>routing</code>路由参数从指定的分片中获取数据.</p>
 </blockquote>
 </li>
-<li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="external">官方文档</a></p>
+<li><p>节点,分片间数据交互参考:<a href="https://elasticsearch.cn/book/elasticsearch_definitive_guide_2.x/distributed-docs.html" target="_blank" rel="noopener">官方文档</a></p>
 </li>
 </ul>
 <h2 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询:"></a>分页查询:</h2><ul>
@@ -409,6 +618,8 @@
 from: 显示应该跳过的初始结果数量, 默认是 0
 </code></pre><blockquote>
 <p>深度分页问题: 当分页深度过大时, 有性能问题. 如from=10000, size=10. 则协调节点向所有的n个分片请求10010个文档数量. 协调节点获取了n <em> 10010个文档后, 排序找到前10个文档再丢弃n </em> 10010 - 10个文档.即在分布式系统中, 对结果排序的成本随分页的深度成指数上升.</p>
+</blockquote>
+<blockquote>
 <p>如果你 确实 需要从你的集群取回大量的文档, 你可以通过用 <code>scroll</code> 查询禁用排序使这个取回行为更有效率.    </p>
 </blockquote>
 </li>
@@ -420,12 +631,12 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <li>游标查询初始化时会取某个时间点的快照数据, 保存在某个位置. </li>
 <li>快照数据可以被指定过期时间.(过期时间会在每次查询时刷新. 故这个时间可以理解为一次请求的最大时间, 后续的连续请求会刷新过期时间. )</li>
 <li><p>初始化后索引上的任何变化会被忽略, 不会再反映到快照数据上.</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</div><div class="line">&#123;</div><div class="line">	<span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</div><div class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</div><div class="line">	"size": 10 // 每批次大小</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GET students/_search?scroll=1m // 指定游标过期时间1分钟</span><br><span class="line">&#123;</span><br><span class="line">	<span class="attr">"query"</span>: &#123;<span class="attr">"match"</span>: &#123;<span class="attr">"name"</span>: <span class="string">"的"</span>&#125;&#125;,</span><br><span class="line">	"sort": [&#123;"id": &#123;"order": "asc"&#125;&#125;], // 排序字段</span><br><span class="line">	"size": 10 // 每批次大小</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <ul>
 <li><p>游标查询返回的结果会有一个<code>_scroll_id</code>字段, 值为base64编码的字符串.</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	GET /_search/scroll</div><div class="line">&#123;</div><div class="line">   "scroll": "1m", // 后续请求刷新的游标过期时间</div><div class="line">   "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAABVT7FlJSQ3VHeWhhVGlLQ0U5OF9qMGlhWmcAAAAAAAVU4xZ0ME5Uc0hkelFQMkJnZURKdjRxZE5RAAAAAAAFVOYWdDBOVHNIZHpRUDJCZ2VESnY0cWROUQAAAAAABVTlFnQwTlRzSGR6UVAyQmdlREp2NHFkTlEAAAAAAAVU5BZ0ME5Uc0hkelFQMkJnZURKdjRxZE5R"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	GET /_search/scroll</span><br><span class="line">&#123;</span><br><span class="line">   "scroll": "1m", // 后续请求刷新的游标过期时间</span><br><span class="line">   "scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAABVT7FlJSQ3VHeWhhVGlLQ0U5OF9qMGlhWmcAAAAAAAVU4xZ0ME5Uc0hkelFQMkJnZURKdjRxZE5RAAAAAAAFVOYWdDBOVHNIZHpRUDJCZ2VESnY0cWROUQAAAAAABVTlFnQwTlRzSGR6UVAyQmdlREp2NHFkTlEAAAAAAAVU5BZ0ME5Uc0hkelFQMkJnZURKdjRxZE5R"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <ul>
@@ -435,10 +646,10 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <li>Lucene不能存储null字段, 故null值, 空数组, null数组均不会被索引.</li>
 <li>字段可以是对象(一个json文档).</li>
 <li><p>内部对象索引后会被打平:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</div><div class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</div><div class="line">    <span class="attr">"user.gender"</span>:      [male],</div><div class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</div><div class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</div><div class="line">    <span class="attr">"user.name.first"</span>:  [john],</div><div class="line">    <span class="attr">"user.name.last"</span>:   [smith]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"tweet"</span>:            [elasticsearch, flexible, very],</span><br><span class="line">    <span class="attr">"user.id"</span>:          [@johnsmith],</span><br><span class="line">    <span class="attr">"user.gender"</span>:      [male],</span><br><span class="line">    <span class="attr">"user.age"</span>:         [<span class="number">26</span>],</span><br><span class="line">    <span class="attr">"user.name.full"</span>:   [john, smith],</span><br><span class="line">    <span class="attr">"user.name.first"</span>:  [john],</span><br><span class="line">    <span class="attr">"user.name.last"</span>:   [smith]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>内部对象数组也会被打平:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"followers"</span>: [</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</div><div class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">打平为:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</div><div class="line">    <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"followers"</span>: [</span><br><span class="line">        &#123; <span class="attr">"age"</span>: <span class="number">35</span>, <span class="attr">"name"</span>: <span class="string">"Mary White"</span>&#125;,</span><br><span class="line">        &#123; <span class="attr">"age"</span>: <span class="number">26</span>, <span class="attr">"name"</span>: <span class="string">"Alex Jones"</span>&#125;,</span><br><span class="line">        &#123; <span class="attr">"age"</span>: <span class="number">19</span>, <span class="attr">"name"</span>: <span class="string">"Lisa Smith"</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">打平为:</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"followers.age"</span>:    [<span class="number">19</span>, <span class="number">26</span>, <span class="number">35</span>],</span><br><span class="line">    <span class="attr">"followers.name"</span>:   [alex, jones, lisa, smith, mary, white]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 
           
@@ -597,15 +808,15 @@ from: 显示应该跳过的初始结果数量, 默认是 0
       
         
           
-            <p><a href="https://www.elastic.co/blog/strings-are-dead-long-live-strings" target="_blank" rel="external">英文原版文档</a></p>
-<p><a href="https://segmentfault.com/a/1190000008897731" target="_blank" rel="external">转载地址</a></p>
+            <p><a href="https://www.elastic.co/blog/strings-are-dead-long-live-strings" target="_blank" rel="noopener">英文原版文档</a></p>
+<p><a href="https://segmentfault.com/a/1190000008897731" target="_blank" rel="noopener">转载地址</a></p>
 <h2 id="Text-vs-keyword"><a href="#Text-vs-keyword" class="headerlink" title="Text vs. keyword"></a>Text vs. keyword</h2><p>随着ElasticSearch 5.0的到来, 同时也迎来了该版本的重大特性之一: 移除了<strong>string</strong>类型. 这个变动的根本原因是<strong>string</strong>类型会给我们带来很多困惑: 因为ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按照整个文本进行匹配, 即关键词搜索(keyword search), 也可以按单个字符匹配, 即全文搜索(full-text search). 对ElasticSearch稍有了解的人都知道, 前者的字符串被称为<strong>not-analyzed</strong>字符, 而后者被称作<strong>analyzed</strong>字符串.</p>
 <p>事实上, 同一种类型用于应对两种不同的使用场景是会让人崩溃的, 因为有些选项只对其一的场景设置有效.例如<strong>position_increment_gap</strong>对<strong>not-analyzed</strong>字符就不会起作用, 而像<strong>ignore_above</strong>对于<strong>analyzed</strong>字符串就很难区分它到底是对整个字符串的值有效还是对单独的每个分词有效(在这种场景, <strong>ignore_above</strong>确实只对整个字符串值有效, 而对单个分词的限制可以使用<strong>limit</strong>设置).</p>
 <h2 id="新的默认类型"><a href="#新的默认类型" class="headerlink" title="新的默认类型"></a>新的默认类型</h2><p>做了这个类型分解之后, 我们对string字段的默认dynamic mappings 也做了改变. 在以前刚接接触ElasticSearch时, 如果需要对某个字段的所有取值做聚合, 你不得不对这些数据重做索引. 假如你正在处理的文档中包含一个city字段. 对这个字段做聚合的话会分别给出new和york的总数, 而非我们通常期望的New York的总数.让人沮丧的是为了达到我们希望的结果, 我们必须对这个字段重新进行索引.</p>
 <p>为了不让事情变得这么糟糕, ElasticSearch决定从Logstash中借取思路: 字符串将默认被同时映射成<strong>text</strong>和<strong>keyword</strong>类型. 例如对下面的文档进行索引后:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"foo"</span>: <span class="string">"bar"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"foo"</span>: <span class="string">"bar"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>ElasticSearch将会为你创建下面的动态映射(dynamic mappings):</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"foo"</span>: &#123;</div><div class="line">        <span class="attr">"type"</span>: <span class="string">"text"</span>,</div><div class="line">        <span class="attr">"fields"</span>: &#123;</div><div class="line">            <span class="attr">"keyword"</span>: &#123;</div><div class="line">                <span class="attr">"type"</span>: <span class="string">"keyword"</span>,</div><div class="line">                <span class="attr">"ignore_above"</span>: <span class="number">256</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"foo"</span>: &#123;</span><br><span class="line">        <span class="attr">"type"</span>: <span class="string">"text"</span>,</span><br><span class="line">        <span class="attr">"fields"</span>: &#123;</span><br><span class="line">            <span class="attr">"keyword"</span>: &#123;</span><br><span class="line">                <span class="attr">"type"</span>: <span class="string">"keyword"</span>,</span><br><span class="line">                <span class="attr">"ignore_above"</span>: <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当然, 基于这个映射你即可以在<strong>foo</strong>字段上进行全文搜索, 也可以通过<strong>foo.keyword</strong>字段实现关键词搜索及数据聚合.</p>
 <p>后略…</p>
 
@@ -771,7 +982,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <ul>
 <li>index文档时可以加<code>op_type=create</code>参数, 来指定只有新增时才会创建成功, 否则报文档冲突异常.</li>
 <li><p>创建时可以指定索引的主分片数量, 复制分片数量.</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"settings"</span>: &#123;</div><div class="line">        <span class="attr">"number_of_shards"</span> :   <span class="number">1</span>,</div><div class="line">        <span class="attr">"number_of_replicas"</span> : <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"settings"</span>: &#123;</span><br><span class="line">        <span class="attr">"number_of_shards"</span> :   <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"number_of_replicas"</span> : <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><ul>
@@ -785,7 +996,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <p>5.0以后的版本<strong>不再支持条件删除</strong>, 只能通过文档id来删除.</p>
 <p>逻辑可以通过<code>scroll API</code>查询出所有满足条件的id, 再使用id来删除.</p>
 <p>java代码示例:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">batchDeleteByQuery</span><span class="params">(String index, String type, QueryBuilder queryBuilder)</span></span>&#123;</div><div class="line">    <span class="comment">// collect going to delete ids</span></div><div class="line">    <span class="keyword">long</span> ct = System.currentTimeMillis();</div><div class="line">    Set&lt;String&gt; ids = Sets.newHashSet();</div><div class="line">    SearchResponse response = <span class="keyword">this</span>.getClient()</div><div class="line">        .prepareSearch(index)</div><div class="line">        .setTypes(type)</div><div class="line">        .setQuery(queryBuilder)</div><div class="line">        .setSize(<span class="number">300</span>)</div><div class="line">        .setScroll(TimeValue.MINUS_ONE)</div><div class="line">        .setFetchSource(<span class="keyword">false</span>)</div><div class="line">        .execute()</div><div class="line">        .actionGet();</div><div class="line">    log.debug(<span class="string">"response:&#123;&#125; "</span>, response);</div><div class="line">    ids.addAll(Arrays.stream(response.getHits().getHits()).map(searchHitFields -&gt; searchHitFields.getId()).collect(</div><div class="line">        Collectors.toList()));</div><div class="line">    <span class="keyword">while</span> (ArrayUtils.isNotEmpty(response.getHits().getHits()))&#123;</div><div class="line">        response = <span class="keyword">this</span>.getClient()</div><div class="line">            .prepareSearchScroll(response.getScrollId())</div><div class="line">            .setScroll(TimeValue.MINUS_ONE)</div><div class="line">            .execute()</div><div class="line">            .actionGet();</div><div class="line">        log.debug(<span class="string">"response:&#123;&#125; "</span>, response);</div><div class="line">        ids.addAll(Arrays.stream(response.getHits().getHits()).map(searchHitFields -&gt; searchHitFields.getId()).collect(Collectors.toList()));</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// remove scroll</span></div><div class="line">    <span class="keyword">this</span>.getClient().prepareClearScroll().addScrollId(response.getScrollId()).execute().actionGet();</div><div class="line"></div><div class="line">    <span class="comment">// iterater to delete</span></div><div class="line">    <span class="keyword">for</span>(String id : ids)&#123;</div><div class="line">        <span class="keyword">this</span>.getDefaultBulkProcessor().add(<span class="keyword">new</span> DeleteRequest(index, type, id));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    log.info(<span class="string">"delete doc. index:&#123;&#125;, type:&#123;&#125;, ids size:&#123;&#125;, costs:&#123;&#125;ms, query:&#123;&#125; "</span>, index, type, ids.size(),</div><div class="line">        System.currentTimeMillis() - ct, queryBuilder);</div><div class="line">    log.debug(<span class="string">"delete ids:&#123;&#125; "</span>, ids);</div><div class="line">    <span class="keyword">return</span> ids.size();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">batchDeleteByQuery</span><span class="params">(String index, String type, QueryBuilder queryBuilder)</span></span>&#123;</span><br><span class="line">    <span class="comment">// collect going to delete ids</span></span><br><span class="line">    <span class="keyword">long</span> ct = System.currentTimeMillis();</span><br><span class="line">    Set&lt;String&gt; ids = Sets.newHashSet();</span><br><span class="line">    SearchResponse response = <span class="keyword">this</span>.getClient()</span><br><span class="line">        .prepareSearch(index)</span><br><span class="line">        .setTypes(type)</span><br><span class="line">        .setQuery(queryBuilder)</span><br><span class="line">        .setSize(<span class="number">300</span>)</span><br><span class="line">        .setScroll(TimeValue.MINUS_ONE)</span><br><span class="line">        .setFetchSource(<span class="keyword">false</span>)</span><br><span class="line">        .execute()</span><br><span class="line">        .actionGet();</span><br><span class="line">    log.debug(<span class="string">"response:&#123;&#125; "</span>, response);</span><br><span class="line">    ids.addAll(Arrays.stream(response.getHits().getHits()).map(searchHitFields -&gt; searchHitFields.getId()).collect(</span><br><span class="line">        Collectors.toList()));</span><br><span class="line">    <span class="keyword">while</span> (ArrayUtils.isNotEmpty(response.getHits().getHits()))&#123;</span><br><span class="line">        response = <span class="keyword">this</span>.getClient()</span><br><span class="line">            .prepareSearchScroll(response.getScrollId())</span><br><span class="line">            .setScroll(TimeValue.MINUS_ONE)</span><br><span class="line">            .execute()</span><br><span class="line">            .actionGet();</span><br><span class="line">        log.debug(<span class="string">"response:&#123;&#125; "</span>, response);</span><br><span class="line">        ids.addAll(Arrays.stream(response.getHits().getHits()).map(searchHitFields -&gt; searchHitFields.getId()).collect(Collectors.toList()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// remove scroll</span></span><br><span class="line">    <span class="keyword">this</span>.getClient().prepareClearScroll().addScrollId(response.getScrollId()).execute().actionGet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// iterater to delete</span></span><br><span class="line">    <span class="keyword">for</span>(String id : ids)&#123;</span><br><span class="line">        <span class="keyword">this</span>.getDefaultBulkProcessor().add(<span class="keyword">new</span> DeleteRequest(index, type, id));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    log.info(<span class="string">"delete doc. index:&#123;&#125;, type:&#123;&#125;, ids size:&#123;&#125;, costs:&#123;&#125;ms, query:&#123;&#125; "</span>, index, type, ids.size(),</span><br><span class="line">        System.currentTimeMillis() - ct, queryBuilder);</span><br><span class="line">    log.debug(<span class="string">"delete ids:&#123;&#125; "</span>, ids);</span><br><span class="line">    <span class="keyword">return</span> ids.size();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -980,7 +1191,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </ul>
 <h3 id="multi-match"><a href="#multi-match" class="headerlink" title="multi_match:"></a>multi_match:</h3><ul>
 <li><p><code>multi_match</code> 查询可以在多个字段上执行相同的 <code>match</code> 查询：</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   	<span class="attr">"multi_match"</span>: &#123;</div><div class="line">      		<span class="attr">"query"</span>:    <span class="string">"full text search"</span>,</div><div class="line">      		<span class="attr">"fields"</span>:   [ <span class="string">"title"</span>, <span class="string">"body"</span> ]</div><div class="line">   	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   	<span class="attr">"multi_match"</span>: &#123;</span><br><span class="line">      		<span class="attr">"query"</span>:    <span class="string">"full text search"</span>,</span><br><span class="line">      		<span class="attr">"fields"</span>:   [ <span class="string">"title"</span>, <span class="string">"body"</span> ]</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="range"><a href="#range" class="headerlink" title="range:"></a>range:</h3><ul>
@@ -990,9 +1201,11 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <blockquote>
 <p>例如: <code>now-1h</code>代表前一个小时, <code>2014-01-01 00:00:00||+1M</code>代表指定时间加一分钟.</p>
 </blockquote>
+</blockquote>
+<blockquote>
 <p>针对于字符串来讲, 字符串范围可以采用字典顺序排序筛选. 但是字符串比较的成本要远大于数值类型, 尤其是长字符串.</p>
 </blockquote>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"range"</span>: &#123;</div><div class="line">        <span class="attr">"age"</span>: &#123;</div><div class="line">            <span class="attr">"gte"</span>:  <span class="number">20</span>,</div><div class="line">            <span class="attr">"lt"</span>:   <span class="number">30</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"range"</span>: &#123;</span><br><span class="line">        <span class="attr">"age"</span>: &#123;</span><br><span class="line">            <span class="attr">"gte"</span>:  <span class="number">20</span>,</span><br><span class="line">            <span class="attr">"lt"</span>:   <span class="number">30</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>gt</code> : 大于</li>
 <li><code>gte</code> : 大于等于</li>
@@ -1011,15 +1224,15 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 </blockquote>
 <ul>
 <li><p>如果这个字段包含了指定值中的任何一个值，那么这个文档满足条件:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">	<span class="attr">"terms"</span>: &#123; </div><div class="line">		<span class="attr">"tag"</span>: [ <span class="string">"search"</span>, <span class="string">"full_text"</span>, <span class="string">"nosql"</span> ]</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">	<span class="attr">"terms"</span>: &#123; </span><br><span class="line">		<span class="attr">"tag"</span>: [ <span class="string">"search"</span>, <span class="string">"full_text"</span>, <span class="string">"nosql"</span> ]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="exists-amp-missing"><a href="#exists-amp-missing" class="headerlink" title="exists &amp; missing:"></a>exists &amp; missing:</h3><ul>
 <li><p><code>exists</code> 查询和 <code>missing</code> 查询被用于查找那些指定字段中有值 或无值的文档. 类似sql中的<code>is null</code>, <code>is not null</code>:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"exists"</span>:   &#123;</div><div class="line">        <span class="attr">"field"</span>:    <span class="string">"title"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"exists"</span>:   &#123;</span><br><span class="line">        <span class="attr">"field"</span>:    <span class="string">"title"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>存在(不存在)查询也可以指定对象类型字段. 如name是一个对象字段, 且里面包含first, last字段:</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   	<span class="attr">"exists"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"name"</span> &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">等价于:</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"bool"</span>: &#123;</div><div class="line">        <span class="attr">"should"</span>: [</div><div class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.first"</span> &#125;&#125;,</div><div class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.last"</span> &#125;&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   	<span class="attr">"exists"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"name"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">等价于:</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"bool"</span>: &#123;</span><br><span class="line">        <span class="attr">"should"</span>: [</span><br><span class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.first"</span> &#125;&#125;,</span><br><span class="line">            &#123; <span class="attr">"exists"</span>: &#123; <span class="attr">"field"</span>: <span class="string">"name.last"</span> &#125;&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 
@@ -1299,7 +1512,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-count">26</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
