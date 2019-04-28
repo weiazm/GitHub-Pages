@@ -103,18 +103,18 @@
   <meta name="keywords" content="linux," />
 
 
-<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; &amp;lt;pid&amp;gt;  head dump: jmap -dump:li">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux系统负载以及JVM诊断常用命令">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; &amp;lt;pid&amp;gt;  head dump: jmap -dump:li">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-29T08:19:58.000Z">
+<meta property="og:updated_time" content="2019-04-28T12:19:57.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux系统负载以及JVM诊断常用命令">
-<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; pid  java堆统计实例数量,大小: jmap -histo:live">
+<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换pid -&amp;gt; nid: printf &amp;quot;%x\n&amp;quot; &amp;lt;pid&amp;gt;  head dump: jmap -dump:li">
 
 
 
@@ -339,7 +339,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2017-09-29T16:19:58+08:00">2017-09-29</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2019-04-28T20:19:57+08:00">2019-04-28</time>
             
           </span>
 
@@ -403,16 +403,20 @@
 <pre><code>top -Hp pid
 </code></pre></li>
 <li><p>转换pid -&gt; nid:</p>
-<pre><code>printf &quot;%x\n&quot; pid
+<pre><code>printf &quot;%x\n&quot; &lt;pid&gt;
+</code></pre></li>
+<li><p>head dump:</p>
+<pre><code>jmap -dump:live,format=b,file=head.bin &lt;pid&gt;
 </code></pre></li>
 <li><p>java堆统计实例数量,大小:</p>
-<pre><code>jmap -histo:live pid | head -100
+<pre><code>jmap -histo:live &lt;pid&gt; | head -100
 </code></pre></li>
 <li><p>java栈快照:</p>
 <pre><code>jstack -l  nid
 </code></pre></li>
-</ul>
-<ul>
+<li><p>查看GC状态:</p>
+<pre><code>jstat -gcutil &lt;pid&gt; 1000
+</code></pre></li>
 <li><p>文件目录大小排序显示:</p>
 <pre><code>du -m -d 1 | sort -k1 -n -t&apos; &apos;
 </code></pre></li>
@@ -665,7 +669,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

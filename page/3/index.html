@@ -1340,7 +1340,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2017-09-29T16:19:58+08:00">2017-09-29</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2019-04-28T20:19:57+08:00">2019-04-28</time>
             
           </span>
 
@@ -1406,16 +1406,20 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <pre><code>top -Hp pid
 </code></pre></li>
 <li><p>转换pid -&gt; nid:</p>
-<pre><code>printf &quot;%x\n&quot; pid
+<pre><code>printf &quot;%x\n&quot; &lt;pid&gt;
+</code></pre></li>
+<li><p>head dump:</p>
+<pre><code>jmap -dump:live,format=b,file=head.bin &lt;pid&gt;
 </code></pre></li>
 <li><p>java堆统计实例数量,大小:</p>
-<pre><code>jmap -histo:live pid | head -100
+<pre><code>jmap -histo:live &lt;pid&gt; | head -100
 </code></pre></li>
 <li><p>java栈快照:</p>
 <pre><code>jstack -l  nid
 </code></pre></li>
-</ul>
-<ul>
+<li><p>查看GC状态:</p>
+<pre><code>jstat -gcutil &lt;pid&gt; 1000
+</code></pre></li>
 <li><p>文件目录大小排序显示:</p>
 <pre><code>du -m -d 1 | sort -k1 -n -t&apos; &apos;
 </code></pre></li>
@@ -1617,7 +1621,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
