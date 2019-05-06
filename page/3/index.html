@@ -1340,7 +1340,7 @@ from: 显示应该跳过的初始结果数量, 默认是 0
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-04-28T20:19:57+08:00">2019-04-28</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2019-05-06T16:37:44+08:00">2019-05-06</time>
             
           </span>
 
@@ -1408,8 +1408,11 @@ from: 显示应该跳过的初始结果数量, 默认是 0
 <li><p>转换pid -&gt; nid:</p>
 <pre><code>printf &quot;%x\n&quot; &lt;pid&gt;
 </code></pre></li>
-<li><p>head dump:</p>
-<pre><code>jmap -dump:live,format=b,file=head.bin &lt;pid&gt;
+<li><p>heap dump:</p>
+<pre><code>jmap -dump:live,format=b,file=heap.bin &lt;pid&gt;
+</code></pre></li>
+<li><p>当堆太大导出速度慢时使用gdb来导出:</p>
+<pre><code>https://www.atlassian.com/blog/archives/so-you-want-your-jvms-heap
 </code></pre></li>
 <li><p>java堆统计实例数量,大小:</p>
 <pre><code>jmap -histo:live &lt;pid&gt; | head -100
