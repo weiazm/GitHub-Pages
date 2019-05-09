@@ -103,18 +103,18 @@
   <meta name="keywords" content="linux," />
 
 
-<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换16进制nid为10进制: printf &amp;quot;%x\n&amp;quot; &amp;lt;nid&amp;gt;  heap dump: jmap -dump:liv">
+<meta name="description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp &amp;lt;port&amp;gt;  查看所有进程,以及cpu,内存占用: ps aux &amp;lt;pid&amp;gt;  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp &amp;lt;pid&amp;gt;  转换10进制nid为16进制: printf &amp;quot;%x\n&amp;quot; &amp;lt;nid&amp;gt">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux系统负载以及JVM诊断常用命令">
 <meta property="og:url" content="http://blog.vonyan.cn/2017/08/17/linux/linux系统负载以及JVM诊断常用命令/index.html">
 <meta property="og:site_name" content="樱丸小头子的blog">
-<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换16进制nid为10进制: printf &amp;quot;%x\n&amp;quot; &amp;lt;nid&amp;gt;  heap dump: jmap -dump:liv">
+<meta property="og:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp &amp;lt;port&amp;gt;  查看所有进程,以及cpu,内存占用: ps aux &amp;lt;pid&amp;gt;  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp &amp;lt;pid&amp;gt;  转换10进制nid为16进制: printf &amp;quot;%x\n&amp;quot; &amp;lt;nid&amp;gt">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-09T06:41:52.380Z">
+<meta property="og:updated_time" content="2019-05-09T06:48:53.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux系统负载以及JVM诊断常用命令">
-<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp 9200  查看所有进程,以及cpu,内存占用: ps aux  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp pid  转换16进制nid为10进制: printf &amp;quot;%x\n&amp;quot; &amp;lt;nid&amp;gt;  heap dump: jmap -dump:liv">
+<meta name="twitter:description" content="一些基本命令备忘 查看端口号被占用情况: fuser -n tcp &amp;lt;port&amp;gt;  查看所有进程,以及cpu,内存占用: ps aux &amp;lt;pid&amp;gt;  查看机器内存用量以及剩余: free -m  查看指定进程内, 线程资源占用情况: top -Hp &amp;lt;pid&amp;gt;  转换10进制nid为16进制: printf &amp;quot;%x\n&amp;quot; &amp;lt;nid&amp;gt">
 
 
 
@@ -339,7 +339,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-09T14:41:52+08:00">2019-05-09</time>
+              <time title="Post modified" itemprop="dateModified" datetime="2019-05-09T14:48:53+08:00">2019-05-09</time>
             
           </span>
 
@@ -391,18 +391,18 @@
       
         <h2 id="一些基本命令备忘"><a href="#一些基本命令备忘" class="headerlink" title="一些基本命令备忘"></a>一些基本命令备忘</h2><ul>
 <li><p>查看端口号被占用情况:</p>
-<pre><code>fuser -n tcp 9200
+<pre><code>fuser -n tcp &lt;port&gt;
 </code></pre></li>
 <li><p>查看所有进程,以及cpu,内存占用:</p>
-<pre><code>ps aux
+<pre><code>ps aux &lt;pid&gt;
 </code></pre></li>
 <li><p>查看机器内存用量以及剩余:</p>
 <pre><code>free -m
 </code></pre></li>
 <li><p>查看指定进程内, 线程资源占用情况:</p>
-<pre><code>top -Hp pid
+<pre><code>top -Hp &lt;pid&gt;
 </code></pre></li>
-<li><p>转换16进制nid为10进制:</p>
+<li><p>转换10进制nid为16进制:</p>
 <pre><code>printf &quot;%x\n&quot; &lt;nid&gt;
 </code></pre></li>
 <li><p>heap dump:</p>
@@ -415,7 +415,7 @@
 <pre><code>jmap -histo:live &lt;pid&gt; | head -100
 </code></pre></li>
 <li><p>java栈快照:</p>
-<pre><code>jstack -l  &lt;pid&gt;
+<pre><code>jstack -l &lt;pid&gt;
 </code></pre></li>
 <li><p>查看GC状态:</p>
 <pre><code>jstat -gcutil &lt;pid&gt; 1000
